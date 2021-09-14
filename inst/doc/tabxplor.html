@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to tabxplor</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script src="data:application/javascript;base64,JChkb2N1bWVudCkucmVhZHkoZnVuY3Rpb24oKXsKICAgIGlmICh0eXBlb2YgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJ0b29sdGlwIl0nKS50b29sdGlwKCk7CiAgICB9CiAgICBpZiAoJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyID09PSAnZnVuY3Rpb24nKSB7CiAgICAgICAgJCgnW2RhdGEtdG9nZ2xlPSJwb3BvdmVyIl0nKS5wb3BvdmVyKCk7CiAgICB9Cn0pOwo="></script>
+<link href="data:text/css,%0A%2Elightable%2Dminimal%20%7B%0Aborder%2Dcollapse%3A%20separate%3B%0Aborder%2Dspacing%3A%2016px%201px%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dminimal%20td%20%7B%0Amargin%2Dleft%3A%205px%3B%0Amargin%2Dright%3A%205px%3B%0A%7D%0A%2Elightable%2Dminimal%20th%20%7B%0Amargin%2Dleft%3A%205px%3B%0Amargin%2Dright%3A%205px%3B%0A%7D%0A%2Elightable%2Dminimal%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%2300000050%3B%0Aempty%2Dcells%3A%20hide%3B%0A%7D%0A%2Elightable%2Dminimal%20tbody%20tr%3Afirst%2Dchild%20td%20%7B%0Apadding%2Dtop%3A%200%2E5em%3B%0A%7D%0A%2Elightable%2Dminimal%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dminimal%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dclassic%20%7B%0Aborder%2Dtop%3A%200%2E16em%20solid%20%23111111%3B%0Aborder%2Dbottom%3A%200%2E16em%20solid%20%23111111%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0Amargin%3A%2010px%205px%3B%0A%7D%0A%2Elightable%2Dclassic%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dclassic%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%200%2E14em%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%20caption%20%7B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20td%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20th%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Afont%2Dweight%3A%20normal%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%200%2E10em%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dclassic%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20%7B%0Aborder%2Dtop%3A%203px%20double%20%23111111%3B%0Aborder%2Dbottom%3A%203px%20double%20%23111111%3B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%203px%20double%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20caption%20%7B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20td%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20th%20%7B%0Apadding%2Dleft%3A%205px%3B%0Apadding%2Dright%3A%205px%3B%0Afont%2Dweight%3A%20normal%3B%0Acolor%3A%20%23222222%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20tbody%20tr%3Alast%2Dchild%20td%20%7B%0Aborder%2Dbottom%3A%203px%20double%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23111111%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dclassic%2D2%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%20%7B%0Amin%2Dwidth%3A%20100%25%3B%0Awhite%2Dspace%3A%20nowrap%3B%0Atable%2Dlayout%3A%20fixed%3B%0Afont%2Dfamily%3A%20Roboto%2C%20sans%2Dserif%3B%0Aborder%3A%201px%20solid%20%23EEE%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0Amargin%2Dbottom%3A%2010px%3B%0A%7D%0A%2Elightable%2Dmaterial%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%23EEE%3B%0A%7D%0A%2Elightable%2Dmaterial%20th%20%7B%0Aheight%3A%2056px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0A%7D%0A%2Elightable%2Dmaterial%20td%20%7B%0Aheight%3A%2052px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Aborder%2Dtop%3A%201px%20solid%20%23eeeeee%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Elightable%2Dstriped%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ddd%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20%7B%0Amin%2Dwidth%3A%20100%25%3B%0Awhite%2Dspace%3A%20nowrap%3B%0Atable%2Dlayout%3A%20fixed%3B%0Afont%2Dfamily%3A%20Roboto%2C%20sans%2Dserif%3B%0Aborder%3A%201px%20solid%20%23FFFFFF12%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0Amargin%2Dbottom%3A%2010px%3B%0Abackground%2Dcolor%3A%20%23363640%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20th%20%7B%0Aheight%3A%2056px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Acolor%3A%20%23FFFFFF60%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%20td%20%7B%0Aheight%3A%2052px%3B%0Apadding%2Dleft%3A%2016px%3B%0Apadding%2Dright%3A%2016px%3B%0Acolor%3A%20%23FFFFFF%3B%0Aborder%2Dtop%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dmaterial%2Ddark%2Elightable%2Dstriped%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23FFFFFF12%3B%0A%7D%0A%2Elightable%2Dpaper%20%7B%0Awidth%3A%20100%25%3B%0Amargin%2Dbottom%3A%2010px%3B%0Acolor%3A%20%23444%3B%0A%7D%0A%2Elightable%2Dpaper%20tfoot%20tr%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A%2Elightable%2Dpaper%20tfoot%20tr%3Afirst%2Dchild%20td%20%7B%0Aborder%2Dtop%3A%201px%20solid%20%2300000020%3B%0A%7D%0A%2Elightable%2Dpaper%20thead%20tr%3Alast%2Dchild%20th%20%7B%0Acolor%3A%20%23666%3B%0Avertical%2Dalign%3A%20bottom%3B%0Aborder%2Dbottom%3A%201px%20solid%20%2300000020%3B%0Aline%2Dheight%3A%201%2E15em%3B%0Apadding%3A%2010px%205px%3B%0A%7D%0A%2Elightable%2Dpaper%20td%20%7B%0Avertical%2Dalign%3A%20middle%3B%0Aborder%2Dbottom%3A%201px%20solid%20%2300000010%3B%0Aline%2Dheight%3A%201%2E15em%3B%0Apadding%3A%207px%205px%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dhover%20tbody%20tr%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23F9EEC1%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dstriped%20tbody%20tr%3Anth%2Dchild%28even%29%20%7B%0Abackground%2Dcolor%3A%20%2300000008%3B%0A%7D%0A%2Elightable%2Dpaper%2Elightable%2Dstriped%20tbody%20td%20%7B%0Aborder%3A%200%3B%0A%7D%0A" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to tabxplor</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tabxplor)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set_color_style</span>(<span class="at">type =</span> <span class="st">&quot;text&quot;</span>, <span class="at">theme =</span> <span class="st">&quot;light&quot;</span>)</span></code></pre></div>
+<p><code>tabxplor</code> tries to make it easy to deal with multiple cross-tables: to create and manipulate them, but also to read them, using color helpers to highlight important informations, and simplify your experience of data exploration. All functions are <code>tidyverse</code> propelled, pipe-friendly, and render <code>tibble</code> data frames which can be easily manipulated with <code>dplyr</code>. Tables can be exported to Excel and in html with formats and colors.</p>
+<div id="base-usage-cross-tables-with-color-helpers-for-data-exploration" class="section level2">
+<h2>Base usage: cross-tables with color helpers for data exploration</h2>
+<p>The main functions are made to be user-friendly and time-saving is data analysis workflows.</p>
+<p><code>tab</code> makes a simple cross-table:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, marital, race)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 7 x 5</span>
+#&gt;   marital       Other Black  White  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>          <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> No answer         2     2     13     17
+#&gt; <span style="color: #BCBCBC;">2</span> Never married   633 1 305  3 478  5 416
+#&gt; <span style="color: #BCBCBC;">3</span> Separated       110   196    437    743
+#&gt; <span style="color: #BCBCBC;">4</span> Divorced        212   495  2 676  3 383
+#&gt; <span style="color: #BCBCBC;">5</span> Widowed          70   262  1 475  1 807
+#&gt; <span style="color: #BCBCBC;">6</span> Married         932   869  8 316 10 117
+#&gt; <span style="color: #BCBCBC;">7</span> Total         1 959 3 129 16 395 21 483
+</code></pre>
+<p>When one of the row or column variables is numeric, <code>tab</code> calculates means by category of the other variable.</p>
+<p><code>tab</code> comes with options to weight the table, print percentages, manage totals, digits and missing values, add legends, gather rare categories in a “Others” level.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">na =</span> <span class="st">&quot;drop&quot;</span>, <span class="at">subtext =</span> gss,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">rare_to_other =</span> <span class="cn">TRUE</span>, <span class="at">n_min =</span> <span class="dv">1000</span>, <span class="at">other_level =</span> <span class="st">&quot;Custom_other_level_name&quot;</span>)</span></code></pre></div>
+<p>When a third variable is provided, <code>tab</code> makes a table with as many subtables as it has levels. With several <code>tab_vars</code>, it makes a subtable for each combination of their levels. The result is grouped: in <code>dplyr</code>, operations like <code>sum()</code> or <code>all()</code> are done within each subtable, and not for the whole dataframe.</p>
+<p>Colors may be added to highlight over-represented and under-represented cells, and therefore help the user read the table. By default, with <code>color = &quot;diff&quot;</code>, colors are based on the differences between a cell and it’s related total (which only works with means and row or col pct). When a percentage is superior to the average percentage of the line or column, it appears with shades of green (or blue). When it’s inferior, it appears with shades of red/orange. A color legend is added below the table. In RStudio colors are adapted to the theme, light or dark.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> forcats<span class="sc">::</span>gss_cat <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2006</span>, <span class="dv">2012</span>), <span class="sc">!</span>marital <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;No answer&quot;</span>, <span class="st">&quot;Widowed&quot;</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gss  <span class="ot">&lt;-</span> <span class="st">&quot;Source: General social survey 2000-2014&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>gss2 <span class="ot">&lt;-</span> <span class="st">&quot;Source: General social survey 2000, 2006 and 2012&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">subtext =</span> gss2, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 13 x 7</span>
+#&gt; <span style="color: #949494;"># Groups:         year [4]</span>
+#&gt;    year     race           `Never married` Separated Divorced Married  Total
+#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>                  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;"> 1</span> 2000     Other                      <span style="color: #5FFFFF;">36%</span>        <span style="color: #949494;">5%</span>      <span style="color: #FFAF5F;">12%</span>     <span style="color: #949494;">47%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 2</span> 2000     Black                      <span style="color: #00D7FF;">41%</span>       <span style="color: #5FFFFF;">11%</span>      <span style="color: #949494;">16%</span>     <span style="color: #FF8700;">32%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 3</span> 2000     White                      <span style="color: #949494;">25%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">54%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 4</span> 2000     TOTAL 2000                 28%        4%      17%     50%   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 5</span> 2006     Other                      <span style="color: #949494;">29%</span>        <span style="color: #949494;">7%</span>      <span style="color: #FFAF5F;">11%</span>     <span style="color: #949494;">53%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 6</span> 2006     Black                      <span style="color: #0087FF;">47%</span>        <span style="color: #949494;">6%</span>      <span style="color: #949494;">18%</span>     <span style="color: #FF5F5F;">30%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 7</span> 2006     White                      <span style="color: #949494;">22%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">19%</span>     <span style="color: #949494;">57%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 8</span> 2006     TOTAL 2006                 26%        4%      18%     52%   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 9</span> 2012     Other                      <span style="color: #5FFFFF;">37%</span>        <span style="color: #949494;">6%</span>       <span style="color: #FF8700;">7%</span>     <span style="color: #949494;">51%</span>   100%
+#&gt; <span style="color: #BCBCBC;">10</span> 2012     Black                      <span style="color: #00D7FF;">43%</span>        <span style="color: #949494;">5%</span>      <span style="color: #949494;">21%</span>     <span style="color: #FF8700;">31%</span>   100%
+#&gt; <span style="color: #BCBCBC;">11</span> 2012     White                      <span style="color: #949494;">25%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">53%</span>   100%
+#&gt; <span style="color: #BCBCBC;">12</span> 2012     TOTAL 2012                 29%        4%      18%     50%   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;">13</span> Ensemble TOTAL ENSEMBLE             27%        4%      18%     51%   100%
+#&gt; <span style="color: #949494;"># marital: </span>x &gt; tot <span style="color: #5FFFFF;">+5%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #949494;">; </span>x &lt; tot <span style="color: #FFAF5F;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-30%</span>
+#&gt; <span style="color: #949494;"># Source: General social survey 2000, 2006 and 2012</span>
+</code></pre>
+<p>The <code>sup_cols</code> argument adds supplementary column variables to the table. With numeric variables, it calculates the mean for each category or the row variable. With text variables, only the first level is kept (you can choose which one to use by placing it first with <code>forcats::fct_relevel</code>). Use <code>tab_many</code> to keep all levels.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(dplyr<span class="sc">::</span>storms, category, status, <span class="at">sup_cols =</span> <span class="fu">c</span>(<span class="st">&quot;pressure&quot;</span>, <span class="st">&quot;wind&quot;</span>))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 8 x 7</span>
+#&gt;   category `tropical depressi~ `tropical storm` hurricane   Total pressure  wind
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>             <span style="color: #949494; font-style: italic;">&lt;n-mixed&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;n-mixed&gt;</span> <span style="color: #949494; font-style: italic;">&lt;n-mixed&gt;</span> <span style="color: #949494; font-style: italic;">&lt;n-mix&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;mean&gt;</span> <span style="color: #949494; font-style: italic;">&lt;mea&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> -1                     2 545                <span style="color: #949494;">0</span>         <span style="color: #949494;">0</span>   2 545    1 008    27
+#&gt; <span style="color: #BCBCBC;">2</span> 0                          <span style="color: #949494;">0</span>            4 373         <span style="color: #949494;">0</span>   4 373      999    46
+#&gt; <span style="color: #BCBCBC;">3</span> 1                          <span style="color: #949494;">0</span>                1     1 684   1 685      982    71
+#&gt; <span style="color: #BCBCBC;">4</span> 2                          <span style="color: #949494;">0</span>                <span style="color: #949494;">0</span>       628     628      967    89
+#&gt; <span style="color: #BCBCBC;">5</span> 3                          <span style="color: #949494;">0</span>                <span style="color: #949494;">0</span>       363     363      954   105
+#&gt; <span style="color: #BCBCBC;">6</span> 4                          <span style="color: #949494;">0</span>                <span style="color: #949494;">0</span>       348     348      940   122
+#&gt; <span style="color: #BCBCBC;">7</span> 5                          <span style="color: #949494;">0</span>                <span style="color: #949494;">0</span>        68      68      916   145
+#&gt; <span style="color: #BCBCBC;">8</span> Total                  2 545            4 374     3 091  10 010      992    53
+</code></pre>
+</div>
+<div id="references-and-comparison-levels-for-colors" class="section level2">
+<h2>References and comparison levels for colors</h2>
+<p>By default, to calculate colors, each cell is compared to the subtable’s related total.</p>
+<p>When a third variable or more are provided, it’s possible to compare with the general total line instead, by setting <code>comp = &quot;all&quot;</code>. Here, only the last total row is highlighted (TOTAL ENSEMBLE appears in white but other total rows in grey).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">subtext =</span> gss2, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>, <span class="at">comp =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 13 x 7</span>
+#&gt; <span style="color: #949494;"># Groups:         year [4]</span>
+#&gt;    year     race           `Never married` Separated Divorced Married  Total
+#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>                  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;"> 1</span> 2000     Other                      <span style="color: #5FFFFF;">36%</span>        <span style="color: #949494;">5%</span>      <span style="color: #FFAF5F;">12%</span>     <span style="color: #949494;">47%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 2</span> 2000     Black                      <span style="color: #00D7FF;">41%</span>       <span style="color: #5FFFFF;">11%</span>      <span style="color: #949494;">16%</span>     <span style="color: #FF8700;">32%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 3</span> 2000     White                      <span style="color: #949494;">25%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">54%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 4</span> 2000     TOTAL 2000                 <span style="color: #949494;">28%</span>        <span style="color: #949494;">4%</span>      <span style="color: #949494;">17%</span>     <span style="color: #949494;">50%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 5</span> 2006     Other                      <span style="color: #949494;">29%</span>        <span style="color: #949494;">7%</span>      <span style="color: #FFAF5F;">11%</span>     <span style="color: #949494;">53%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 6</span> 2006     Black                      <span style="color: #00D7FF;">47%</span>        <span style="color: #949494;">6%</span>      <span style="color: #949494;">18%</span>     <span style="color: #FF5F5F;">30%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 7</span> 2006     White                      <span style="color: #FFAF5F;">22%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">19%</span>     <span style="color: #5FFFFF;">57%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 8</span> 2006     TOTAL 2006                 <span style="color: #949494;">26%</span>        <span style="color: #949494;">4%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">52%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 9</span> 2012     Other                      <span style="color: #5FFFFF;">37%</span>        <span style="color: #949494;">6%</span>       <span style="color: #FF8700;">7%</span>     <span style="color: #949494;">51%</span>   100%
+#&gt; <span style="color: #BCBCBC;">10</span> 2012     Black                      <span style="color: #00D7FF;">43%</span>        <span style="color: #949494;">5%</span>      <span style="color: #949494;">21%</span>     <span style="color: #FF5F5F;">31%</span>   100%
+#&gt; <span style="color: #BCBCBC;">11</span> 2012     White                      <span style="color: #949494;">25%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">53%</span>   100%
+#&gt; <span style="color: #BCBCBC;">12</span> 2012     TOTAL 2012                 <span style="color: #949494;">29%</span>        <span style="color: #949494;">4%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">50%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;">13</span> Ensemble TOTAL ENSEMBLE             27%        4%      18%     51%   100%
+#&gt; <span style="color: #949494;"># marital: </span>x &gt; tot <span style="color: #5FFFFF;">+5%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #949494;">; </span>x &lt; tot <span style="color: #FFAF5F;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-30%</span>
+#&gt; <span style="color: #949494;"># Source: General social survey 2000, 2006 and 2012</span>
+</code></pre>
+<p>With <code>diff = &quot;first&quot;</code>, each row (or column) is compared to the first row (or column), which is particularly helpful to highlight historical evolutions. The first rows then appears in white (while totals are themselves colored like normal lines).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.factor</span>(year))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, year, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>, <span class="at">diff =</span> <span class="st">&quot;first&quot;</span>, <span class="at">tot =</span> <span class="st">&quot;col&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">totaltab =</span> <span class="st">&quot;table&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 12 x 7</span>
+#&gt; <span style="color: #949494;"># Groups:         race [4]</span>
+#&gt;    race     year   `Never married` Separated Divorced Married  Total
+#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>          <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;"> 1</span> Other    2000               36%        5%      12%     47%   100%
+#&gt; <span style="color: #BCBCBC;"> 2</span> Other    2006               <span style="color: #FFAF5F;">29%</span>        <span style="color: #949494;">7%</span>      <span style="color: #949494;">11%</span>     <span style="color: #5FFFFF;">53%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 3</span> Other    2012               <span style="color: #949494;">37%</span>        <span style="color: #949494;">6%</span>       <span style="color: #FFAF5F;">7%</span>     <span style="color: #949494;">51%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 4</span> Black    2000               41%       11%      16%     32%   100%
+#&gt; <span style="color: #BCBCBC;"> 5</span> Black    2006               <span style="color: #5FFFFF;">47%</span>        <span style="color: #FFAF5F;">6%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">30%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 6</span> Black    2012               <span style="color: #949494;">43%</span>        <span style="color: #FFAF5F;">5%</span>      <span style="color: #5FFFFF;">21%</span>     <span style="color: #949494;">31%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;"> 7</span> White    2000               25%        3%      18%     54%   100%
+#&gt; <span style="color: #BCBCBC;"> 8</span> White    2006               <span style="color: #949494;">22%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">19%</span>     <span style="color: #949494;">57%</span>   100%
+#&gt; <span style="color: #BCBCBC;"> 9</span> White    2012               <span style="color: #949494;">25%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">53%</span>   100%
+#&gt; 
+#&gt; <span style="color: #BCBCBC;">10</span> Ensemble 2000               28%        4%      17%     50%   100%
+#&gt; <span style="color: #BCBCBC;">11</span> Ensemble 2006               <span style="color: #949494;">26%</span>        <span style="color: #949494;">4%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">52%</span>   100%
+#&gt; <span style="color: #BCBCBC;">12</span> Ensemble 2012               <span style="color: #949494;">29%</span>        <span style="color: #949494;">4%</span>      <span style="color: #949494;">18%</span>     <span style="color: #949494;">50%</span>   100%
+#&gt; <span style="color: #949494;"># marital: </span>x &gt; x1 <span style="color: #5FFFFF;">+5%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #949494;">; </span>x &lt; x1 <span style="color: #FFAF5F;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-30%</span>
+</code></pre>
+</div>
+<div id="confidence-intervals" class="section level2">
+<h2>Confidence intervals</h2>
+<p>It it possible to print confidence intervals for each cell:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">ci =</span> <span class="st">&quot;cell&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   `No answer` `Never married` Separated Divorced Widowed  Married  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>      <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other      0% ±0.3        32% ±2.1   6% ±1.1 11% ±1.5 4% ±0.9 48% ±2.2   100%
+#&gt; <span style="color: #BCBCBC;">2</span> Black      0% ±0.2        42% ±1.7   6% ±0.9 16% ±1.3 8% ±1.0 28% ±1.6   100%
+#&gt; <span style="color: #BCBCBC;">3</span> White      0% ±0.1        21% ±0.6   3% ±0.3 16% ±0.6 9% ±0.4 51% ±0.8   100%
+#&gt; <span style="color: #BCBCBC;">4</span> Total      0%             25%        3%      16%      8%      47%        100%
+</code></pre>
+<p>It is also possible to use confidence intervals to enhance colors helpers. With <code>color = &quot;diff_ci&quot;</code>, the cells are only colored if the confidence interval of the difference between them and their reference cell (in total or first row/col) is superior to the difference itself. Otherwise, it means the cell is not significantly different from it’s reference in the total (or first) row: it turns grey, and the reader is not anymore tempted to over-interpret the difference.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff_ci&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   `No answer` `Never married` Separated Divorced Widowed Married  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>      <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other           <span style="color: #949494;">0%</span>             <span style="color: #5FFFFF;">32%</span>        <span style="color: #949494;">6%</span>      <span style="color: #949494;">11%</span>      <span style="color: #949494;">4%</span>     <span style="color: #949494;">48%</span>   100%
+#&gt; <span style="color: #BCBCBC;">2</span> Black           <span style="color: #949494;">0%</span>             <span style="color: #00D7FF;">42%</span>        <span style="color: #949494;">6%</span>      <span style="color: #949494;">16%</span>      <span style="color: #949494;">8%</span>     <span style="color: #FF8700;">28%</span>   100%
+#&gt; <span style="color: #BCBCBC;">3</span> White           <span style="color: #949494;">0%</span>             <span style="color: #949494;">21%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">16%</span>      <span style="color: #949494;">9%</span>     <span style="color: #949494;">51%</span>   100%
+#&gt; <span style="color: #BCBCBC;">4</span> Total           0%             25%        3%      16%      8%     47%   100%
+#&gt; <span style="color: #949494;"># marital: </span>|x-tot|&gt;ci &amp; x &gt; tot <span style="color: #5FFFFF;">+5%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #949494;">; </span>|x-tot|&gt;ci &amp; x &lt; tot <span style="color: #FFAF5F;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-30%</span>
+</code></pre>
+<p>Finally, another calculation appears helpful: the difference between the cell and the total, minus the confidence interval of this difference (or in other word, what remains of that difference after having subtracted the confidence interval). <code>ci = &quot;after_ci&quot;</code> highligths all the cells whose value is significantly different from the relative total (or first cell). This is particularly useful when working on small populations: we can see at a glance which numbers we have right to read and interpret.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">subtext =</span> gss, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   `No answer` `Never married` Separated Divorced Widowed Married  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>      <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other           <span style="color: #949494;">0%</span>             <span style="color: #5FFFFF;">32%</span>        <span style="color: #5FFFFF;">6%</span>      <span style="color: #949494;">11%</span>      <span style="color: #949494;">4%</span>     <span style="color: #949494;">48%</span>   100%
+#&gt; <span style="color: #BCBCBC;">2</span> Black           <span style="color: #949494;">0%</span>             <span style="color: #00D7FF;">42%</span>        <span style="color: #5FFFFF;">6%</span>      <span style="color: #949494;">16%</span>      <span style="color: #949494;">8%</span>     <span style="color: #FF5F5F;">28%</span>   100%
+#&gt; <span style="color: #BCBCBC;">3</span> White           <span style="color: #949494;">0%</span>             <span style="color: #949494;">21%</span>        <span style="color: #949494;">3%</span>      <span style="color: #949494;">16%</span>      <span style="color: #5FFFFF;">9%</span>     <span style="color: #5FFFFF;">51%</span>   100%
+#&gt; <span style="color: #BCBCBC;">4</span> Total           0%             25%        3%      16%      8%     47%   100%
+#&gt; <span style="color: #949494;"># marital: </span>|x-tot| &gt; ci <span style="color: #5FFFFF;">+0%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+5%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+15%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+25%</span><span style="color: #949494;">; </span>|x-tot| &gt; ci <span style="color: #FFAF5F;">-0%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-15%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-25%</span>
+#&gt; <span style="color: #949494;"># Source: General social survey 2000-2014</span>
+</code></pre>
+</div>
+<div id="chi2-stats-and-contributions-of-cells-to-variance" class="section level2">
+<h2>Chi2 stats and contributions of cells to variance</h2>
+<p><code>chi2 = TRUE</code> add summary statistics made in the chi2 metric: degrees of freedom (df), unweighted count, pvalue and (sub)table’s variance. Chi2 pvalue is colored in green when inferior to 5%, and in red when superior or equal to 5%, meaning that the table is not significantly different from the independent hypothesis (the two variables may be independent).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats     marital</span>
+#&gt; </span>df                  12
+#&gt; variance        0.0464
+#&gt; pvalue              <span style="color: #0000FF;">0%</span>
+#&gt; <span style="text-decoration: underline;">count           21 483</span>
+#&gt; 
+#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   `No answer` `Never married` Separated Divorced Widowed Married  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>         <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other            2             633       110      212      70     932  1 959
+#&gt; <span style="color: #BCBCBC;">2</span> Black            2           1 305       196      495     262     869  3 129
+#&gt; <span style="color: #BCBCBC;">3</span> White           13           3 478       437    2 676   1 475   8 316 16 395
+#&gt; <span style="color: #BCBCBC;">4</span> Total           17           5 416       743    3 383   1 807  10 117 21 483
+</code></pre>
+<p>Chi2 stats can also be used to color cells based on their contributions to the variance of the (sub)table, with <code>color = &quot;contrib&quot;</code>. By default, only the cells whose contribution is superior to the mean contribution are colored. It highlights the cells which would stand out in a correspondence analysis (the two related categories would be located at the edges of the first axes ; here, being black is associated with never married and being separated).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">color =</span> <span class="st">&quot;contrib&quot;</span>)</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats     marital</span>
+#&gt; </span>df                  12
+#&gt; variance        0.0464
+#&gt; pvalue              <span style="color: #0000FF;">0%</span>
+#&gt; <span style="text-decoration: underline;">count           21 483</span>
+#&gt; 
+#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   `No answer` `Never married` Separated Divorced Widowed Married  Total
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>         <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;n&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other            <span style="color: #949494;">2</span>             <span style="color: #949494;">633</span>       <span style="color: #949494;">110</span>      <span style="color: #949494;">212</span>      <span style="color: #949494;">70</span>     <span style="color: #949494;">932</span>  1 959
+#&gt; <span style="color: #BCBCBC;">2</span> Black            <span style="color: #949494;">2</span>           <span style="color: #0087FF;">1 305</span>       <span style="color: #5FFFFF;">196</span>      <span style="color: #949494;">495</span>     <span style="color: #949494;">262</span>     <span style="color: #FF8700;">869</span>  3 129
+#&gt; <span style="color: #BCBCBC;">3</span> White           <span style="color: #949494;">13</span>           <span style="color: #FFAF5F;">3 478</span>       <span style="color: #949494;">437</span>    <span style="color: #949494;">2 676</span>   <span style="color: #949494;">1 475</span>   <span style="color: #949494;">8 316</span> 16 395
+#&gt; <span style="color: #BCBCBC;">4</span> Total           17           5 416       743    3 383   1 807  10 117 21 483
+#&gt; <span style="color: #949494;"># marital: </span>contrib &gt; mean_ctr <span style="color: #5FFFFF;">×1</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">×2</span><span style="color: #949494;">; </span><span style="color: #0087FF;">×5</span><span style="color: #949494;">; </span><span style="color: #0000FF;">×10</span><span style="color: #949494;">; </span>contrib &gt; mean_ctr <span style="color: #FFAF5F;">×1</span><span style="color: #949494;">; </span><span style="color: #FF8700;">×2</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">×5</span><span style="color: #949494;">; </span><span style="color: #FF0000;">×10</span>
+</code></pre>
+</div>
+<div id="combine-tabxplor-and-dplyr" class="section level2">
+<h2>Combine tabxplor and dplyr</h2>
+<p>The result of <code>tab</code> is a <code>tibble::tibble</code> dataframe with class <code>tab</code>. It gets it’s own printing methods but, in the same time, can be transformed using most dplyr verbs, like a normal tibble.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(storms, category, status, <span class="at">sup_cols =</span> <span class="fu">c</span>(<span class="st">&quot;pressure&quot;</span>, <span class="st">&quot;wind&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">!=</span> <span class="st">&quot;-1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">tropical depression</span><span class="st">`</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(category)) <span class="co"># use is_totrow to keep total rows</span></span></code></pre></div>
+<p>With <code>dplyr::arrange</code>, don’t forget to keep the order of tab variables and total rows:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year, <span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(Married))</span></code></pre></div>
+</div>
+<div id="draw-more-complex-tables-with-tab_many" class="section level2">
+<h2>Draw more complex tables with <code>tab_many</code></h2>
+<p><code>tab</code> is a wrapper around the more powerful function <code>tab_many</code>, which can be used to customize your tables.</p>
+<p>It’s possible, for example, to make a summary table of as many columns variables as you want (showing all levels, or showing only one specific level like here):</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>first_lvs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Married&quot;</span>, <span class="st">&quot;$25000 or more&quot;</span>, <span class="st">&quot;Strong republican&quot;</span>, <span class="st">&quot;Protestant&quot;</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> forcats<span class="sc">::</span>gss_cat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">where</span>(is.factor),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(., first_lvs[first_lvs <span class="sc">%in%</span> <span class="fu">levels</span>(.)])</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">tab_many</span>(data, race, <span class="fu">c</span>(marital, rincome, partyid, relig, age, tvhours),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">levels =</span> <span class="st">&quot;first&quot;</span>, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>tabs</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats     marital   rincome   partyid     relig       age   tvhours</span>
+#&gt; </span>df                  12        32        20        30                    
+#&gt; variance        0.0464    0.0092    0.1231    0.1299                    
+#&gt; pvalue              <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>                    
+#&gt; <span style="text-decoration: underline;">count           21 483    21 483    21 483    21 483    21 407    11 337</span>
+#&gt; 
+#&gt; <span style="color: #949494;"># A tabxplor tab: 4 x 8</span>
+#&gt;   race   Married `$25000 or more` `Strong republi~ Protestant Total   age tvhours
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt; </span>  <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;row%&gt;</span> <span style="color: #949494; font-style: italic;">&lt;row&gt;</span> <span style="color: #949494; font-style: italic;">&lt;mea&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;mean&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> Other      <span style="color: #949494;">48%</span>              <span style="color: #949494;">32%</span>               <span style="color: #FFAF5F;">4%</span>        <span style="color: #FF0000;">20%</span>  100%    <span style="color: #FFAF5F;">39</span>       <span style="color: #949494;">3</span>
+#&gt; <span style="color: #BCBCBC;">2</span> Black      <span style="color: #FF8700;">28%</span>              <span style="color: #FFAF5F;">28%</span>               <span style="color: #FFAF5F;">2%</span>        <span style="color: #0087FF;">73%</span>  100%    <span style="color: #949494;">44</span>       <span style="color: #5FFFFF;">4</span>
+#&gt; <span style="color: #BCBCBC;">3</span> White      <span style="color: #949494;">51%</span>              <span style="color: #949494;">36%</span>              <span style="color: #949494;">13%</span>        <span style="color: #949494;">50%</span>  100%    <span style="color: #949494;">49</span>       <span style="color: #949494;">3</span>
+#&gt; <span style="color: #BCBCBC;">4</span> Total      47%              34%              11%        50%  100%    47       3
+#&gt; <span style="color: #949494;"># marital, rincome, partyid: </span>x &gt; tot <span style="color: #5FFFFF;">+5%</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #949494;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #949494;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #949494;">; </span>x &lt; tot <span style="color: #FFAF5F;">-5%</span><span style="color: #949494;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #949494;">; </span><span style="color: #FF0000;">-30%</span>
+#&gt; <span style="color: #949494;"># age, tvhours             : </span>x &gt; tot <span style="color: #5FFFFF;">×1.15</span><span style="color: #949494;">; </span><span style="color: #00D7FF;">×1.5</span><span style="color: #949494;">; </span><span style="color: #0087FF;">×2</span><span style="color: #949494;">; </span><span style="color: #0000FF;">×4</span><span style="color: #949494;">; </span>x &lt; tot <span style="color: #FFAF5F;">/1.15</span><span style="color: #949494;">; </span><span style="color: #FF8700;">/1.5</span><span style="color: #949494;">; </span><span style="color: #FF5F5F;">/2</span><span style="color: #949494;">; </span><span style="color: #FF0000;">/4</span>
+</code></pre>
+<p>Using <code>tab</code> or <code>tab_many</code> with <code>purrr::map</code> and <code>tibble::tribble</code>, you can program several tables with different parameters all at once, in a readable way:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">pmap</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span>row_var, <span class="sc">~</span>col_vars       , <span class="sc">~</span>pct , <span class="sc">~</span>filter              , <span class="sc">~</span>subtext               ,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;row&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;col&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2000:2010&quot;</span>, <span class="st">&quot;Source: GSS 2000-2010&quot;</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2010:2014&quot;</span>, <span class="st">&quot;Source: GSS 2010-2014&quot;</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NA_character_</span>, <span class="st">&quot;race&quot;</span>     , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.f =</span> tab_many,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> forcats<span class="sc">::</span>gss_cat, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="export-to-html-or-excel" class="section level2">
+<h2>Export to html or Excel</h2>
+<p>To export a table to html with colors, tabxplor uses <code>knitr::kable</code> and <code>kableExtra</code>. In this format differences from totals, confidence intervals, contribution to variance, and unweighted counts, are available in a tooltip at cells hover.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_kable</span>()</span></code></pre></div>
+<table class=" lightable-classic lightable-hover" style="font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+race
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Married
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+$25000 or more
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Strong republican
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Protestant
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Total
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+age
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+tvhours
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+Other
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; contrib: 0% ; n: 932">48%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; contrib: 2% ; n: 621">32%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #FF9933 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; contrib: 3% ; n: 81">4%</span>
+</td>
+<td style="text-align:left;">
+<span style=" font-weight: bold;    color: #FF0000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -31% ; contrib: 13% ; n: 387">20%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 959">100%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #FF9933 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +84% ; n: 1 951">39</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +93% ; n: 1 027">3</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+Black
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #FF6600 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -19% ; contrib: 25% ; n: 869">28%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #FF9933 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -6% ; contrib: 16% ; n: 886">28%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #FF9933 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -9% ; contrib: 9% ; n: 56">2%</span>
+</td>
+<td style="text-align:left;">
+<span style=" font-weight: bold;    color: #0066FF !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +22% ; contrib: 11% ; n: 2 271">73%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 129">100%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +93% ; n: 3 115">44</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #33FFFF !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +140% ; n: 1 700">4</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+White
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; contrib: 5% ; n: 8 316">51%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; contrib: 5% ; n: 5 856">36%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; contrib: 4% ; n: 2 177">13%</span>
+</td>
+<td style="text-align:left;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; contrib: 0% ; n: 8 188">50%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 16 395">100%</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +103% ; n: 16 341">49</span>
+</td>
+<td style="text-align:left;border-right:1px solid;">
+<span style="     color: #888888 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +93% ; n: 8 610">3</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;border-bottom: 1px solid">
+Total
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 6% ; n: 10 117">47%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 2% ; n: 7 363">34%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 3% ; n: 2 314">11%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 2% ; n: 10 846">50%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 21 483">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 21 407">47</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;text-align: r;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 11 337">3</span>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> <span style="     color: #888888 !important;">marital, rincome, partyid: </span>x &gt; tot <span style="     color: #33FFFF !important;">+5%</span>; <span style="     color: #00CCFF !important;">+10%</span>; <span style="     color: #0066FF !important;">+20%</span>; <span style="     color: #0000FF !important;">+30%</span>; x &lt; tot <span style="     color: #FF9933 !important;">-5%</span>; <span style="     color: #FF6600 !important;">-10%</span>; <span style="     color: #FF3333 !important;">-20%</span>; <span style="     color: #FF0000 !important;">-30%</span>
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> <span style="     color: #888888 !important;">age, tvhours : </span>x &gt; tot <span style="     color: #33FFFF !important;">×1.15</span>; <span style="     color: #00CCFF !important;">×1.5</span>; <span style="     color: #0066FF !important;">×2</span>; <span style="     color: #0000FF !important;">×4</span>; x &lt; tot <span style="     color: #FF9933 !important;">/1.15</span>; <span style="     color: #FF6600 !important;">/1.5</span>; <span style="     color: #FF3333 !important;">/2</span>; <span style="     color: #FF0000 !important;">/4</span>
+</td>
+</tr>
+</tfoot>
+</table>
+<p>To print an html table by default (for example, in RStudio viewer), use tabxplor options:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">tabxplor.print =</span> <span class="st">&quot;kable&quot;</span>) <span class="co"># default to options(tabxplor.print = &quot;console&quot;)</span></span></code></pre></div>
+<p><code>tab_xl</code> exports any table or list of tables to Excel, with all colors, chi2 stats and formatting. On Excel, it is still possible to do calculations on raw numbers.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_xl</span>(<span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">sheets =</span> <span class="st">&quot;unique&quot;</span>)</span></code></pre></div>
+</div>
+<div id="programming-with-tabxplor" class="section level2">
+<h2>Programming with <code>tabxplor</code></h2>
+<p>When not doing data analysis but writing functions, you can use the sub-functions of <code>tab_many</code> step by step to attain more flexibility or speed. That way, it’s possible to write new functions to customize your tables even more.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_prepare</span>(sex, hair_color, gender, <span class="at">rare_to_other =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">n_min =</span> <span class="dv">5</span>, <span class="at">na =</span> <span class="st">&quot;keep&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_core</span>(sex, hair_color, gender) <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_totaltab</span>(<span class="st">&quot;line&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_tot</span>()  <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_pct</span>(<span class="at">comp =</span> <span class="st">&quot;all&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_ci</span>(<span class="st">&quot;diff&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_chi2</span>(<span class="at">calc =</span> <span class="st">&quot;p&quot;</span>)</span></code></pre></div>
+<p>The whole architecture of <code>tabxplor</code> is powered by a special vector class, named <code>fmt</code> for formatted numbers. As a <code>vctrs::record</code>, it stores behind the scenes all the data necessary to calculate printed results, formats and colors. A set of functions are available to access or transform this data, like <code>is_totrow</code>, <code>is_totcol</code> or <code>is_tottab</code>. <code>?fmt</code> to get more information.</p>
+<p>The simple way to recover the underlying numbers as numeric vectors is <code>get_num</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), get_num))</span></code></pre></div>
+<p>To render character vectors (without colors), use <code>format</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), format))</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
