@@ -25,6 +25,9 @@ assignInNamespace("num_colors", num_colors, pos = "package:crayon")
 ## ---- echo = TRUE-------------------------------------------------------------
 tab(forcats::gss_cat, marital, race)
 
+## ---- include = FALSE---------------------------------------------------------
+options(tabxplor.output_kable = TRUE)
+
 ## ---- echo = TRUE-------------------------------------------------------------
 data <- forcats::gss_cat %>% 
   dplyr::filter(year %in% c(2000, 2006, 2012), !marital %in% c("No answer", "Widowed"))
@@ -58,7 +61,10 @@ tab(forcats::gss_cat, race, marital, chi2 = TRUE)
 ## ---- echo = TRUE-------------------------------------------------------------
 tab(forcats::gss_cat, race, marital, color = "contrib")
 
-## ---- echo = TRUE-------------------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
+options(tabxplor.output_kable = FALSE)
+
+## ---- echo = TRUE, message = FALSE--------------------------------------------
 library(dplyr)
 first_lvs <- c("Married", "$25000 or more", "Strong republican", "Protestant")
 data <- forcats::gss_cat %>% mutate(across(
@@ -71,5 +77,4 @@ tabs
 
 ## ---- echo = TRUE-------------------------------------------------------------
 tabs %>% tab_kable()
-
 

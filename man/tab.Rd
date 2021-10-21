@@ -98,7 +98,7 @@ otherwise they are colored with "diff".
 \item \code{"tot"}: by default, cells differences from total rows are calculated with
 \code{pct = "row"}, and cells differences from total columns with \code{pct = "col"}.
 \item \code{"first"}: calculate cells differences from the first cell
-of the row or column (useful to color temporal evolutions).
+of the row or column (useful to color temporal developments).
 \item \code{"no"}: not use diffs to gain calculation time.
 }}
 
@@ -236,7 +236,7 @@ tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff",
 data2 <- data \%>\% dplyr::mutate(year = as.factor(year))
 tab(data2, year, marital, race, subtext = gss2, pct = "row",
     color = "diff", diff = "first", tot = "col")
-    }
+
 
 # Differences with the total, except if their confidences intervals are superior to them:
 tab(forcats::gss_cat, race, marital, subtext = gss, pct = "row", color = "diff_ci")
@@ -246,7 +246,7 @@ tab(forcats::gss_cat, race, marital, subtext = gss, pct = "row", color = "after_
 
 # Contribution of cells to table's variance, like in a correspondence analysis:
 tab(forcats::gss_cat, race, marital, subtext = gss, color = "contrib")
-
+}
 
 # Since the result is a tibble, you can use all dplyr verbs to modify it :
 \donttest{
