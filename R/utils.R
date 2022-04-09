@@ -522,18 +522,72 @@ formats_SAS_to_R <- function(path, name_in, name_out) {
     path_out <- stringr::str_c("formats_R-", name_out, ".R")
   }
 
+  #path_out <- tempfile("recode", fileext = ".R")
+  writeLines(f, path_out, useBytes = TRUE)
 
-  file.create(path_out)
-  con <- file(path_out, open = "wt", encoding = "UTF-8")
-  sink(con)
-  cat(f)
-  sink()
-  close(con)
+  # file.create(path_out)
+  # con <- file(path_out, open = "wt", encoding = "UTF-8")
+  # sink(con)
+  # cat(f)
+  # sink()
+  # close(con)
   # file.show(path_out) # Ouvrir le resultat.
 
   return(path_out)
 }
 
+#' fct_recode helper to recode multiple variables
+#'
+#' @param .data The data frame.
+#' @param .cols <\link[tidyr:tidyr_tidy_select]{tidy-select}> The variables to recode.
+#' @param .data_out_name The name of the output data frame, if different from the
+#' input data frame.
+#' @param cat By default the result is written in the console if there are less than
+#' 6 variables, written in a temporary file and opened otherwise. Set to
+#' false to get a data frame with a character variable instead.
+#'
+#' @return A temporary R file. A `tibble` with the recode text as a character variable is
+#'  returned invisibly (or as main result if `cat = TRUE`).
+# @export
+fct_recode_helper <- function(.data, .cols = -where(is.numeric), .data_out_name, cat = TRUE) {
+  .data_in_name <- rlang::enquo(.data) %>% rlang::as_name()
+  if(missing(.data_out_name)) .data_out_name <- .data_in_name
+
+  pos_cols <- tidyselect::eval_select(rlang::enquo(.cols), .data)
+  .data <- .data[pos_cols]
+  .data <- .data %>% dplyr::mutate(dplyr::across(.fns = as.factor))
+
+  recode <- .data %>%
+    purrr::map(~ paste0("\"",
+                        #stringi::stri_escape_unicode(
+                        stringr::str_replace_all(
+                          levels(.), "\"", "'"
+                          #)
+                        ),
+                        "\"")) %>%
+    purrr::map(
+      ~ paste0(stringr::str_pad(., max(stringr::str_length(.)), "right"), " = ",
+               stringr::str_pad(., max(stringr::str_length(.)), "right"), collapse = ",\n")
+    ) %>%
+    purrr::imap(~ paste0(.data_out_name, "$", .y, " <- fct_recode(\n",
+                         .data_in_name, "$", .y, ",\n",
+                         .x, "\n)\n\n"
+
+    )) %>% purrr::flatten_chr() %>%
+    tibble::tibble(recode = .)
+
+  if (cat == FALSE) return(recode)
+
+  if (ncol(.data) <= 5) {
+    cat(recode$recode)
+  } else {
+    path <- tempfile("", fileext = ".R")
+    writeLines(recode$recode, path, useBytes = TRUE)
+    file.show(path)
+  }
+
+  invisible(recode)
+}
 
 
 #' Prepare fct_recode

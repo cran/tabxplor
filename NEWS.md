@@ -1,9 +1,25 @@
+# tabxplor 1.0.3
+
+## Added :
+*  Remove rows with missing values or 0 in `wt` (weight), for them not to be added in counts (except in `tab_plain`)
+*  `fmt_get_color_code()` to get the html color codes of a table as a character vector
+
+## Bug corrections :
+* `tab_many` : bug with totaltab when two numeric column variables (and a tabs_var)
+* `tab_spread` not working with two `tab_vars`. Ok with a workaround, but would need to calculate one subtotal for each level of `spread_vars` in * `tab_totaltab` to fully work (and, then, to fully hierarchise total tables...). 
+* `wt` argument procudes missing values with NA ; NA in weight variable are now automatically removed (excepted in `tab_plain`)
+* Addition between `fmt` vectors wasn't working no more with percentages
+* In `tab_plain`, `col_var` was not sorted anymore (`names_sort = TRUE` added in `pivot_wider`)
+* `tab_color_legend()` was not working when some cols were colored and some not colored
+* In `tab()` functions, correction was made to remove a R 4.1.2 `dplyr` warning message (data frame results in `filter()` are deprecated, use `if_any()` or `if_all()`). 
+
+
 # tabxplor 1.0.2
 
 ## Added : 
 * With `tab_kable`, option to use html `popover` instead of `tooltips`, to be able to use it in rmarkdown with a floating table of content.
 * Two new 24 bits color styles for hmtl tables (`"blue_red"` and `"green_red"`).
-* Possibility to provide a custom color palette for color styles, using `with set_color_style()`. 
+* Possibility to provide a custom color palette for color styles, using `set_color_style()`. 
 * `tab_core` was deprecated and renamed `tab_plain` for more clarity. Added options to render a table with normal numeric vectors instead of fmt, and to render a plain data.frame instead of a tibble. 
 * Two way to print confidence intervals, using global option `"tabxplor.ci_print"` : `"moe"`, for margin of errors, prints as `12%±1.1` ; `"ci"` prints the interval `11·13%`.
 * In `tab_kable`, confidence intervals of type `"cell` with print type `"moe"` appear in subscript. 
@@ -28,4 +44,4 @@
 
 
 # tabxplor 1.0.0
-* This is the first stable and published version of `tabxplor` !
+* This is the first stable and published version of `tabxplor`.

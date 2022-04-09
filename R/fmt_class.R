@@ -98,6 +98,7 @@ globalVariables(c(":="))
 #' @param col_var The name of the \code{col_var} used to calculate the vector
 #' @param totcol \code{TRUE} when the vector is a total column
 #' @param refcol \code{TRUE} when the vector is a reference column
+#' @param fmt A fmt vector to test or to modify fields.
 #' @param color The type of color to print :
 #' \itemize{
 #'   \item \code{"no"}: no colors are printed.
@@ -493,6 +494,27 @@ as_totcol     <- function(x, totcol = TRUE) {
 }
 
 
+#' Get HTML Color Code of a fmt vector
+#' @param fmt A fmt vector.
+#'
+#' @return A character vector with html color codes, of the length of the initial vector.
+#' @export
+  fmt_get_color_code <- function(fmt) {
+  color_selection <- fmt_color_selection(fmt) %>% purrr::map(which)
+
+  color_styles <- select_in_color_style(length(color_selection))
+  color_styles <- get_color_style("color_code", type = "text", theme = "light")[color_styles]
+
+  color_positions <- color_selection %>%
+    purrr::map2(color_styles, ~ purrr::set_names(.x, stringr::str_to_upper(.y))) %>%
+    purrr::flatten_int()
+
+  no_color <- 1:length(fmt)
+  no_color <- purrr::set_names(no_color[!no_color %in% color_positions], NA_character_)
+
+  names(sort(c(color_positions, no_color)))
+}
+
 
 
 # INTERNAL FUNCTIONS #####################################################################
@@ -632,14 +654,14 @@ get_wn     <- function(fmt) { #If there is no weighted counts, take counts
 #' @keywords internal
 # @export
 get_pct    <- fmt_field_factory("pct")
-# @describeIn fmt get the "pct" field
+# @describeIn fmt get the "diff" field (differences from totals or first cells)
 #' @keywords internal
 # @export
 get_diff   <- fmt_field_factory("diff")
 #get_pct_ci <- function(fmt) vctrs::field("pct")
-# @describeIn fmt get the "diff" field (differences from totals or first cells)
-#' @keywords internal
-# @export
+#' @describeIn fmt get the "digits" field
+# @keywords internal
+#' @export
 get_digits <- fmt_field_factory("digits")
 # @describeIn fmt get the "ctr" field (relative contributions of cells to variance)
 #' @keywords internal
@@ -689,14 +711,16 @@ get_ref_means <- function(x) {
   mean    <- get_mean(x)
 
   if (comp) {
-    rep(mean[refrows & tottabs], length(x))
+   refs <- mean[refrows & tottabs]
+   if (length(refs) == 0) {rep(NA_real_, length(x))} else {rep(mean[refs], length(x))}
   } else {
     tibble::tibble(
       mean = mean,
       gr = cumsum(as.integer(refrows)) - as.integer(refrows) ) %>%
       dplyr::mutate(nb = dplyr::row_number()) %>%
       dplyr::with_groups(.data$gr, ~ dplyr::mutate(., nb = dplyr::last(.data$nb))) %>%
-      dplyr::mutate(ref_means = .data$mean[.data$nb]) %>% dplyr::pull(.data$ref_means)
+      dplyr::mutate(ref_means = .data$mean[.data$nb]) %>%
+      dplyr::pull(.data$ref_means)
   }
 }
 
@@ -994,16 +1018,16 @@ set_wn      <- fmt_set_field_factory("wn"     , cast = double()   )
 #' @keywords internal
 # @export
 set_pct     <- fmt_set_field_factory("pct"    , cast = double()   )
-# @describeIn fmt set the "diff" field
+# @describeIn fmt set the "diff" field (differences from totals or first cells)
 #' @keywords internal
 # @export
 set_diff    <- fmt_set_field_factory("diff"   , cast = double()   )
-# @describeIn fmt set the "digits" field (differences from totals or first cells)
-#' @keywords internal
-# @export
+#' @describeIn fmt set the "digits" field
+# @keywords internal
+#' @export
 set_digits  <- fmt_set_field_factory("digits" , cast = integer()  )
 # @describeIn fmt set the "ctr" field (relative contributions of cells to variance)
-#' @keywords internal
+# @keywords internal
 # @export
 set_ctr     <- fmt_set_field_factory("ctr"    , cast = double()   )
 # @describeIn fmt set the "mean" field
@@ -1072,7 +1096,7 @@ set_color     <- function(fmt, color) {
 #' @keywords internal
 # @export
 set_comp      <- function(fmt, value = c("tab", "all")) {
-  `attr<-`(fmt, "comp_all", value == "all")
+  `attr<-`(fmt, "comp_all", value == "all") # PB ??
 }
 
 
@@ -1103,10 +1127,11 @@ ci_html_subscript <- function(x, html = FALSE) {
 #' @param x A fmt object.
 #' @param ... Other parameters.
 #' @param html Should html tags be added (to print confidence intervals as subscripts) ?
+#' @param na How `NA`s should be printed. Default to `NA`.
 #'
 #' @return The fmt printed in a character vector.
 #' @export
-format.tabxplor_fmt <- function(x, ..., html = FALSE) {
+format.tabxplor_fmt <- function(x, ..., html = FALSE, na = NA) {
   out    <- get_num(x)
   na_out <- is.na(out)
 
@@ -1182,7 +1207,7 @@ format.tabxplor_fmt <- function(x, ..., html = FALSE) {
   }
 
   out[!na_out] <- print_num(out[!na_out], digits[!na_out])
-  out[ na_out] <- NA
+  out[na_out] <- na
   if (any(plus_ci)) out[plus_ci] <- out_ci
   out[n_wn] <- out[n_wn] %>% prettyNum(big.mark = " ", preserve.width = "individual")
   out[pct_no_ci] <- paste0(out[pct_no_ci], "%") #pillar::style_subtle()
@@ -1547,6 +1572,11 @@ tab_color_legend <- function(x, colored = TRUE, mode = c("console", "html"),
                              text_color = NULL,
                              grey_color = NULL) {
   color     <- get_color(x)
+
+  x <- x[!is.na(color) & !color %in% c("no", "")]
+
+  color <- get_color(x)
+
   type      <- get_type(x)
   diff_type <- get_diff_type(x)
   col_vars_levels <- tab_get_vars(x)$col_vars_levels %>%
@@ -2284,9 +2314,11 @@ vec_arith.tabxplor_fmt.tabxplor_fmt <- function(op, x, y, ...) {
       display = get_display(x),      #dplyr::if_else(get_display(x) == get_display(x)), true = get_display(x), false = "n),
       n       = vctrs::vec_arith_base(op, get_n(x)  , get_n(y)  ), #%>% positive_integer(),
       wn      = vctrs::vec_arith_base(op, get_wn(x) , get_wn(y) ), #%>% positive_double(),
-      pct     = ifelse(same_type & ! type_x %in% c("col", "mean", "n"),
-                       yes  = vctrs::vec_arith_base(op, get_pct(x), get_pct(y)),
-                       no = NA_real_) %>% tidyr::replace_na(NA_real_), #NA_real_
+      pct     = if (same_type & !type_x %in% c("col", "mean", "n") ) {
+        tidyr::replace_na(vctrs::vec_arith_base(op, get_pct(x), get_pct(y)), NA_real_)
+      } else {
+        rep_NA_real
+      },
       diff    = rep_NA_real,
       digits  = pmax(get_digits(x), get_digits(y)),
       ctr     = rep_NA_real, # ???
