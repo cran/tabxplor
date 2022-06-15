@@ -12,12 +12,13 @@
 \usage{
 tab_many(
   data,
-  row_var,
+  row_vars,
   col_vars,
   tab_vars,
   wt,
   levels = "all",
   na = "keep",
+  na_drop_all,
   digits = 0,
   totaltab = "line",
   totaltab_name = "Ensemble",
@@ -26,19 +27,19 @@ tab_many(
   total_names = "Total",
   pct = "no",
   diff = "tot",
-  comp = c("tab", "all"),
+  comp = "tab",
   chi2 = FALSE,
   ci = "no",
   conf_level = 0.95,
-  ci_visible = FALSE,
+  method_cell = "wilson",
+  method_diff = "ac",
   color = "no",
   subtext = "",
   cleannames = NULL,
   rare_to_other = FALSE,
   n_min = 30,
   other_level = "Others",
-  filter,
-  listed = FALSE
+  filter
 )
 
 tab_get_vars(tabs, vars = c("row_var", "col_vars", "tab_vars"))
@@ -66,8 +67,9 @@ get_color_breaks(brk, type = c("positive", "all"))
 \arguments{
 \item{data}{A data frame.}
 
-\item{row_var}{The row variable, which will be printed with one level per line.
-For numeric variables means are calculated, in a single row.}
+\item{row_vars}{The row variable, which will be printed with one level per line.
+If numeric, it will be converted to factor. If more than one row_var if provided,
+a different table is made for each of them.}
 
 \item{col_vars}{<\link[tidyr:tidyr_tidy_select]{tidy-select}>
 One column is printed for each level of each column variable.
@@ -82,29 +84,29 @@ All tab variables are converted to factor. Leave empty to make a simple table.}
 \item{wt}{A weight variable, of class numeric. Leave empty for unweighted results.}
 
 \item{levels}{The levels of \code{col_vars} to keep (for more complex selections
-use \code{\link[dplyr:select]{dplyr::select}}) :
+use \code{\link[dplyr:select]{dplyr::select}}). The argument is vectorised over \code{col_vars}.
 \itemize{
 \item \code{"all"}: by default, all levels are kept.
 \item \code{"first"}: only keep the first level of each \code{col_vars}
 }}
 
-\item{na}{The policy to adopt with missing values. It can be a single string, or a
-character vector the same length of the number of variables (row + cols + tabs) :
+\item{na}{The policy to adopt with missing values. It must be a single string.
 \itemize{
 \item \code{na = "keep"}: by default, prints \code{NA}'s as explicit \code{"NA"} level.
 \item \code{na = "drop"}: removes \code{NA} levels before making each table
 (tabs made with different column variables may have a different number of
 observations, and won't exactly have the same total columns).
-\item \code{na = "drop_all"}: first removes observations with NA in any related
-variable, for all tables (tabs for each column variable will have the same number of
-observations).
 }}
 
-\item{digits}{The number of digits to print, as a single integer, or an integer vector
-the same length as \code{col_vars}.}
+\item{na_drop_all}{<\link[tidyr:tidyr_tidy_select]{tidy-select}>
+Removes all observations with a \code{NA} in any of the chosen variables, for all tables
+(tabs for each column variable will have the same number of observations).}
 
-\item{totaltab}{The total table, to create with \code{\link{tab_totaltab}},
-if there are subtables/groups (i.e. when \code{tab_vars} is provided) :
+\item{digits}{The number of digits to print, as a single integer, or an integer vector
+the same length as \code{col_vars}. The argument is vectorisez over \code{col_vars}.}
+
+\item{totaltab}{The total table, if there are subtables/groups
+(i.e. when \code{tab_vars} is provided). Vectorised over \code{row_vars}.
 \itemize{
 \item \code{"line"}: by default, add a general total line (necessary for
 calculations with \code{comp = "all"})
@@ -116,10 +118,10 @@ calculations with \code{comp = "all"})
 \item{totaltab_name}{The name of the total table, as a single string.}
 
 \item{totrow}{By default, total rows are printed.
-Set to \code{FALSE} to remove them (after calculations if needed). Arguments relative
-to totals are passed to \code{\link{tab_tot}}.}
+Set to \code{FALSE} to remove them (after calculations if needed).
+Vectorised over \code{row_vars}.}
 
-\item{totcol}{The policy with total columns :
+\item{totcol}{The policy with total columns. Vectorised over \code{col_vars}.
 \itemize{
 \item \code{"last"}: by default, only prints a total column for the last
 column variable (of class factor, not numeric).
@@ -131,38 +133,48 @@ column variable (of class factor, not numeric).
 Use syntax of type \code{c("Total row", "Total column")} to set different names for
 rows and cols.}
 
-\item{pct}{The type of percentages to calculate, passed to \code{\link{tab_pct}} :
+\item{pct}{The type of percentages to calculate :
 \itemize{
 \item \code{"row"}: row percentages.
 \item \code{"col"}: column percentages.
 \item \code{"all"}: frequencies for each subtable/group, if there is \code{tab_vars}.
 \item \code{"all_tabs"}: frequencies for the whole (set of) table(s).
-}}
+}
+The argument is vectorised over both \code{row_vars} and \code{col_vars}. You can then write as
+the following :
+\code{pct = list(row_var1 = list("row", "col", "col"), row_var2 = list("col", "row", "row"))}}
 
-\item{diff}{The reference cell to calculate differences (used to print \code{colors}) :
+\item{diff}{The reference cell to calculate differences (used to print \code{colors}).
+Vectorisez over \code{row_vars}.
 \itemize{
 \item \code{"tot"}: by default, cells differences from total rows are calculated with
 \code{pct = "row"}, and cells differences from total columns with \code{pct = "col"}.
 \item \code{"first"}: calculate cells differences from the first cell
 of the row or column (useful to color temporal developments).
-\item \code{"no"}: not use diffs to gain calculation time.
+\item \code{n}: when \code{diff} is an integer, the nth row (or column) is used for comparison.
+\item \code{"regex"}: when \code{diff} is a string, it it used as a regular expression,
+to match with the names of the rows (or columns). Be precise enough to match only one
+column or row, otherwise you get a warning message.
+\item \code{"no"}: not use diffs.
 }}
 
 \item{comp}{The comparison level : by subtables/groups, or for the whole table.
+Vectorised over \code{row_vars}.
 \itemize{
 \item \code{"tab"}: by default, contributions to variance,
 row differences from totals/first cells, and row confidence intervals for these
 differences, are calculated for each \code{tab_vars} group.
 \item \code{"all"}: compare cells to the general total line (provided there is
-a total table with a total row), or with the first line of the total table
-when \code{diff = "first"}.
+a total table with a total row), or with the reference line of the total table
+when \code{diff = "first"}, an integer or a regular expression.
 }}
 
 \item{chi2}{Set to \code{TRUE} to calculate Chi2 summaries with \code{\link{tab_chi2}}.
 Useful to print metadata, and to color cells based on their contribution to variance
-(\code{color = "contrib"}).}
+(\code{color = "contrib"}). Vectorised over \code{row_vars}.}
 
-\item{ci}{The type of confidence intervals to calculate, passed to \code{\link{tab_ci}}
+\item{ci}{The type of confidence intervals to calculate, passed to \code{\link{tab_ci}}.
+Vectorised over \code{row_vars}.
 \itemize{
 \item \code{"cell"}: absolute confidence intervals of cells percentages.
 \item \code{"diff"}: confidence intervals of the difference between a cell and the
@@ -177,10 +189,20 @@ Means use classic method. This can be changed in \code{\link{tab_ci}}.}
 \item{conf_level}{The confidence level, as a single numeric between 0 and 1.
 Default to 0.95 (95\%).}
 
-\item{ci_visible}{By default, confidence intervals are calculated and used to set
-colors, but not printed. Set to \code{TRUE} to print them in the result.}
+\item{method_cell}{Character string specifying which method to use with percentages
+for \code{ci = "cell"}. This can be one out of:
+"wald", "wilson", "wilsoncc", "agresti-coull", "jeffreys", "modified wilson",
+"modified jeffreys", "clopper-pearson", "arcsine", "logit", "witting", "pratt",
+"midp", "lik" and "blaker". Defaults to "wilson".
+See \code{\link[DescTools:BinomCI]{BinomCI}}.}
 
-\item{color}{The type of colors to print, as a single string :
+\item{method_diff}{Character string specifying which method to use with percentages
+for \code{ci = "diff"}. This can be one out of: "wald", "waldcc", "ac", "score",
+"scorecc", "mn", "mee", "blj", "ha", "hal", "jp". Defaults to "ac", Wald interval with
+the adjustment according to Agresti, Caffo for difference in proportions and
+independent samples. See \code{\link[DescTools:BinomDiffCI]{BinomDiffCI}}.}
+
+\item{color}{The type of colors to print, as a single string. Vectorised over \code{row_vars}.
 \itemize{
 \item \code{"no"}: by default, no colors are printed.
 \item \code{"diff"}: color percentages and means based on cells differences from
@@ -216,10 +238,6 @@ first, as a single string (which will be converted to code, i.e. to a call).
 Useful when printing multiples tabs with \code{\link[tibble:tribble]{tibble::tribble}},
 to use different filters for similar tables or simply make the field of observation
 more visible into the code.}
-
-\item{listed}{By default the result is a single table, grouped by \code{tab_vars}, and
-with as many fmt columns as there is levels in all \code{col_vars}. Set to \code{TRUE}
-to keep it as a list of individual tables, with one table for each \code{col_vars}.}
 
 \item{tabs}{A \code{tibble} of class \code{tab}, made with \code{\link{tab}},
 \code{\link{tab_many}} or \code{\link{tab_plain}}.}
@@ -275,6 +293,7 @@ break, among \code{"pct"}, \code{"mean"}, \code{"contrib"}, \code{"pct_ci"} and
 }
 \value{
 A \code{tibble} of class \code{tab}, possibly with colored reading helpers.
+When there are two \code{row_vars} or more, a list of \code{tibble} of class \code{tab}.
 All non-text columns are of class \code{\link{fmt}}, storing all
 the data necessary to print formats and colors. Columns with \code{row_var} and
 \code{tab_vars} are of class \code{factor} : every added \code{factor} will be
@@ -301,7 +320,7 @@ as one, using colors to make the printed tab more easily readable (in R terminal
 exported to Excel with \code{\link{tab_xl}}).
 Since objects of class \code{tab} are also of class \code{tibble}, you can then use all
 \pkg{dplyr} verbs to modify the result, like \code{\link[dplyr:select]{select}},
-like \code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
+\code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
 or \code{\link[dplyr:mutate]{mutate}}.
 
 Only breaks for attractions/over-representations (in green) should be

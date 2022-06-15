@@ -21,10 +21,9 @@ tab(
   totaltab_name = "Ensemble",
   tot = c("row", "col"),
   total_names = "Total",
-  chi2 = NULL,
-  ci = NULL,
+  chi2 = FALSE,
+  ci = "no",
   conf_level = 0.95,
-  ci_visible = NULL,
   subtext = "",
   cleannames = NULL,
   rare_to_other = FALSE,
@@ -53,21 +52,20 @@ To pass many variables you may use syntax \code{sup_cols = c(sup_col1, sup_col2,
 To keep all levels of other \code{col_vars}, or other types of percentages,
 use \code{\link{tab_many}} instead.}
 
-\item{na}{The policy to adopt with missing values, as a single string (for a more
-precise control over the behavior of \code{NA}'s, vectorized for each variable,
-use \code{\link{tab_many}}).
+\item{na}{The policy to adopt for missing values, as a single string :
 \itemize{
-\item \code{"keep"}: by default, \code{NA}'s of row, col and tab variables are printed
-as explicit "NA" level. Observations with NA in \code{sup_cols} variables are always
-kept to calculate the base table, always removed to calculate supplementary cols.
-\item \code{"drop"}: removes NA of row, col and tab variables.
+\item \code{"keep"}: by default, \code{NA}'s of row, col and tab variables
+are printed as an explicit \code{"NA"} level.
+\item \code{"drop"}: remove \code{NA}'s in row, col and tab variables before calculations
+are done. Supplementary columns are then calculated for observations with no \code{NA} in
+any of the row, col and tab variables.
 }}
 
 \item{digits}{The number of digits to print, as a single integer. To print a different
 number of digits for each \code{sup_cols}, an integer vector of length
 1 + \code{sup_cols} (the first being the number of digits for the base table).}
 
-\item{pct}{The type of percentages to calculate, passed to \code{\link{tab_pct}} :
+\item{pct}{The type of percentages to calculate :
 \itemize{
 \item \code{"row"}: row percentages.
 \item \code{"col"}: column percentages.
@@ -112,8 +110,8 @@ a total table with a total row), or with the first line of the total table
 when \code{diff = "first"}.
 }}
 
-\item{totaltab}{The total table, to create with \code{\link{tab_totaltab}},
-if there are subtables/groups (i.e. when \code{tab_vars} is provided) :
+\item{totaltab}{The total table, if there are subtables/groups
+(i.e. when \code{tab_vars} is provided) :
 \itemize{
 \item \code{"line"}: by default, add a general total line (necessary for
 calculations with \code{comp = "all"})
@@ -124,7 +122,7 @@ calculations with \code{comp = "all"})
 
 \item{totaltab_name}{The name of the total table, as a single string.}
 
-\item{tot}{The totals, to create with \code{\link{tab_tot}} :
+\item{tot}{The totals :
 \itemize{
 \item \code{c("col", "row")} or \code{"both"} : by default, both total rows and total
 columns.
@@ -156,9 +154,6 @@ Means use classic method. This can be changed in \code{\link{tab_ci}}.}
 
 \item{conf_level}{The confidence level, as a single numeric between 0 and 1.
 Default to 0.95 (95\%).}
-
-\item{ci_visible}{By default, confidence intervals are calculated and used to set
-colors, but not printed. Set to \code{TRUE} to print them in the result.}
 
 \item{subtext}{A character vector to print rows of legend under the table.}
 
@@ -201,8 +196,6 @@ Wrapper around the more powerful \code{\link{tab_many}}.
 # A simple cross-table:
 tab(forcats::gss_cat, marital, race)
 
-# With one numeric row or col variables it calculates means by category:
-tab(forcats::gss_cat, marital, age)
 
 # With more variables provided, `tab` makes a subtables for each combination of levels:
 \donttest{

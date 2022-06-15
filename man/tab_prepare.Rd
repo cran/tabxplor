@@ -6,10 +6,8 @@
 \usage{
 tab_prepare(
   data,
-  row_var,
-  col_vars,
-  tab_vars,
-  na = "keep",
+  ...,
+  na_drop_all,
   cleannames = NULL,
   rare_to_other = FALSE,
   n_min = 30,
@@ -19,15 +17,10 @@ tab_prepare(
 \arguments{
 \item{data}{A dataframe.}
 
-\item{row_var, col_vars, tab_vars}{Variables then to be passed in \code{\link{tab_plain}}.}
+\item{...}{Variables then to be passed in \code{\link{tab_plain}}.}
 
-\item{na}{\code{na = "keep"} prints \code{NA}'s as explicit \code{"NA"} level.
-\code{na = "drop"} removes \code{NA} levels before making each table
-(tabs made with different column variables may have a different number of
-observations, and won't exactly have the same total columns).
-\code{na = "drop_all"} first removes observations with NA in any selected variable,
-for all tables (tabs for each column variable will have the same number of
-observations)}
+\item{na_drop_all}{<\link[tidyr:tidyr_tidy_select]{tidy-select}> Removes all
+observation with a \code{NA} in any of the chosen variables.}
 
 \item{cleannames}{Set to \code{TRUE} to clean levels names, by removing
 prefix numbers like \code{"1-"}, and text in parentheses.}
@@ -48,7 +41,7 @@ Prepare data for \code{\link{tab_plain}}.
 \examples{
 \donttest{data <- dplyr::starwars \%>\%
 tab_prepare(sex, hair_color, gender, rare_to_other = TRUE,
-            n_min = 5, na = "keep")
+            n_min = 5, na_drop_all = sex)
 data
 }
 }

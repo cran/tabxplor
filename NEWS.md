@@ -1,3 +1,11 @@
+
+# tabxplor 1.1.0 
+
+## Added : 
+* `tab_plain` have been separated in two functions, `tab_plain` for factors, `tab_num` for numeric variables
+* `tab_plain` and `tab_num` have been rewrited in `data.table` to gain speed with big databases.
+
+
 # tabxplor 1.0.3
 
 ## Added :

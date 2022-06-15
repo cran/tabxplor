@@ -571,12 +571,13 @@ using color helpers to highlight important informations, and simplify
 your experience of data exploration. All functions are
 <code>tidyverse</code> propelled, pipe-friendly, and render
 <code>tibble</code> data frames which can be easily manipulated with
-<code>dplyr</code>. Tables can be exported to Excel and in html with
-formats and colors.</p>
+<code>dplyr</code>. In the same time, time-taking operations are done
+with <code>data.table</code> to go faster with big dataframes. Tables
+can be exported to Excel and in html with formats and colors.</p>
 <div id="base-usage-cross-tables-with-color-helpers-for-data-exploration" class="section level2">
 <h2>Base usage: cross-tables with color helpers for data
 exploration</h2>
-<p>The main functions are made to be user-friendly and time-saving is
+<p>The main functions are made to be user-friendly and time-saving in
 data analysis workflows.</p>
 <p><code>tab</code> makes a simple cross-table:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, marital, race)</span></code></pre></div>
@@ -596,7 +597,7 @@ calculates means by category of the other variable.</p>
 <p><code>tab</code> comes with options to weight the table, print
 percentages, manage totals, digits and missing values, add legends,
 gather rare categories in a “Others” level.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">na =</span> <span class="st">&quot;drop&quot;</span>, <span class="at">subtext =</span> gss,</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">na =</span> <span class="st">&quot;drop&quot;</span>, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">rare_to_other =</span> <span class="cn">TRUE</span>, <span class="at">n_min =</span> <span class="dv">1000</span>, <span class="at">other_level =</span> <span class="st">&quot;Custom_other_level_name&quot;</span>)</span></code></pre></div>
 <p>When a third variable is provided, <code>tab</code> makes a table
 with as many subtables as it has levels. With several
@@ -704,7 +705,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2000
+Total 2000
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 712">28%</span>
@@ -784,7 +785,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2006
+Total 2006
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 080">26%</span>
@@ -864,7 +865,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2012
+Total 2012
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 526">29%</span>
@@ -884,7 +885,7 @@ TOTAL 2012
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;border-bottom: 1px solid">
-TOTAL ENSEMBLE
+Total Ensemble
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 2 318">27%</span>
@@ -960,16 +961,16 @@ wind
 -1
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 898</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 898">2 898</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 898</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ×1.0 ; n: 2 898">1 008</span>
@@ -983,16 +984,16 @@ wind
 0
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>5 347</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 5 347">5 347</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>5 347</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ×1.0 ; n: 5 347">999</span>
@@ -1009,7 +1010,7 @@ wind
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 933</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1</span>
@@ -1032,10 +1033,10 @@ wind
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>749</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>749</span>
@@ -1055,10 +1056,10 @@ wind
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>434</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>434</span>
@@ -1078,10 +1079,10 @@ wind
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>411</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>411</span>
@@ -1101,10 +1102,10 @@ wind
 <span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>86</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 0">0</span>
+<span style="     color: #111111 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>0</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>86</span>
@@ -1121,16 +1122,16 @@ wind
 Total
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 613">3 613</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>3 613</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 898</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 5 348">5 348</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>5 348</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 11 859">11 859</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>11 859</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 11 859">992</span>
@@ -1237,7 +1238,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2000
+Total 2000
 </td>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 712">28%</span>
@@ -1317,7 +1318,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2006
+Total 2006
 </td>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 1 080">26%</span>
@@ -1397,7 +1398,7 @@ White
 </tr>
 <tr>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
-TOTAL 2012
+Total 2012
 </td>
 <td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
 <span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 526">29%</span>
@@ -1417,7 +1418,7 @@ TOTAL 2012
 </tr>
 <tr>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;border-bottom: 1px solid">
-TOTAL ENSEMBLE
+Total Ensemble
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 2 318">27%</span>
@@ -1456,7 +1457,7 @@ TOTAL ENSEMBLE
 </table>
 <p>With <code>diff = &quot;first&quot;</code>, each row (or column) is compared to
 the first row (or column), which is particularly helpful to highlight
-historical evolutions. The first rows then appears in white (while
+historical evolutions. The first rows then appears in white (while rows
 totals are themselves colored like normal lines).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.factor</span>(year))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, year, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>, <span class="at">diff =</span> <span class="st">&quot;first&quot;</span>, <span class="at">tot =</span> <span class="st">&quot;col&quot;</span>,</span>
@@ -1739,11 +1740,571 @@ Total
 </tr>
 </tfoot>
 </table>
+<p>When <code>diff</code> is a number, the nth row (or column) is used
+for comparison.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, year, marital, race, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>, <span class="at">diff =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+year
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Never married
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Separated
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Divorced
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Married
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Total
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 60">36%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 8">5%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #1AE6D6 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +5% ; n: 20">12%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -4% ; n: 78">47%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 166">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -8% ; n: 165">29%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 40">7%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +5% ; n: 65">11%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 302">53%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 572">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 70">37%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 11">6%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 13">7%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 96">51%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 190">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total Other
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 295">32%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 59">6%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 98">11%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 476">51%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 928">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -2% ; n: 157">41%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #1AE6D6 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +7% ; n: 43">11%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -6% ; n: 60">16%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 121">32%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 381">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 270">47%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 35">6%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -4% ; n: 102">18%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 173">30%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 580">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 120">43%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 13">5%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 59">21%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 85">31%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 277">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total Black
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 547">44%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 91">7%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; n: 221">18%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 379">31%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 238">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 495">25%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 61">3%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 361">18%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 1 079">54%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 996">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; n: 645">22%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 81">3%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 565">19%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 1 695">57%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 986">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 336">25%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 44">3%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 245">18%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 719">53%</span>
+</td>
+<td style="text-align:left;font-weight: bold;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 344">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total White
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -2% ; n: 1 476">23%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 186">3%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 1 171">19%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 3 493">55%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 6 326">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;border-bottom: 1px solid">
+Total Ensemble
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 318">27%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 336">4%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 490">18%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 348">51%</span>
+</td>
+<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 8 492">100%</span>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> <span style="     color: #888888 !important;">marital:
+</span>x &gt; x3 <b><span style="     color: #1AE6D6 !important;">+5%</span></b>; <b><span style="     color: #00bcd4 !important;">+10%</span></b>; <b><span style="     color: #1e88e5 !important;">+20%</span></b>; <b><span style="     color: #0019ff !important;">+30%</span></b>; x &lt; x3
+<b><span style="     color: #ffb300 !important;">-5%</span></b>;
+<b><span style="     color: #FF8138 !important;">-10%</span></b>;
+<b><span style="     color: #ff3d00 !important;">-20%</span></b>;
+<b><span style="     color: #cb0000 !important;">-30%</span></b>
+</td>
+</tr>
+</tfoot>
+</table>
+<p>Finally, when <code>diff</code> is a string, it it used as a regular
+expression, to match with the names of the rows (or columns).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, year, marital, race, <span class="at">pct =</span> <span class="st">&quot;col&quot;</span>, <span class="at">tot =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff&quot;</span>, <span class="at">diff =</span> <span class="st">&quot;Married&quot;</span>)</span></code></pre></div>
+<table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
+<thead>
+<tr>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+year
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Never married
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Separated
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Divorced
+</th>
+<th style="text-align:left;font-weight: bold;color: #000000 !important;border-top: 0px solid ; border-bottom: 1px solid ;">
+Married
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 60">20%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; n: 8">14%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 20">20%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 78">16%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -8% ; n: 165">56%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 40">68%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 65">66%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 302">63%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 70">24%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -2% ; n: 11">19%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; n: 13">13%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 96">20%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total Other
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 295">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 59">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 98">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 476">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; n: 157">29%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #00bcd4 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +15% ; n: 43">47%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 60">27%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 121">32%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 270">49%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; n: 35">38%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 102">46%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 173">46%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 120">22%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -8% ; n: 13">14%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 59">27%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 85">22%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total Black
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 547">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 91">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 221">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 379">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2000
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 495">34%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 61">33%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 361">31%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 079">31%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2006
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 645">44%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 81">44%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 565">48%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 695">49%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; ">
+2012
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 336">23%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 44">24%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;">
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 245">21%</span>
+</td>
+<td style="text-align:left;white-space: nowrap;border-right:1px solid;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 719">21%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;">
+Total White
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 476">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 186">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 171">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 493">100%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid ;border-bottom: 1px solid">
+Total Ensemble
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 318">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 336">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 490">100%</span>
+</td>
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 348">100%</span>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> <span style="     color: #888888 !important;">marital:
+</span>x &gt; Married <b><span style="     color: #1AE6D6 !important;">+5%</span></b>; <b><span style="     color: #00bcd4 !important;">+10%</span></b>; <b><span style="     color: #1e88e5 !important;">+20%</span></b>; <b><span style="     color: #0019ff !important;">+30%</span></b>; x &lt; Married
+<b><span style="     color: #ffb300 !important;">-5%</span></b>;
+<b><span style="     color: #FF8138 !important;">-10%</span></b>;
+<b><span style="     color: #ff3d00 !important;">-20%</span></b>;
+<b><span style="     color: #cb0000 !important;">-30%</span></b>
+</td>
+</tr>
+</tfoot>
+</table>
 </div>
 <div id="confidence-intervals" class="section level2">
 <h2>Confidence intervals</h2>
 <p>It it possible to print confidence intervals for each cell:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">ci =</span> <span class="st">&quot;cell&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">ci =</span> <span class="st">&quot;cell&quot;</span>)</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -1887,7 +2448,7 @@ reference cell (in total or first row/col) is superior to the difference
 itself. Otherwise, it means the cell is not significantly different from
 it’s reference in the total (or first) row: it turns grey, and the
 reader is not anymore tempted to over-interpret the difference.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff_ci&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;diff_ci&quot;</span>)</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -2041,7 +2602,7 @@ highligths all the cells whose value is significantly different from the
 relative total (or first cell). This is particularly useful when working
 on small populations: we can see at a glance which numbers we have right
 to read and interpret.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">subtext =</span> gss, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">subtext =</span> gss, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -2204,7 +2765,7 @@ metric: degrees of freedom (df), unweighted count, pvalue and
 5%, and in red when superior or equal to 5%, meaning that the table is
 not significantly different from the independent hypothesis (the two
 variables may be independent).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -2354,7 +2915,7 @@ highlights the cells which would stand out in a correspondence analysis
 (the two related categories would be located at the edges of the first
 axes ; here, being black is associated with never married and being
 separated).</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">color =</span> <span class="st">&quot;contrib&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">color =</span> <span class="st">&quot;contrib&quot;</span>)</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -2511,15 +3072,15 @@ mean_ctr <b><span style="     color: #ffb300 !important;">×1</span></b>;
 dataframe with class <code>tab</code>. It gets it’s own printing methods
 but, in the same time, can be transformed using most dplyr verbs, like a
 normal tibble.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(storms, category, status, <span class="at">sup_cols =</span> <span class="fu">c</span>(<span class="st">&quot;pressure&quot;</span>, <span class="st">&quot;wind&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">!=</span> <span class="st">&quot;-1&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">tropical depression</span><span class="st">`</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(category)) <span class="co"># use is_totrow to keep total rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(storms, category, status, <span class="at">sup_cols =</span> <span class="fu">c</span>(<span class="st">&quot;pressure&quot;</span>, <span class="st">&quot;wind&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">!=</span> <span class="st">&quot;-1&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">tropical depression</span><span class="st">`</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(category)) <span class="co"># use is_totrow to keep total rows</span></span></code></pre></div>
 <p>With <code>dplyr::arrange</code>, don’t forget to keep the order of
 tab variables and total rows:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year, <span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(Married))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year, <span class="fu">is_totrow</span>(.), <span class="fu">desc</span>(Married))</span></code></pre></div>
 </div>
 <div id="draw-more-complex-tables-with-tab_many" class="section level2">
 <h2>Draw more complex tables with <code>tab_many</code></h2>
@@ -2528,20 +3089,20 @@ tab variables and total rows:</p>
 <p>It’s possible, for example, to make a summary table of as many
 columns variables as you want (showing all levels, or showing only one
 specific level like here):</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>first_lvs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Married&quot;</span>, <span class="st">&quot;$25000 or more&quot;</span>, <span class="st">&quot;Strong republican&quot;</span>, <span class="st">&quot;Protestant&quot;</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> forcats<span class="sc">::</span>gss_cat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">where</span>(is.factor),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(., first_lvs[first_lvs <span class="sc">%in%</span> <span class="fu">levels</span>(.)])</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">tab_many</span>(data, race, <span class="fu">c</span>(marital, rincome, partyid, relig, age, tvhours),</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">levels =</span> <span class="st">&quot;first&quot;</span>, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>tabs</span></code></pre></div>
-<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats     marital   rincome   partyid     relig       age   tvhours</span>
-#&gt; df                  12        32        20        30                    
-#&gt; variance        0.0464    0.0092    0.1231    0.1299                    
-#&gt; pvalue              <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>                    
-#&gt; <span style="text-decoration: underline;">count           21 483    21 483    21 483    21 483    21 407    11 337</span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>first_lvs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Married&quot;</span>, <span class="st">&quot;$25000 or more&quot;</span>, <span class="st">&quot;Strong republican&quot;</span>, <span class="st">&quot;Protestant&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> forcats<span class="sc">::</span>gss_cat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">where</span>(is.factor),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(., first_lvs[first_lvs <span class="sc">%in%</span> <span class="fu">levels</span>(.)])</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">tab_many</span>(data, race, <span class="fu">c</span>(marital, rincome, partyid, relig, age, tvhours),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">levels =</span> <span class="st">&quot;first&quot;</span>, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>tabs</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats     marital   rincome   partyid     relig</span>
+#&gt; df                   4         4         4         4
+#&gt; variance        0.0259    0.0033    0.0214    0.0630
+#&gt; pvalue              <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>        <span style="color: #0000FF;">0%</span>
+#&gt; <span style="text-decoration: underline;">count           21 483    21 483    21 483    21 483</span>
 #&gt; 
 #&gt; <span style="color: #555555;"># A tabxplor tab: 4 × 8</span>
 #&gt;   race  Married `$25000 or more` `Strong republ…` Protestant Total   age tvhours
@@ -2557,19 +3118,19 @@ specific level like here):</p>
 <code>purrr::map</code> and <code>tibble::tribble</code>, you can
 program several tables with different parameters all at once, in a
 readable way:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">pmap</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span>row_var, <span class="sc">~</span>col_vars       , <span class="sc">~</span>pct , <span class="sc">~</span>filter              , <span class="sc">~</span>subtext               ,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;row&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;col&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2000:2010&quot;</span>, <span class="st">&quot;Source: GSS 2000-2010&quot;</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2010:2014&quot;</span>, <span class="st">&quot;Source: GSS 2010-2014&quot;</span>,</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NA_character_</span>, <span class="st">&quot;race&quot;</span>     , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.f =</span> tab_many,</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> forcats<span class="sc">::</span>gss_cat, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">pmap</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span>row_var, <span class="sc">~</span>col_vars       , <span class="sc">~</span>pct , <span class="sc">~</span>filter              , <span class="sc">~</span>subtext               ,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;row&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;race&quot;</span>  , <span class="st">&quot;marital&quot;</span>       , <span class="st">&quot;col&quot;</span>, <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2000:2010&quot;</span>, <span class="st">&quot;Source: GSS 2000-2010&quot;</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;relig&quot;</span> , <span class="fu">c</span>(<span class="st">&quot;race&quot;</span>, <span class="st">&quot;age&quot;</span>), <span class="st">&quot;row&quot;</span>, <span class="st">&quot;year %in% 2010:2014&quot;</span>, <span class="st">&quot;Source: GSS 2010-2014&quot;</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NA_character_</span>, <span class="st">&quot;race&quot;</span>     , <span class="st">&quot;no&quot;</span> , <span class="cn">NULL</span>                 , <span class="st">&quot;Source: GSS 2000-2014&quot;</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.f =</span> tab_many,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> forcats<span class="sc">::</span>gss_cat, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="export-to-html-or-excel" class="section level2">
 <h2>Export to html or Excel</h2>
@@ -2578,7 +3139,7 @@ current vignette, tabxplor uses <code>knitr::kable</code> and
 <code>kableExtra</code>. In this format differences from totals,
 confidence intervals, contribution to variance, and unweighted counts,
 are available in a tooltip at cells hover.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_kable</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_kable</span>()</span></code></pre></div>
 <table style="border-top: 0; border-bottom: 0; font-family: DejaVu Sans Condensed; width: auto !important; margin-left: auto; margin-right: auto;" class=" lightable-classic lightable-hover">
 <thead>
 <tr>
@@ -2617,13 +3178,13 @@ Other
 <span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; contrib: 0% ; n: 932">48%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; contrib: 2% ; n: 621">32%</span>
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; contrib: 5% ; n: 621">32%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; contrib: 3% ; n: 81">4%</span>
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; contrib: 17% ; n: 81">4%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style=" font-weight: bold;    color: #cb0000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -31% ; contrib: 13% ; n: 387">20%</span>
+<span style=" font-weight: bold;    color: #cb0000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -31% ; contrib: 27% ; n: 387">20%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 959">100%</span>
@@ -2640,16 +3201,16 @@ Other
 Black
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style=" font-weight: bold;    color: #FF8138 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -19% ; contrib: 25% ; n: 869">28%</span>
+<span style=" font-weight: bold;    color: #FF8138 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -19% ; contrib: 45% ; n: 869">28%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -6% ; contrib: 16% ; n: 886">28%</span>
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -6% ; contrib: 46% ; n: 886">28%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -9% ; contrib: 9% ; n: 56">2%</span>
+<span style=" font-weight: bold;    color: #ffb300 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -9% ; contrib: 51% ; n: 56">2%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
-<span style=" font-weight: bold;    color: #1e88e5 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +22% ; contrib: 11% ; n: 2 271">73%</span>
+<span style=" font-weight: bold;    color: #1e88e5 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +22% ; contrib: 22% ; n: 2 271">73%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 129">100%</span>
@@ -2666,13 +3227,13 @@ Black
 White
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; contrib: 5% ; n: 8 316">51%</span>
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; contrib: 8% ; n: 8 316">51%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; contrib: 5% ; n: 5 856">36%</span>
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; contrib: 14% ; n: 5 856">36%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;border-right:1px solid;">
-<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; contrib: 4% ; n: 2 177">13%</span>
+<span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; contrib: 21% ; n: 2 177">13%</span>
 </td>
 <td style="text-align:left;white-space: nowrap;">
 <span style="     color: #888888 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; contrib: 0% ; n: 8 188">50%</span>
@@ -2692,16 +3253,16 @@ White
 Total
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 6% ; n: 10 117">47%</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 10 117">47%</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 2% ; n: 7 363">34%</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 7 363">34%</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 3% ; n: 2 314">11%</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 2 314">11%</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid ;border-bottom: 1px solid">
-<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 2% ; n: 10 846">50%</span>
+<span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 10 846">50%</span>
 </td>
 <td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; font-weight: bold;border-left:1px solid;border-bottom: 1px solid ;border-bottom: 1px solid">
 <span style=" font-weight: bold;    color: #000000 !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 21 483">100%</span>
@@ -2738,11 +3299,11 @@ rincome, partyid: </span>x &gt; tot <b><span style="     color: #1AE6D6 !importa
 </table>
 <p>To print an html table by default (for example, in RStudio viewer),
 use tabxplor options:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">tabxplor.print =</span> <span class="st">&quot;kable&quot;</span>) <span class="co"># default to options(tabxplor.print = &quot;console&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">tabxplor.print =</span> <span class="st">&quot;kable&quot;</span>) <span class="co"># default to options(tabxplor.print = &quot;console&quot;)</span></span></code></pre></div>
 <p><code>tab_xl</code> exports any table or list of tables to Excel,
 with all colors, chi2 stats and formatting. On Excel, it is still
 possible to do calculations on raw numbers.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_xl</span>(<span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">sheets =</span> <span class="st">&quot;unique&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_xl</span>(<span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">sheets =</span> <span class="st">&quot;unique&quot;</span>)</span></code></pre></div>
 </div>
 <div id="programming-with-tabxplor" class="section level2">
 <h2>Programming with <code>tabxplor</code></h2>
@@ -2750,38 +3311,383 @@ possible to do calculations on raw numbers.</p>
 sub-functions of <code>tab_many</code> step by step to attain more
 flexibility or speed. That way, it’s possible to write new functions to
 customize your tables even more.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>starwars <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_prepare</span>(sex, hair_color, gender, <span class="at">rare_to_other =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">n_min =</span> <span class="dv">5</span>, <span class="at">na =</span> <span class="st">&quot;keep&quot;</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_plain</span>(sex, hair_color, gender) <span class="sc">%&gt;%</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_totaltab</span>(<span class="st">&quot;line&quot;</span>)  <span class="sc">%&gt;%</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_tot</span>()  <span class="sc">%&gt;%</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_pct</span>(<span class="at">comp =</span> <span class="st">&quot;all&quot;</span>)  <span class="sc">%&gt;%</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_ci</span>(<span class="st">&quot;diff&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)  <span class="sc">%&gt;%</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_chi2</span>(<span class="at">calc =</span> <span class="st">&quot;p&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_prepare</span>(sex, hair_color, gender, <span class="at">rare_to_other =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="at">n_min =</span> <span class="dv">5</span>, <span class="at">na_drop_all =</span> sex)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_plain</span>(sex, hair_color, gender, <span class="at">tot =</span> <span class="fu">c</span>(<span class="st">&quot;row&quot;</span>, <span class="st">&quot;col&quot;</span>), <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">comp =</span> <span class="st">&quot;all&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_ci</span>(<span class="st">&quot;diff&quot;</span>, <span class="at">color =</span> <span class="st">&quot;after_ci&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_chi2</span>(<span class="at">calc =</span> <span class="st">&quot;p&quot;</span>)</span></code></pre></div>
 <p>The whole architecture of <code>tabxplor</code> is powered by a
-special vector class, named <code>fmt</code> for formatted numbers. As a
-<code>vctrs::record</code>, it stores behind the scenes all the data
-necessary to calculate printed results, formats and colors. A set of
-functions are available to access or transform this data, like
-<code>is_totrow</code>, <code>is_totcol</code> or
-<code>is_tottab</code>. <code>?fmt</code> to get more information.</p>
+special vector class, named <code>tabxplor_fmt</code> for formatted
+numbers. As a <code>vctrs::record</code>, it stores behind the scenes
+all the data necessary to calculate printed results, formats and colors.
+A set of functions are available to access or transform this data.
+<code>?fmt</code> to get more information.</p>
 <p>The simple way to recover the underlying numbers as numeric vectors
-is <code>get_num</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), get_num))</span></code></pre></div>
+is <code>get_num</code>, which extract the currently displayed field
+whatever it is :</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), get_num))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #555555;"># A tabxplor tab: 33 × 9</span>
+#&gt; <span style="color: #555555;"># Groups:         year [9]</span>
+#&gt;    year    race           Married `No answer` `Never married` Separated Divorced
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;fct&gt; </span>           <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span> 2000    Other            0.446    0.005<span style="text-decoration: underline;">71</span>            0.343    0.045<span style="text-decoration: underline;">7</span>   0.114 
+#&gt; <span style="color: #555555;"> 2</span> 2000    Black            0.282    0                  0.366    0.100    0.140 
+#&gt; <span style="color: #555555;"> 3</span> 2000    White            0.488    0                  0.224    0.027<span style="text-decoration: underline;">6</span>   0.163 
+#&gt; <span style="color: #555555;"> 4</span> 2000    Total 2000       0.454    0.000<span style="text-decoration: underline;">355</span>           0.253    0.039<span style="text-decoration: underline;">8</span>   0.157 
+#&gt; 
+#&gt; <span style="color: #555555;"> 5</span> 2002    Other            0.497    0                  0.281    0.053<span style="text-decoration: underline;">9</span>   0.156 
+#&gt; <span style="color: #555555;"> 6</span> 2002    Black            0.283    0                  0.398    0.063<span style="text-decoration: underline;">4</span>   0.161 
+#&gt; <span style="color: #555555;"> 7</span> 2002    White            0.489    0                  0.228    0.027<span style="text-decoration: underline;">9</span>   0.161 
+#&gt; <span style="color: #555555;"> 8</span> 2002    Total 2002       0.459    0                  0.256    0.034<span style="text-decoration: underline;">7</span>   0.161 
+#&gt; 
+#&gt; <span style="color: #555555;"> 9</span> 2004    Other            0.557    0                  0.289    0.039<span style="text-decoration: underline;">8</span>   0.084<span style="text-decoration: underline;">6</span>
+#&gt; <span style="color: #555555;">10</span> 2004    Black            0.332    0                  0.403    0.071<span style="text-decoration: underline;">6</span>   0.133 
+#&gt; <span style="color: #555555;">11</span> 2004    White            0.556    0                  0.183    0.026<span style="text-decoration: underline;">9</span>   0.156 
+#&gt; <span style="color: #555555;">12</span> 2004    Total 2004       0.526    0                  0.220    0.033<span style="text-decoration: underline;">8</span>   0.148 
+#&gt; 
+#&gt; <span style="color: #555555;">13</span> 2006    Other            0.510    0.001<span style="text-decoration: underline;">69</span>            0.279    0.067<span style="text-decoration: underline;">6</span>   0.110 
+#&gt; <span style="color: #555555;">14</span> 2006    Black            0.273    0                  0.426    0.055<span style="text-decoration: underline;">2</span>   0.161 
+#&gt; <span style="color: #555555;">15</span> 2006    White            0.516    0.001<span style="text-decoration: underline;">52</span>            0.196    0.024<span style="text-decoration: underline;">7</span>   0.172 
+#&gt; <span style="color: #555555;">16</span> 2006    Total 2006       0.481    0.001<span style="text-decoration: underline;">33</span>            0.239    0.034<span style="text-decoration: underline;">6</span>   0.162 
+#&gt; 
+#&gt; <span style="color: #555555;">17</span> 2008    Other            0.437    0                  0.372    0.060<span style="text-decoration: underline;">1</span>   0.076<span style="text-decoration: underline;">5</span>
+#&gt; <span style="color: #555555;">18</span> 2008    Black            0.302    0                  0.416    0.089<span style="text-decoration: underline;">0</span>   0.128 
+#&gt; <span style="color: #555555;">19</span> 2008    White            0.518    0.003<span style="text-decoration: underline;">21</span>            0.222    0.021<span style="text-decoration: underline;">8</span>   0.148 
+#&gt; <span style="color: #555555;">20</span> 2008    Total 2008       0.480    0.002<span style="text-decoration: underline;">47</span>            0.262    0.034<span style="text-decoration: underline;">6</span>   0.139 
+#&gt; 
+#&gt; <span style="color: #555555;">21</span> 2010    Other            0.377    0                  0.404    0.060<span style="text-decoration: underline;">1</span>   0.109 
+#&gt; <span style="color: #555555;">22</span> 2010    Black            0.215    0                  0.511    0.025<span style="text-decoration: underline;">7</span>   0.174 
+#&gt; <span style="color: #555555;">23</span> 2010    White            0.487    0.000<span style="text-decoration: underline;">645</span>           0.214    0.029<span style="text-decoration: underline;">7</span>   0.172 
+#&gt; <span style="color: #555555;">24</span> 2010    Total 2010       0.436    0.000<span style="text-decoration: underline;">489</span>           0.276    0.031<span style="text-decoration: underline;">8</span>   0.167 
+#&gt; 
+#&gt; <span style="color: #555555;">25</span> 2012    Other            0.490    0                  0.357    0.056<span style="text-decoration: underline;">1</span>   0.066<span style="text-decoration: underline;">3</span>
+#&gt; <span style="color: #555555;">26</span> 2012    Black            0.282    0                  0.399    0.043<span style="text-decoration: underline;">2</span>   0.196 
+#&gt; <span style="color: #555555;">27</span> 2012    White            0.487    0                  0.227    0.029<span style="text-decoration: underline;">8</span>   0.166 
+#&gt; <span style="color: #555555;">28</span> 2012    Total 2012       0.456    0                  0.266    0.034<span style="text-decoration: underline;">4</span>   0.161 
+#&gt; 
+#&gt; <span style="color: #555555;">29</span> 2014    Other            0.427    0                  0.347    0.045<span style="text-decoration: underline;">8</span>   0.141 
+#&gt; <span style="color: #555555;">30</span> 2014    Black            0.251    0.005<span style="text-decoration: underline;">18</span>            0.433    0.049<span style="text-decoration: underline;">2</span>   0.176 
+#&gt; <span style="color: #555555;">31</span> 2014    White            0.502    0.001<span style="text-decoration: underline;">06</span>            0.221    0.026<span style="text-decoration: underline;">5</span>   0.162 
+#&gt; <span style="color: #555555;">32</span> 2014    Total 2014       0.456    0.001<span style="text-decoration: underline;">58</span>            0.266    0.031<span style="text-decoration: underline;">9</span>   0.162 
+#&gt; 
+#&gt; <span style="color: #555555;">33</span> Ensemb… Total Ensemble   0.471    0.000<span style="text-decoration: underline;">791</span>           0.252    0.034<span style="text-decoration: underline;">6</span>   0.157 
+#&gt; <span style="color: #555555;"># … with 2 more variables: Widowed &lt;dbl&gt;, Total &lt;dbl&gt;</span>
+</code></pre>
 <p>To render character vectors (without colors), use
 <code>format</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), format))</span></code></pre></div>
-<p>For the simplest table, with only numeric counts (no
-<code>fmt</code>), or even as normal data.frame (not a
-<code>tibble</code>):</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine with `tab_prepare` to handle missing values</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">num =</span> <span class="cn">TRUE</span>) <span class="co"># counts as numeric vector</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">df =</span> <span class="cn">TRUE</span>)  <span class="co"># same, with unique class = &quot;data.frame&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), format))</span></code></pre></div>
+<p>The following fields compose any <code>fmt</code> column (though many
+can be <code>NA</code> if not calculated) :</p>
+<ul>
+<li><p><code>display</code> : name of the field to display, customisable
+for each cell (character)</p></li>
+<li><p><code>n</code> : raw count (integer)</p></li>
+<li><p><code>wn</code> : weighted count</p></li>
+<li><p><code>pct</code> : percentages</p></li>
+<li><p><code>diff</code> : differences from totals or reference
+cells</p></li>
+<li><p><code>digits</code> : digits to display, customisable for each
+cell (integer)</p></li>
+<li><p><code>ctr</code> : contributions of cells to variance (with
+<code>color = &quot;contrib&quot;</code>)</p></li>
+<li><p><code>mean</code> : means (for numeric column variables)</p></li>
+<li><p><code>var</code> : variance (for numeric column variables ; Chi2
+variance with <code>pct</code>)</p></li>
+<li><p><code>ci</code> : confidence intervals</p></li>
+<li><p><code>in_totrow</code> : <code>TRUE</code> if the cell is part of
+a total row, <code>FALSE</code> otherwise (logical)</p></li>
+<li><p><code>in_tottab</code> : <code>TRUE</code> if the cell is part of
+a total table, <code>FALSE</code> otherwise (logical)</p></li>
+<li><p><code>in_refrow</code> : <code>TRUE</code> if the cell is part of
+a reference row, <code>FALSE</code> otherwise (logical)</p></li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>vctrs<span class="sc">::</span><span class="fu">vec_data</span>(tabs<span class="sc">$</span>Married)</span></code></pre></div>
+<pre class="r-output"><code>#&gt;        n display digits wn       pct mean         diff ctr var ci in_totrow
+#&gt; 1     78     pct      0 NA 0.4457143   NA -0.007959836  NA  NA NA     FALSE
+#&gt; 2    121     pct      0 NA 0.2820513   NA -0.171622839  NA  NA NA     FALSE
+#&gt; 3   1079     pct      0 NA 0.4875734   NA  0.033899308  NA  NA NA     FALSE
+#&gt; 4   1278     pct      0 NA 0.4536741   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 5     83     pct      0 NA 0.4970060   NA  0.038054813  NA  NA NA     FALSE
+#&gt; 6    116     pct      0 NA 0.2829268   NA -0.176024346  NA  NA NA     FALSE
+#&gt; 7   1070     pct      0 NA 0.4890311   NA  0.030079903  NA  NA NA     FALSE
+#&gt; 8   1269     pct      0 NA 0.4589512   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 9    112     pct      0 NA 0.5572139   NA  0.031253760  NA  NA NA     FALSE
+#&gt; 10   125     pct      0 NA 0.3315650   NA -0.194395184  NA  NA NA     FALSE
+#&gt; 11  1242     pct      0 NA 0.5559534   NA  0.029993276  NA  NA NA     FALSE
+#&gt; 12  1479     pct      0 NA 0.5259602   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 13   302     pct      0 NA 0.5101351   NA  0.028982142  NA  NA NA     FALSE
+#&gt; 14   173     pct      0 NA 0.2728707   NA -0.208282331  NA  NA NA     FALSE
+#&gt; 15  1695     pct      0 NA 0.5161389   NA  0.034985862  NA  NA NA     FALSE
+#&gt; 16  2170     pct      0 NA 0.4811530   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 17    80     pct      0 NA 0.4371585   NA -0.043316073  NA  NA NA     FALSE
+#&gt; 18    85     pct      0 NA 0.3024911   NA -0.177983440  NA  NA NA     FALSE
+#&gt; 19   807     pct      0 NA 0.5176395   NA  0.037164970  NA  NA NA     FALSE
+#&gt; 20   972     pct      0 NA 0.4804745   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 21    69     pct      0 NA 0.3770492   NA -0.058860800  NA  NA NA     FALSE
+#&gt; 22    67     pct      0 NA 0.2154341   NA -0.220475897  NA  NA NA     FALSE
+#&gt; 23   755     pct      0 NA 0.4870968   NA  0.051186794  NA  NA NA     FALSE
+#&gt; 24   891     pct      0 NA 0.4359100   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 25    96     pct      0 NA 0.4897959   NA  0.033868867  NA  NA NA     FALSE
+#&gt; 26    85     pct      0 NA 0.2823920   NA -0.173535025  NA  NA NA     FALSE
+#&gt; 27   719     pct      0 NA 0.4867976   NA  0.030870511  NA  NA NA     FALSE
+#&gt; 28   900     pct      0 NA 0.4559271   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 29   112     pct      0 NA 0.4274809   NA -0.028783859  NA  NA NA     FALSE
+#&gt; 30    97     pct      0 NA 0.2512953   NA -0.204969439  NA  NA NA     FALSE
+#&gt; 31   949     pct      0 NA 0.5021164   NA  0.045851627  NA  NA NA     FALSE
+#&gt; 32  1158     pct      0 NA 0.4562648   NA  0.000000000  NA  NA NA      TRUE
+#&gt; 33 10117     pct      0 NA 0.4709305   NA  0.000000000  NA  NA NA      TRUE
+#&gt;    in_tottab in_refrow
+#&gt; 1      FALSE     FALSE
+#&gt; 2      FALSE     FALSE
+#&gt; 3      FALSE     FALSE
+#&gt; 4      FALSE     FALSE
+#&gt; 5      FALSE     FALSE
+#&gt; 6      FALSE     FALSE
+#&gt; 7      FALSE     FALSE
+#&gt; 8      FALSE     FALSE
+#&gt; 9      FALSE     FALSE
+#&gt; 10     FALSE     FALSE
+#&gt; 11     FALSE     FALSE
+#&gt; 12     FALSE     FALSE
+#&gt; 13     FALSE     FALSE
+#&gt; 14     FALSE     FALSE
+#&gt; 15     FALSE     FALSE
+#&gt; 16     FALSE     FALSE
+#&gt; 17     FALSE     FALSE
+#&gt; 18     FALSE     FALSE
+#&gt; 19     FALSE     FALSE
+#&gt; 20     FALSE     FALSE
+#&gt; 21     FALSE     FALSE
+#&gt; 22     FALSE     FALSE
+#&gt; 23     FALSE     FALSE
+#&gt; 24     FALSE     FALSE
+#&gt; 25     FALSE     FALSE
+#&gt; 26     FALSE     FALSE
+#&gt; 27     FALSE     FALSE
+#&gt; 28     FALSE     FALSE
+#&gt; 29     FALSE     FALSE
+#&gt; 30     FALSE     FALSE
+#&gt; 31     FALSE     FALSE
+#&gt; 32     FALSE     FALSE
+#&gt; 33      TRUE     FALSE
+</code></pre>
+<p>To get those underlying fields you can either use
+<code>vctrs::fields</code> or, more simply, <code>$</code> :</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), <span class="sc">~</span> vctrs<span class="sc">::</span><span class="fu">field</span>(., <span class="st">&quot;pct&quot;</span>) ))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>tabs<span class="sc">$</span>Married<span class="sc">$</span>pct</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>tabs<span class="sc">$</span>Married<span class="sc">$</span>n</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), <span class="sc">~</span> .<span class="sc">$</span>n))</span></code></pre></div>
+<p>To modify a field, you can use <code>vctrs</code>
+<code>field&lt;-</code>. For example, to change the displayed field
+:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), <span class="sc">~</span> vctrs<span class="sc">::</span><span class="st">`</span><span class="at">field&lt;-</span><span class="st">`</span>(., <span class="st">&quot;display&quot;</span>, <span class="fu">rep</span>(<span class="st">&quot;diff&quot;</span>, <span class="fu">length</span>(.)))))</span></code></pre></div>
+<p>Faster to write and easier to read, you can also use
+<code>dplyr::mutate()</code> on an <code>fmt</code> vector. For example,
+to create a new column with standards deviations and display it with
+decimals :</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_num</span>(data, race, <span class="fu">c</span>(age, tvhours), marital, <span class="at">digits =</span> 1L, <span class="at">comp =</span> <span class="st">&quot;all&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>( <span class="co">#Mutate over the whole table.</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(age, tvhours),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(., <span class="co">#Mutate over each fmt vector&#39;s underlying data.frame.</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">var     =</span> <span class="fu">sqrt</span>(var), </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">display =</span> <span class="st">&quot;var&quot;</span>, </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">digits  =</span> 2L) <span class="sc">|&gt;</span> </span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">set_color</span>(<span class="st">&quot;no&quot;</span>),</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.names =</span> <span class="st">&quot;{.col}_sd&quot;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #555555;"># A tabxplor tab: 25 × 6</span>
+#&gt; <span style="color: #555555;"># Groups:         marital [7]</span>
+#&gt;    marital       race                   age tvhours     age_sd tvhours_sd
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #555555; font-style: italic;">&lt;fct&gt; </span>              <span style="color: #555555; font-style: italic;">&lt;mean&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;mean&gt;</span> <span style="color: #555555; font-style: italic;">&lt;mean-var&gt;</span> <span style="color: #555555; font-style: italic;">&lt;mean-var&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span> Married       Other                 <span style="color: #555555;">42.2</span>     <span style="color: #FFAF5F;">2.5</span>      13.01       1.88
+#&gt; <span style="color: #555555;"> 2</span> Married       Black                 <span style="color: #555555;">46.4</span>     <span style="color: #5FFFFF;">3.8</span>      13.40       3.06
+#&gt; <span style="color: #555555;"> 3</span> Married       White                 <span style="color: #555555;">49.7</span>     <span style="color: #FFAF5F;">2.6</span>      15.24       1.98
+#&gt; <span style="color: #555555;"> 4</span> Married       Total Married         <span style="color: #555555;">48.7</span>     <span style="color: #555555;">2.7</span>      15.06       2.11
+#&gt; 
+#&gt; <span style="color: #555555;"> 5</span> No answer     Other                 <span style="color: #FFAF5F;">34.0</span>     <span style="color: #FFAF5F;">2.0</span>       8.49           
+#&gt; <span style="color: #555555;"> 6</span> No answer     Black                 <span style="color: #5FFFFF;">64.0</span>                              
+#&gt; <span style="color: #555555;"> 7</span> No answer     White                 <span style="color: #5FFFFF;">56.0</span>     <span style="color: #555555;">2.6</span>      15.71       1.19
+#&gt; <span style="color: #555555;"> 8</span> No answer     Total No answer       <span style="color: #555555;">52.4</span>     <span style="color: #FFAF5F;">2.6</span>      16.51       1.13
+#&gt; 
+#&gt; <span style="color: #555555;"> 9</span> Never married Other                 <span style="color: #FF8700;">30.2</span>     <span style="color: #555555;">2.8</span>      10.60       2.67
+#&gt; <span style="color: #555555;">10</span> Never married Black                 <span style="color: #FFAF5F;">34.5</span>     <span style="color: #5FFFFF;">4.2</span>      12.14       3.39
+#&gt; <span style="color: #555555;">11</span> Never married White                 <span style="color: #FFAF5F;">34.4</span>     <span style="color: #555555;">2.8</span>      14.29       2.56
+#&gt; <span style="color: #555555;">12</span> Never married Total Never married   <span style="color: #FFAF5F;">33.9</span>     <span style="color: #555555;">3.1</span>      13.47       2.86
+#&gt; 
+#&gt; <span style="color: #555555;">13</span> Separated     Other                 <span style="color: #555555;">42.5</span>     <span style="color: #555555;">3.3</span>      12.97       3.26
+#&gt; <span style="color: #555555;">14</span> Separated     Black                 <span style="color: #555555;">46.2</span>     <span style="color: #00D7FF;">5.1</span>      13.36       4.73
+#&gt; <span style="color: #555555;">15</span> Separated     White                 <span style="color: #555555;">45.6</span>     <span style="color: #555555;">2.9</span>      13.52       2.77
+#&gt; <span style="color: #555555;">16</span> Separated     Total Separated       <span style="color: #555555;">45.3</span>     <span style="color: #5FFFFF;">3.5</span>      13.43       3.60
+#&gt; 
+#&gt; <span style="color: #555555;">17</span> Divorced      Other                 <span style="color: #555555;">45.5</span>     <span style="color: #555555;">3.0</span>      11.82       2.71
+#&gt; <span style="color: #555555;">18</span> Divorced      Black                 <span style="color: #555555;">51.0</span>     <span style="color: #5FFFFF;">4.3</span>      12.67       3.74
+#&gt; <span style="color: #555555;">19</span> Divorced      White                 <span style="color: #555555;">51.6</span>     <span style="color: #555555;">2.9</span>      13.22       2.43
+#&gt; <span style="color: #555555;">20</span> Divorced      Total Divorced        <span style="color: #555555;">51.1</span>     <span style="color: #555555;">3.1</span>      13.14       2.73
+#&gt; 
+#&gt; <span style="color: #555555;">21</span> Widowed       Other                 <span style="color: #5FFFFF;">64.5</span>     <span style="color: #5FFFFF;">4.2</span>      14.84       2.79
+#&gt; <span style="color: #555555;">22</span> Widowed       Black                 <span style="color: #5FFFFF;">67.5</span>     <span style="color: #00D7FF;">4.7</span>      13.89       3.70
+#&gt; <span style="color: #555555;">23</span> Widowed       White                 <span style="color: #00D7FF;">72.8</span>     <span style="color: #5FFFFF;">3.7</span>      12.48       2.70
+#&gt; <span style="color: #555555;">24</span> Widowed       Total Widowed         <span style="color: #00D7FF;">71.7</span>     <span style="color: #5FFFFF;">3.9</span>      13.00       2.90
+#&gt; 
+#&gt; <span style="color: #555555;">25</span> Ensemble      Total Ensemble        47.2     3.0      17.29       2.59
+#&gt; <span style="color: #555555;"># age, tvhours: </span>x &gt; tot <span style="color: #5FFFFF;">×1.15</span><span style="color: #555555;">; </span><span style="color: #00D7FF;">×1.5</span><span style="color: #555555;">; </span><span style="color: #0087FF;">×2</span><span style="color: #555555;">; </span><span style="color: #0000FF;">×4</span><span style="color: #555555;">; </span>x &lt; tot <span style="color: #FFAF5F;">/1.15</span><span style="color: #555555;">; </span><span style="color: #FF8700;">/1.5</span><span style="color: #555555;">; </span><span style="color: #FF5F5F;">/2</span><span style="color: #555555;">; </span><span style="color: #FF0000;">/4</span>
+</code></pre>
+<p>Some helper functions exists for total rows, total tables and
+reference rows (<code>is_totrow()</code> / <code>as_totrow()</code>,
+<code>is_tottab()</code> / <code>as_tottab()</code>,
+<code>is_refrow()</code> / <code>as_refrow()</code>) :</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="fu">across</span>( </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">where</span>(is_fmt),</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> dplyr<span class="sc">::</span><span class="fu">if_else</span>(<span class="fu">is_totrow</span>(.), </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">true  =</span> <span class="fu">mutate</span>(., <span class="at">digits =</span> 1L), </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">false =</span> <span class="fu">mutate</span>(., <span class="at">digits =</span> 2L))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #555555;"># A tabxplor tab: 33 × 9</span>
+#&gt; <span style="color: #555555;"># Groups:         year [9]</span>
+#&gt;    year    race           Married `No answer` `Never married` Separated Divorced
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;fct&gt; </span>          <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span> 2000    Other           44.57%       0.57%          34.29%     4.57%   11.43%
+#&gt; <span style="color: #555555;"> 2</span> 2000    Black           28.21%          <span style="color: #555555;">0%</span>          36.60%    10.02%   13.99%
+#&gt; <span style="color: #555555;"> 3</span> 2000    White           48.76%          <span style="color: #555555;">0%</span>          22.37%     2.76%   16.31%
+#&gt; <span style="color: #555555;"> 4</span> 2000    Total 2000       45.4%          <span style="color: #555555;">0%</span>           25.3%      4.0%    15.7%
+#&gt; 
+#&gt; <span style="color: #555555;"> 5</span> 2002    Other           49.70%          <span style="color: #555555;">0%</span>          28.14%     5.39%   15.57%
+#&gt; <span style="color: #555555;"> 6</span> 2002    Black           28.29%          <span style="color: #555555;">0%</span>          39.76%     6.34%   16.10%
+#&gt; <span style="color: #555555;"> 7</span> 2002    White           48.90%          <span style="color: #555555;">0%</span>          22.76%     2.79%   16.13%
+#&gt; <span style="color: #555555;"> 8</span> 2002    Total 2002       45.9%          <span style="color: #555555;">0%</span>           25.6%      3.5%    16.1%
+#&gt; 
+#&gt; <span style="color: #555555;"> 9</span> 2004    Other           55.72%          <span style="color: #555555;">0%</span>          28.86%     3.98%    8.46%
+#&gt; <span style="color: #555555;">10</span> 2004    Black           33.16%          <span style="color: #555555;">0%</span>          40.32%     7.16%   13.26%
+#&gt; <span style="color: #555555;">11</span> 2004    White           55.60%          <span style="color: #555555;">0%</span>          18.31%     2.69%   15.58%
+#&gt; <span style="color: #555555;">12</span> 2004    Total 2004       52.6%          <span style="color: #555555;">0%</span>           22.0%      3.4%    14.8%
+#&gt; 
+#&gt; <span style="color: #555555;">13</span> 2006    Other           51.01%       0.17%          27.87%     6.76%   10.98%
+#&gt; <span style="color: #555555;">14</span> 2006    Black           27.29%          <span style="color: #555555;">0%</span>          42.59%     5.52%   16.09%
+#&gt; <span style="color: #555555;">15</span> 2006    White           51.61%       0.15%          19.64%     2.47%   17.20%
+#&gt; <span style="color: #555555;">16</span> 2006    Total 2006       48.1%        0.1%           23.9%      3.5%    16.2%
+#&gt; 
+#&gt; <span style="color: #555555;">17</span> 2008    Other           43.72%          <span style="color: #555555;">0%</span>          37.16%     6.01%    7.65%
+#&gt; <span style="color: #555555;">18</span> 2008    Black           30.25%          <span style="color: #555555;">0%</span>          41.64%     8.90%   12.81%
+#&gt; <span style="color: #555555;">19</span> 2008    White           51.76%       0.32%          22.19%     2.18%   14.82%
+#&gt; <span style="color: #555555;">20</span> 2008    Total 2008       48.0%        0.2%           26.2%      3.5%    13.9%
+#&gt; 
+#&gt; <span style="color: #555555;">21</span> 2010    Other           37.70%          <span style="color: #555555;">0%</span>          40.44%     6.01%   10.93%
+#&gt; <span style="color: #555555;">22</span> 2010    Black           21.54%          <span style="color: #555555;">0%</span>          51.13%     2.57%   17.36%
+#&gt; <span style="color: #555555;">23</span> 2010    White           48.71%       0.06%          21.42%     2.97%   17.23%
+#&gt; <span style="color: #555555;">24</span> 2010    Total 2010       43.6%          <span style="color: #555555;">0%</span>           27.6%      3.2%    16.7%
+#&gt; 
+#&gt; <span style="color: #555555;">25</span> 2012    Other           48.98%          <span style="color: #555555;">0%</span>          35.71%     5.61%    6.63%
+#&gt; <span style="color: #555555;">26</span> 2012    Black           28.24%          <span style="color: #555555;">0%</span>          39.87%     4.32%   19.60%
+#&gt; <span style="color: #555555;">27</span> 2012    White           48.68%          <span style="color: #555555;">0%</span>          22.75%     2.98%   16.59%
+#&gt; <span style="color: #555555;">28</span> 2012    Total 2012       45.6%          <span style="color: #555555;">0%</span>           26.6%      3.4%    16.1%
+#&gt; 
+#&gt; <span style="color: #555555;">29</span> 2014    Other           42.75%          <span style="color: #555555;">0%</span>          34.73%     4.58%   14.12%
+#&gt; <span style="color: #555555;">30</span> 2014    Black           25.13%       0.52%          43.26%     4.92%   17.62%
+#&gt; <span style="color: #555555;">31</span> 2014    White           50.21%       0.11%          22.06%     2.65%   16.19%
+#&gt; <span style="color: #555555;">32</span> 2014    Total 2014       45.6%        0.2%           26.6%      3.2%    16.2%
+#&gt; 
+#&gt; <span style="color: #555555;">33</span> Ensemb… Total Ensemble   47.1%        0.1%           25.2%      3.5%    15.7%
+#&gt; <span style="color: #555555;"># … with 2 more variables: Widowed &lt;row%&gt;, Total &lt;row%&gt;</span>
+</code></pre>
+<p>Each <code>fmt</code> column have attributes, which you can access or
+modify with <code>get_</code> and <code>set_</code> functions :</p>
+<ul>
+<li><p>type / <code>get_type()</code> / <code>set_type()</code> : the
+type of the <code>fmt</code> vector, among
+<code>c(&quot;n&quot;, &quot;mean&quot;, &quot;row&quot;, &quot;col&quot;, &quot;all&quot;, &quot;all_tabs&quot;)</code> ; it
+determines which calculations are done within <code>tab_</code>
+functions.</p></li>
+<li><p>totcol / <code>is_totcol()</code> / <code>as_totcol()</code> :
+<code>TRUE</code> if the column is a total column, <code>FALSE</code>
+otherwise (logical)</p></li>
+<li><p>refcol / <code>is_refcol()</code> / <code>as_refcol()</code> :
+<code>TRUE</code> if the column is a reference column for comparison,
+<code>FALSE</code> otherwise (logical)</p></li>
+<li><p>color / <code>get_color()</code> / <code>set_color()</code> : the
+calculation to make to print colors ; among
+<code>c(&quot;&quot;, &quot;no&quot;, &quot;diff&quot;, &quot;diff_ci&quot;, &quot;after_ci&quot;, &quot;contrib&quot;)</code></p></li>
+<li><p>col_var / <code>get_col_var()</code> / <code>set_col_var()</code>
+: the name of the column variable (there can be many in one single
+table)</p></li>
+<li><p>comp_all / <code>get_comp_all</code> /
+<code>set_comp_all()</code> : when there are <code>tab_vars</code>, is
+the reference for comparison the subtable (<code>FALSE</code>), or the
+total table (<code>TRUE</code>) ?</p></li>
+<li><p>diff_type / <code>get_diff_type()</code> /
+<code>set_diff_type()</code> : the type of difference calculated, either
+<code>&quot;no&quot;</code>, <code>&quot;tot&quot;</code> for totals, an index, or a regular
+expression.</p></li>
+<li><p>ci_type / <code>get_ci_type()</code> / <code>set_ci_type()</code>
+: the type of confidence interval, either <code>&quot;cell&quot;</code> or
+<code>&quot;diff&quot;</code></p></li>
+</ul>
+<p>For example, to print the number of observations of the total column
+:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(data, race, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_totcol), <span class="sc">~</span> <span class="fu">mutate</span>(., <span class="at">display =</span> <span class="st">&quot;n&quot;</span>) ))</span></code></pre></div>
+<pre class="r-output"><code>#&gt; <span style="color: #555555;"># A tabxplor tab: 33 × 9</span>
+#&gt; <span style="color: #555555;"># Groups:         year [9]</span>
+#&gt;    year    race           Married `No answer` `Never married` Separated Divorced
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;fct&gt; </span>          <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span> 2000    Other              45%          1%             34%        5%      11%
+#&gt; <span style="color: #555555;"> 2</span> 2000    Black              28%          <span style="color: #555555;">0%</span>             37%       10%      14%
+#&gt; <span style="color: #555555;"> 3</span> 2000    White              49%          <span style="color: #555555;">0%</span>             22%        3%      16%
+#&gt; <span style="color: #555555;"> 4</span> 2000    Total 2000         45%          <span style="color: #555555;">0%</span>             25%        4%      16%
+#&gt; 
+#&gt; <span style="color: #555555;"> 5</span> 2002    Other              50%          <span style="color: #555555;">0%</span>             28%        5%      16%
+#&gt; <span style="color: #555555;"> 6</span> 2002    Black              28%          <span style="color: #555555;">0%</span>             40%        6%      16%
+#&gt; <span style="color: #555555;"> 7</span> 2002    White              49%          <span style="color: #555555;">0%</span>             23%        3%      16%
+#&gt; <span style="color: #555555;"> 8</span> 2002    Total 2002         46%          <span style="color: #555555;">0%</span>             26%        3%      16%
+#&gt; 
+#&gt; <span style="color: #555555;"> 9</span> 2004    Other              56%          <span style="color: #555555;">0%</span>             29%        4%       8%
+#&gt; <span style="color: #555555;">10</span> 2004    Black              33%          <span style="color: #555555;">0%</span>             40%        7%      13%
+#&gt; <span style="color: #555555;">11</span> 2004    White              56%          <span style="color: #555555;">0%</span>             18%        3%      16%
+#&gt; <span style="color: #555555;">12</span> 2004    Total 2004         53%          <span style="color: #555555;">0%</span>             22%        3%      15%
+#&gt; 
+#&gt; <span style="color: #555555;">13</span> 2006    Other              51%          <span style="color: #555555;">0%</span>             28%        7%      11%
+#&gt; <span style="color: #555555;">14</span> 2006    Black              27%          <span style="color: #555555;">0%</span>             43%        6%      16%
+#&gt; <span style="color: #555555;">15</span> 2006    White              52%          <span style="color: #555555;">0%</span>             20%        2%      17%
+#&gt; <span style="color: #555555;">16</span> 2006    Total 2006         48%          <span style="color: #555555;">0%</span>             24%        3%      16%
+#&gt; 
+#&gt; <span style="color: #555555;">17</span> 2008    Other              44%          <span style="color: #555555;">0%</span>             37%        6%       8%
+#&gt; <span style="color: #555555;">18</span> 2008    Black              30%          <span style="color: #555555;">0%</span>             42%        9%      13%
+#&gt; <span style="color: #555555;">19</span> 2008    White              52%          <span style="color: #555555;">0%</span>             22%        2%      15%
+#&gt; <span style="color: #555555;">20</span> 2008    Total 2008         48%          <span style="color: #555555;">0%</span>             26%        3%      14%
+#&gt; 
+#&gt; <span style="color: #555555;">21</span> 2010    Other              38%          <span style="color: #555555;">0%</span>             40%        6%      11%
+#&gt; <span style="color: #555555;">22</span> 2010    Black              22%          <span style="color: #555555;">0%</span>             51%        3%      17%
+#&gt; <span style="color: #555555;">23</span> 2010    White              49%          <span style="color: #555555;">0%</span>             21%        3%      17%
+#&gt; <span style="color: #555555;">24</span> 2010    Total 2010         44%          <span style="color: #555555;">0%</span>             28%        3%      17%
+#&gt; 
+#&gt; <span style="color: #555555;">25</span> 2012    Other              49%          <span style="color: #555555;">0%</span>             36%        6%       7%
+#&gt; <span style="color: #555555;">26</span> 2012    Black              28%          <span style="color: #555555;">0%</span>             40%        4%      20%
+#&gt; <span style="color: #555555;">27</span> 2012    White              49%          <span style="color: #555555;">0%</span>             23%        3%      17%
+#&gt; <span style="color: #555555;">28</span> 2012    Total 2012         46%          <span style="color: #555555;">0%</span>             27%        3%      16%
+#&gt; 
+#&gt; <span style="color: #555555;">29</span> 2014    Other              43%          <span style="color: #555555;">0%</span>             35%        5%      14%
+#&gt; <span style="color: #555555;">30</span> 2014    Black              25%          1%             43%        5%      18%
+#&gt; <span style="color: #555555;">31</span> 2014    White              50%          <span style="color: #555555;">0%</span>             22%        3%      16%
+#&gt; <span style="color: #555555;">32</span> 2014    Total 2014         46%          <span style="color: #555555;">0%</span>             27%        3%      16%
+#&gt; 
+#&gt; <span style="color: #555555;">33</span> Ensemb… Total Ensemble     47%          <span style="color: #555555;">0%</span>             25%        3%      16%
+#&gt; <span style="color: #555555;"># … with 2 more variables: Widowed &lt;row%&gt;, Total &lt;row%-n&gt;</span>
+</code></pre>
+<p>Note that, if <code>tab_vars</code> are provided, the table is
+grouped and all operations are made within groups. To remove grouping
+(for example when it gives errors), use
+<code>dplyr::ungroup()</code>.</p>
+<p>If you only need the simplest table, with only numeric counts (no
+<code>fmt</code>), or even a base <code>data.frame</code> (not a
+<code>tibble</code>) :</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">num =</span> <span class="cn">TRUE</span>) <span class="co"># counts as a numeric vector</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">df =</span> <span class="cn">TRUE</span>)  <span class="co"># same, with unique class = &quot;data.frame&quot;</span></span></code></pre></div>
 </div>
 
 

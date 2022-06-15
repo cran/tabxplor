@@ -47,6 +47,12 @@ tab(data, year, marital, race, pct = "row", color = "diff", diff = "first", tot 
     totaltab = "table")
 
 ## ---- echo = TRUE-------------------------------------------------------------
+tab(data, year, marital, race, pct = "row", color = "diff", diff = 3)
+
+## ---- echo = TRUE-------------------------------------------------------------
+tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", diff = "Married")
+
+## ---- echo = TRUE-------------------------------------------------------------
 tab(forcats::gss_cat, race, marital, pct = "row", ci = "cell")
 
 ## ---- echo = TRUE-------------------------------------------------------------
@@ -77,4 +83,36 @@ tabs
 
 ## ---- echo = TRUE-------------------------------------------------------------
 tabs %>% tab_kable()
+
+## -----------------------------------------------------------------------------
+tabs <- tab(data, race, marital, year, pct = "row")
+tabs %>% mutate(across(where(is_fmt), get_num))
+
+## -----------------------------------------------------------------------------
+vctrs::vec_data(tabs$Married)
+
+## ---- echo = TRUE, message = FALSE--------------------------------------------
+tab_num(data, race, c(age, tvhours), marital, digits = 1L, comp = "all") |>
+  dplyr::mutate(dplyr::across( #Mutate over the whole table.
+    c(age, tvhours),
+    ~ dplyr::mutate(., #Mutate over each fmt vector's underlying data.frame.
+                    var     = sqrt(var), 
+                    display = "var", 
+                    digits  = 2L) |> 
+      set_color("no"),
+    .names = "{.col}_sd"
+  ))
+
+## ---- echo = TRUE, message = FALSE--------------------------------------------
+tab(data, race, marital, year, pct = "row") %>%
+  dplyr::mutate(across( 
+    where(is_fmt),
+    ~ dplyr::if_else(is_totrow(.), 
+                true  = mutate(., digits = 1L), 
+                false = mutate(., digits = 2L))
+  ))
+
+## ---- echo = TRUE, message = FALSE--------------------------------------------
+tab(data, race, marital, year, pct = "row") %>%
+  mutate(across(where(is_totcol), ~ mutate(., display = "n") ))
 

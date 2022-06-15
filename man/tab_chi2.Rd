@@ -23,8 +23,8 @@ are computed by selecting elements in the vector \code{c("ctr", "p", "var", "cou
 contributions to variance be calculated for each subtable/group (by default,
 \code{comp = "tab"}) ? Should they be calculated for the whole table
 (\code{comp = "all"}) ?
-\code{comp} must be set once and for all the first time you use \code{\link{tab_chi2}},
-\code{\link{tab_pct}} with rows, or \code{\link{tab_ci}}.}
+\code{comp} must be set once and for all the first time you use \code{\link{tab_plain}},
+\code{\link{tab_num}} or \code{\link{tab_chi2}} with rows, or \code{\link{tab_ci}}.}
 
 \item{color}{The type of colors to print, as a single string.
 \itemize{
@@ -49,12 +49,10 @@ Add Chi2 summaries to a \code{\link[tabxplor]{tab}}
 \donttest{
 data <- dplyr::starwars \%>\%
   tab_prepare(sex, hair_color, gender, rare_to_other = TRUE,
-              n_min = 5, na = "keep")
+              n_min = 5, na_drop_all = sex)
 
 data \%>\%
-  tab_plain(sex, hair_color, gender) \%>\%
-  tab_totaltab("line")  \%>\%
-  tab_tot()  \%>\%
+  tab_plain(sex, hair_color, gender, tot = c("row", "col")) \%>\%
   tab_chi2(calc = c("p", "ctr"), color = TRUE)
   }
 }
