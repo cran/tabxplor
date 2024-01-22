@@ -254,7 +254,7 @@ print_chi2 <- function(x, width = NULL) {
   if (nrow(chi2) == 0) return(NULL)
   # if (is.na(chi2)) return(NULL)
 
-  chi2 <- chi2 %>% dplyr::select(-.data$row_var) %>%
+  chi2 <- chi2 %>% dplyr::select(-"row_var") %>%
     dplyr::filter(!.data$`chi2 stats` %in% c("cells"))
 
   fmt_cols <- purrr::map_lgl(chi2, is_fmt) %>% purrr::keep(. == TRUE) %>%
@@ -265,7 +265,7 @@ print_chi2 <- function(x, width = NULL) {
       purrr::map_df(is.na)
     row_all_na <- row_all_na %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(empty = all(dplyr::c_across())) %>%
+      dplyr::mutate(empty = all(dplyr::c_across(cols = dplyr::everything()))) %>%
       dplyr::pull(.data$empty)
 
     chi2 <- chi2 %>% dplyr::filter(!row_all_na)
@@ -335,6 +335,7 @@ tbl_sum.tabxplor_grouped_tab <- function(x, ...) {
 #' @param x An object of class tabxplor_tab
 #' @param setup A setup object from the table
 #' @param ... Other parameters.
+#' @return A character vector.
 #' @export
 #' @method tbl_format_footer tabxplor_tab
 tbl_format_footer.tabxplor_tab <- function(x, setup, ...) {
@@ -356,6 +357,7 @@ tbl_format_footer.tabxplor_tab <- function(x, setup, ...) {
 #' @param x An object of class tabxplor_tab
 #' @param setup A setup object from the table
 #' @param ... Other parameters.
+#' @return A character vector.
 #' @export
 #' @method tbl_format_body tabxplor_tab
 tbl_format_body.tabxplor_tab <- function(x, setup, ...) {
@@ -386,7 +388,7 @@ tbl_format_body.tabxplor_tab <- function(x, setup, ...) {
 #' at mouse hover. Set to \code{FALSE} to discard.
 #' @param popover By default, takes \code{getOption("tabxplor.kable_popover")}. When
 #' `FALSE`, html tooltips are of the base kind : they can't be used with floating table of
-#' content in pkg{rmarkdown} documents. Set to `TRUE` to use \pkg{kableExtra} html
+#' content in \pkg{rmarkdown} documents. Set to `TRUE` to use \pkg{kableExtra} html
 #' popovers instead, which are compatible with floating toc. Remember
 #' to enable the `popover` module by copying the following code into your document :
 #' \code{<script>
@@ -730,18 +732,18 @@ group_by.tabxplor_tab <- function(.data,
 
 #' rowwise method for class tabxplor_tab
 #' @importFrom dplyr rowwise
-#' @param .data A tibble of class \code{tabxplor_tab}.
+#' @param data A tibble of class \code{tabxplor_tab}.
 #' @param ... Variables to be preserved
 #'   when calling \code{summarise()}. This is typically a set of variables whose
 #'   combination uniquely identify each row.
 #' @method rowwise tabxplor_tab
 #' @return A tibble of class \code{tabxplor_grouped_tab} and \code{rowwise_df}.
 #' @export
-rowwise.tabxplor_tab <- function(.data, ...) {
+rowwise.tabxplor_tab <- function(data, ...) {
   out <- NextMethod()
   groups <- dplyr::group_data(out)
   out <- new_grouped_tab(out, groups,
-                         subtext = get_subtext(.data), chi2 = get_chi2(.data))
+                         subtext = get_subtext(data), chi2 = get_chi2(data))
 
   `class<-`(out, stringr::str_replace(class(out), "grouped_df", "rowwise_df"))
 }
@@ -797,13 +799,14 @@ tab_ptype2 <- function(x, y, ..., x_arg = "", y_arg = "") {
 
 
 #Let's now implement the coercion methods, starting with the self-self methods.
-#' @return A tibble of class \code{tabxplor_grouped_tab}.
+#' @return A tibble of class \code{tabxplor_tab}.
 #' @describeIn tab_cast find common ptype between tabxplor_tab and tabxplor_tab
 #' @export
 vec_ptype2.tabxplor_tab.tabxplor_tab <- function(x, y, ...) {
   tab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert tabxplor_tab to tabxplor_tab
+#' @return A tibble of class \code{tabxplor_tab}.
 #' @export
 vec_cast.tabxplor_tab.tabxplor_tab <- function(x, to, ...) {
   tab_cast(x, to, ...)
@@ -812,42 +815,51 @@ vec_cast.tabxplor_tab.tabxplor_tab <- function(x, to, ...) {
 # The methods for combining our class with tibbles follow the same pattern.
 # For ptype2 we return our class in both cases because it is the richer type
 
+#' @describeIn tab_cast find common ptype between tabxplor_tab and tbl_df
 #' @export
+#' @return A tibble of class \code{tabxplor_tab}.
 vec_ptype2.tabxplor_tab.tbl_df <- function(x, y, ...) {
   tab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between tbl_df and tabxplor_tab
+#' @return A tibble.
 #' @export
 vec_ptype2.tbl_df.tabxplor_tab <- function(x, y, ...) {
   tab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert tbl_df to tabxplor_tab
+#' @return A tibble of class \code{tabxplor_tab}.
 #' @export
 vec_cast.tabxplor_tab.tbl_df <- function(x, to, ...) {
   tab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_tab to tbl_df
+#' @return A tibble.
 #' @export
 vec_cast.tbl_df.tabxplor_tab <- function(x, to, ...) {
   vctrs::tib_cast(x, to, ...)
 }
 
 #' @describeIn tab_cast find common ptype between tabxplor_tab and data.frame
+#' @return A tibble of class \code{tabxplor_tab}.
 #' @export
 vec_ptype2.tabxplor_tab.data.frame <- function(x, y, ...) {
   tab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between data.frame and tabxplor_tab
+#' @return A data.frame.
 #' @export
 vec_ptype2.data.frame.tabxplor_tab <- function(x, y, ...) {
   tab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert data.frame to tabxplor_tab
+#' @return A tibble of class \code{tabxplor_tab}.
 #' @export
 vec_cast.tabxplor_tab.data.frame <- function(x, to, ...) {
   tab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_tab to data.frame
+#' @return A data.frame.
 #' @export
 vec_cast.data.frame.tabxplor_tab <- function(x, to, ...) {
   vctrs::df_cast(x, to, ...)
@@ -953,14 +965,15 @@ dplyr_reconstruct.tabxplor_grouped_tab <- function(data, template) {
 }
 # dplyr:::dplyr_reconstruct.grouped_df
 
-# subset method for class tabxplor_grouped_tab
-# @param x A tabxplor_grouped_tab object.
-# @param i,j Indices
-# @param drop For matrices and arrays. If TRUE the result is coerced to the lowest
-# possible dimension (see the examples). This only works for extracting elements,
-# not for the replacement.
+#' subset method for class tabxplor_grouped_tab
+#' @param x A tabxplor_grouped_tab object.
+#' @param i,j,... Indices
+#' @param drop For matrices and arrays. If TRUE the result is coerced to the lowest
+#' possible dimension (see the examples). This only works for extracting elements,
+#' not for the replacement.
+#' @usage "x[i]  ;  x[i, j, ... , drop = TRUE]"
 #' @method `[` tabxplor_grouped_tab
-# @return An object of class \code{tabxplor_grouped_tab}.
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 `[.tabxplor_grouped_tab` <- function(x, i, j, drop = FALSE) {
   out <- NextMethod()
@@ -973,12 +986,17 @@ dplyr_reconstruct.tabxplor_grouped_tab <- function(data, template) {
 }
 # dplyr:::`[.grouped_df`
 
-# set subset method for class tabxplor_grouped_tab
-# @param x A tabxplor_grouped_tab object.
-# @param i,j,... Indices.
-# @param value The new value.
+# #' @rdname `[.tabxplor_grouped_tab`
+# `[` <- `[.tabxplor_grouped_tab`
+
+
+#' set subset method for class tabxplor_grouped_tab
+#' @param x A tabxplor_grouped_tab object.
+#' @param i,j,... Indices.
+#' @param value The new value.
+#' @usage "x[i] <- value  ;   x[i, j, ...] <- value"
 #' @method `[<-` tabxplor_grouped_tab
-# @return An object of class \code{tabxplor_grouped_tab}.
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 `[<-.tabxplor_grouped_tab` <- function(x, i, j, ..., value) {
   out <- NextMethod()
@@ -991,12 +1009,16 @@ dplyr_reconstruct.tabxplor_grouped_tab <- function(data, template) {
 }
 # dplyr:::`[<-.grouped_df`
 
-# set sub-subset method for class tabxplor_grouped_tab
-# @param x A tabxplor_grouped_tab object.
-# @param ... Indices
-# @param value The new value.
+# #' @rdname `[<-.tabxplor_grouped_tab`
+# `[<-` <- `[<-.tabxplor_grouped_tab`
+
+#' set sub-subset method for class tabxplor_grouped_tab
+#' @param x A tabxplor_grouped_tab object.
+#' @param ... Indices
+#' @param value The new value.
+#' @usage "x[[...]] <- value"
 #' @method `[[<-` tabxplor_grouped_tab
-# @return An object of class \code{tabxplor_grouped_tab}.
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 `[[<-.tabxplor_grouped_tab` <- function(x, ..., value) {
   out <- NextMethod()
@@ -1009,20 +1031,23 @@ dplyr_reconstruct.tabxplor_grouped_tab <- function(data, template) {
 }
 # dplyr:::`[[<-.grouped_df`
 
+# #' @rdname `[[<-.tabxplor_grouped_tab`
+# `[[<-` <- `[[<-.tabxplor_grouped_tab`
+
 #' rowwise method for class tabxplor_grouped_tab
 #' @importFrom dplyr rowwise
 #' @method rowwise tabxplor_grouped_tab
-#' @param .data A tibble of class \code{tabxplor_tab}.
+#' @param data A tibble of class \code{tabxplor_tab}.
 #' @param ... Variables to be preserved
 #'   when calling summarise(). This is typically a set of variables whose
 #'   combination uniquely identify each row.
 #' @return An object of class \code{tabxplor_grouped_tab} and \code{rowwise_df}.
 #' @export
-rowwise.tabxplor_grouped_tab <- function(.data, ...) {
+rowwise.tabxplor_grouped_tab <- function(data, ...) {
   out <- NextMethod()
   groups <- dplyr::group_data(out)
 
-  out <- new_grouped_tab(out, groups, subtext = get_subtext(.data), chi2 = get_chi2(.data))
+  out <- new_grouped_tab(out, groups, subtext = get_subtext(data), chi2 = get_chi2(data))
   `class<-`(out, stringr::str_replace(class(out), "grouped_df", "rowwise_df"))
 }
 
@@ -1129,7 +1154,6 @@ rename_with.tabxplor_grouped_tab <- function(.data, .fn, .cols = dplyr::everythi
 }
 
 
-# not for grouped_df
 #' relocate method for class tabxplor_grouped_tab
 #' @importFrom dplyr relocate
 #' @method relocate tabxplor_grouped_tab
@@ -1210,11 +1234,13 @@ gtab_ptype2 <- function(x, y, ..., x_arg = "", y_arg = "") {
 
 #Self-self
 #' @describeIn tab_cast find common ptype between tabxplor_grouped_tab and tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_ptype2.tabxplor_grouped_tab.tabxplor_grouped_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert tabxplor_grouped_tab to tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_cast.tabxplor_grouped_tab.tabxplor_grouped_tab <- function(x, to, ...) {
   gtab_cast(x, to, ...)
@@ -1222,21 +1248,25 @@ vec_cast.tabxplor_grouped_tab.tabxplor_grouped_tab <- function(x, to, ...) {
 
 #grouped_tab / grouped_df
 #' @describeIn tab_cast find common ptype between tabxplor_grouped_tab and grouped_df
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_ptype2.tabxplor_grouped_tab.grouped_df <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between grouped_df and tabxplor_grouped_tab
+#' @return An object of class \code{grouped_df}.
 #' @export
 vec_ptype2.grouped_df.tabxplor_grouped_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert grouped_df to tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_cast.tabxplor_grouped_tab.grouped_df <- function(x, to, ...) {
   gtab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_grouped_tab to grouped_df
+#' @return An object of class \code{grouped_df}.
 #' @export
 vec_cast.grouped_df.tabxplor_grouped_tab <- function(x, to, ...) {
   #vctrs:::gdf_cast
@@ -1248,21 +1278,25 @@ vec_cast.grouped_df.tabxplor_grouped_tab <- function(x, to, ...) {
 
 #grouped_tab / tab
 #' @describeIn tab_cast find common ptype between tabxplor_grouped_tab and tabxplor_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_ptype2.tabxplor_grouped_tab.tabxplor_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between tabxplor_tab and tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_tab}.
 #' @export
 vec_ptype2.tabxplor_tab.tabxplor_grouped_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert tabxplor_tab to tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_cast.tabxplor_grouped_tab.tabxplor_tab <- function(x, to, ...) {
   gtab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_grouped_tab to tabxplor_tab
+#' @return An object of class \code{tabxplor_tab}.
 #' @export
 vec_cast.tabxplor_tab.tabxplor_grouped_tab <- function(x, to, ...) {
   tab_cast(x, to, ...)
@@ -1270,21 +1304,25 @@ vec_cast.tabxplor_tab.tabxplor_grouped_tab <- function(x, to, ...) {
 
 #grouped_tab / tbl_df
 #' @describeIn tab_cast find common ptype between tabxplor_grouped_tab and tbl_df
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_ptype2.tabxplor_grouped_tab.tbl_df <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between tbl_df and tabxplor_grouped_tab
+#' @return An object of class \code{tbl_df}.
 #' @export
 vec_ptype2.tbl_df.tabxplor_grouped_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert tbl_df to tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_cast.tabxplor_grouped_tab.tbl_df <- function(x, to, ...) {
   gtab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_grouped_tab to tbl_df
+#' @return An object of class \code{tbl_df}.
 #' @export
 vec_cast.tbl_df.tabxplor_grouped_tab <- function(x, to, ...) {
   vctrs::tib_cast(x, to, ...)
@@ -1292,21 +1330,25 @@ vec_cast.tbl_df.tabxplor_grouped_tab <- function(x, to, ...) {
 
 #grouped_tab / data.frame
 #' @describeIn tab_cast find common ptype between tabxplor_grouped_tab and data.frame
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_ptype2.tabxplor_grouped_tab.data.frame <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast find common ptype between data.frame and tabxplor_grouped_tab
+#' @return An data.frame.
 #' @export
 vec_ptype2.data.frame.tabxplor_grouped_tab <- function(x, y, ...) {
   gtab_ptype2(x, y, ...)
 }
 #' @describeIn tab_cast convert data.frame to tabxplor_grouped_tab
+#' @return An object of class \code{tabxplor_grouped_tab}.
 #' @export
 vec_cast.tabxplor_grouped_tab.data.frame <- function(x, to, ...) {
   gtab_cast(x, to, ...)
 }
 #' @describeIn tab_cast convert tabxplor_grouped_tab to data.frame
+#' @return An data.frame.
 #' @export
 vec_cast.data.frame.tabxplor_grouped_tab <- function(x, to, ...) {
   vctrs::df_cast(x, to, ...)

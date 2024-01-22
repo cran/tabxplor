@@ -8,7 +8,7 @@
 NULL
 
 
-# binding for global variables not found by R cmd check
+# binding for global variables not found by R CMD check
 . = NULL
 globalVariables(c(":=", ".SD", ".N"))
 
@@ -406,14 +406,11 @@ is_totrow.data.frame <- function(x, ..., partial = FALSE) {
     purrr::map_df(~ is_totrow(.))
 
   if (partial == TRUE) {
-    totrow_cells_test %>%
-      dplyr::rowwise() %>% dplyr::transmute(partial = any(dplyr::c_across())) %>%
-      dplyr::pull(.data$partial)
+    totrow_cells_test |> dplyr::transmute(var = dplyr::if_any()) |> tibble::deframe()
   } else {
     test_result <- totrow_cells_test %>%
-      dplyr::rowwise() %>%
-      dplyr::transmute(complete = all(dplyr::c_across()),
-                       partial  = any(dplyr::c_across()) & !.data$complete)
+      dplyr::transmute(complete = dplyr::if_all(.cols = dplyr::everything() ),
+                       partial  = dplyr::if_all(-"complete") & !.data$complete)
     if (tidyr::replace_na(any(test_result$partial), FALSE)) {
       warning("partial total rows (with some fmt cells not tagged 'totrow') ",
               "were not taken into account ")
@@ -428,6 +425,55 @@ is_totrow.data.frame <- function(x, ..., partial = FALSE) {
 as_totrow  <- function(x, in_totrow = TRUE) {
   vctrs::vec_assert(in_totrow, logical())
   vctrs::`field<-`(x, "in_totrow", vctrs::vec_recycle(in_totrow, length(x)))
+}
+
+#' Complete partial total rows
+#'
+#' @param tabs A table or data.framate containting `tabxplor_fmt` columns.
+#'
+#' @return The table with completed total rows, total tables, and reference rows.
+#' @export
+#'
+# @examples
+complete_partial_totals <- function(tabs) {
+  .diff_totrows <- suppressWarnings(is_totrow(tabs)) != is_totrow(tabs, partial = TRUE)
+
+  if (any(.diff_totrows)) {
+    tabs <- tabs |>
+      tibble::add_column(.diff_totrows) |>
+      dplyr::mutate(dplyr::across(where(is_fmt), ~ dplyr::if_else(
+        condition = .diff_totrows,
+        true      = as_totrow(.),
+        false     = .
+      ))) |>
+      select(-.diff_totrows)
+  }
+
+  .diff_tottabs <- suppressWarnings(is_tottab(tabs)) != is_tottab(tabs, partial = TRUE)
+  if (any(.diff_tottabs)) {
+    tabs <- tabs |>
+      tibble::add_column(.diff_tottabs) |>
+      dplyr::mutate(dplyr::across(where(is_fmt), ~ dplyr::if_else(
+        condition = .diff_tottabs,
+        true      = as_tottab(.),
+        false     = .
+      ))) |>
+      select(-.diff_tottabs)
+  }
+
+  .diff_refrows <- suppressWarnings(is_refrow(tabs)) != is_refrow(tabs, partial = TRUE)
+  if (any(.diff_refrows)) {
+    tabs <- tabs |>
+      tibble::add_column(.diff_refrows) |>
+      dplyr::mutate(dplyr::across(where(is_fmt), ~ dplyr::if_else(
+        condition = .diff_refrows,
+        true      = as_refrow(.),
+        false     = .
+      ))) |>
+      select(-.diff_refrows)
+  }
+
+  tabs
 }
 
 
@@ -459,15 +505,14 @@ is_tottab.data.frame <- function(x, ..., partial = FALSE) {
   tottab_cells_test <- dplyr::ungroup(x) %>% dplyr::select(where(is_fmt)) %>%
     purrr::map_df(~ is_tottab(.))
 
+
+
   if (partial == TRUE) {
-    tottab_cells_test %>%
-      dplyr::rowwise() %>% dplyr::transmute(partial = any(dplyr::c_across())) %>%
-      dplyr::pull(.data$partial)
+    tottab_cells_test %>% dplyr::transmute(var = dplyr::if_any()) %>% tibble::deframe()
   } else {
     test_result <- tottab_cells_test %>%
-      dplyr::rowwise() %>%
-      dplyr::transmute(complete = all(dplyr::c_across()),
-                       partial  = any(dplyr::c_across()) & !.data$complete)
+      dplyr::transmute(complete = dplyr::if_all(.cols = dplyr::everything() ),
+                       partial  = dplyr::if_all(-"complete") & !.data$complete)
     if (tidyr::replace_na(any(test_result$partial), FALSE)) {
       warning("partial total rows (with some fmt cells not tagged 'totrow') ",
               "were not taken into account ")
@@ -551,14 +596,11 @@ is_refrow.data.frame <- function(x, ..., partial = TRUE) {
     purrr::map_df(~ is_refrow(.))
 
   if (partial == TRUE) {
-    refrow_cells_test %>%
-      dplyr::rowwise() %>% dplyr::transmute(partial = any(dplyr::c_across())) %>%
-      dplyr::pull(.data$partial)
+    refrow_cells_test %>% dplyr::transmute(var = dplyr::if_any()) %>% tibble::deframe()
   } else {
     test_result <- refrow_cells_test %>%
-      dplyr::rowwise() %>%
-      dplyr::transmute(complete = all(dplyr::c_across()),
-                       partial  = any(dplyr::c_across()) & !.data$complete)
+      dplyr::transmute(complete = dplyr::if_all(.cols = dplyr::everything() ),
+                       partial  = dplyr::if_all(-"complete") & !.data$complete)
     if (tidyr::replace_na(any(test_result$partial), FALSE)) {
       warning("partial total rows (with some fmt cells not tagged 'refrow') ",
               "were not taken into account ")
@@ -797,10 +839,10 @@ get_color.data.frame <- function(x, ...) {
 # @keywords internal
 #' @export
 set_color     <- function(x, color) {
-  if (color %in% c("no", "")) color <- NA_character_
+  if (color %in% c("no", NA_character_)) color <- "" #NA_character_
   stopifnot(color %in% c("diff", "diff_ci", "after_ci", "contrib", "ci",
                          "", NA_character_))
-  `attr<-`(x ,"color"   , color)
+  `attr<-`(x ,"color", color)
 }
 
 
@@ -1036,7 +1078,7 @@ get_mean_contrib <- function(x) {
       ctr = ctr,
       gr = cumsum(as.integer(totrows)) - as.integer(totrows) ) %>%
       dplyr::mutate(nb = dplyr::row_number()) %>%
-      dplyr::with_groups(.data$gr, ~ dplyr::mutate(., nb = dplyr::last(.data$nb))) %>%
+      dplyr::with_groups("gr", ~ dplyr::mutate(., nb = dplyr::last(.data$nb))) %>%
       dplyr::mutate(mean_ctr = .data$ctr[.data$nb]) %>% dplyr::pull(.data$mean_ctr)
   }
 }
@@ -1058,7 +1100,7 @@ get_ref_means <- function(x) {
       mean = mean,
       gr = cumsum(as.integer(refrows)) - as.integer(refrows) ) %>%
       dplyr::mutate(nb = dplyr::row_number()) %>%
-      dplyr::with_groups(.data$gr, ~ dplyr::mutate(., nb = dplyr::last(.data$nb))) %>%
+      dplyr::with_groups("gr", ~ dplyr::mutate(., nb = dplyr::last(.data$nb))) %>%
       dplyr::mutate(ref_means = .data$mean[.data$nb]) %>%
       dplyr::pull(.data$ref_means)
   }
@@ -1451,7 +1493,7 @@ pillar_shaft.tab_chi2_fmt <- function(x, ...) {
 #' mutate method to access vctrs::fields of tabxplor_fmt vectors
 #' @importFrom dplyr mutate
 #' @method mutate tabxplor_fmt
-#' @param x A tabxplor_fmt column.
+#' @param .data A tabxplor_fmt column.
 #' @param ... <[`data-masking`][dplyr_data_masking]> Name-value pairs.
 #'   The name gives the name of the column in the output (do not change it).
 #'
@@ -1462,13 +1504,13 @@ pillar_shaft.tab_chi2_fmt <- function(x, ...) {
 #'     if ungrouped).
 #' @return An object of class \code{tabxplor_fmt}.
 #' @export
-mutate.tabxplor_fmt <- function(x, ...) {
+mutate.tabxplor_fmt <- function(.data, ...) {
   dots <- rlang::enquos(...)
 
-  x |>
+  .data |>
     vctrs::vec_proxy() |>
     dplyr::mutate(!!!dots, .keep = "all", .before = NULL, .after = NULL) |>
-    vctrs::vec_restore(x)
+    vctrs::vec_restore(.data)
 }
 
 #' $ method for class tabxplor_fmt
@@ -1695,8 +1737,8 @@ color_formula <- function(type, color, diff, ci, ref_means,
 #' @keywords internal
 tab_color_legend <- function(x, colored = TRUE, mode = c("console", "html"),
                              html_theme = NULL, html_type = NULL, html_24_bit,
-                             text_color = NULL,
-                             grey_color = NULL) {
+                             text_color = NULL, grey_color = NULL,
+                             add_color_and_diff_types = FALSE, all_variables_names = FALSE) {
   color     <- get_color(x)
 
   x <- x[!is.na(color) & !color %in% c("no", "")]
@@ -1795,14 +1837,34 @@ tab_color_legend <- function(x, colored = TRUE, mode = c("console", "html"),
   color_table <-
     tibble::tibble(color_type, diff_type, names = names(color_type)) %>%
     dplyr::filter(!is.na(.data$color_type) & !.data$color_type %in% c("no", "")) %>%
-    dplyr::group_by(.data$color_type) %>%
-    dplyr::mutate(etc = dplyr::if_else(dplyr::row_number() >= 3, ",...", "") ) %>%
-    dplyr::slice(1:3) %>%
+    dplyr::group_by(.data$color_type)
+
+  if (all_variables_names == FALSE) {
+    color_table <- color_table |>
+      dplyr::mutate(etc = dplyr::if_else(dplyr::row_number() >= 3, ",...", "") ) %>%
+      dplyr::slice(1:3)
+  } else {
+    color_table <- color_table |> dplyr::mutate(etc =  "")
+  }
+
+  color_table <- color_table |>
     dplyr::summarise(names = paste0(.data$names, collapse = ", "),
                      etc = dplyr::first(.data$etc),
                      diff_type = dplyr::first(.data$diff_type),
                      .groups = "drop") %>%
     dplyr::mutate(names = paste0(.data$names, .data$etc))
+
+  if (add_color_and_diff_types) {
+    color_table <- color_table |>
+      dplyr::mutate(names = paste0(
+        "[color:", .data$color_type, "] ",
+        dplyr::if_else(color_type %in% c("diff_mean", "diff", "diff_ci_mean",
+                                         "diff_ci", "after_ci_mean", "after_ci"),
+          true  = paste0("[diff:", .data$diff_type, "] "),
+          false = ""),
+        .data$names
+      ))
+  }
 
   if (colored == TRUE) color_table <- color_table %>%
     dplyr::mutate(names = stringr::str_pad(.data$names,
@@ -1973,7 +2035,10 @@ get_color_type <- function(color, type) {
 #' @keywords internal
 select_in_color_style <- function(length) {
 
-  if (stringr::str_detect(get_color_style()$pos1, "#CCFFCC|#000033e")) {
+  color_code_pos1 <- get_color_style()$pos1 |> attr("_styles") |> names()
+
+
+  if (stringr::str_detect(color_code_pos1, "#CCFFCC|#000033e")) {
     switch(as.character(length),
            "1"  = c(3)              ,
            "2"  = c(3, 8)           ,
@@ -2235,21 +2300,21 @@ vec_ptype2.tabxplor_fmt.double  <- function(x, y, ...) x # new_fmt() #double()
 #' @param x A double vector
 #' @param y A fmt vector
 #' @param ... Other parameter.
-#' #' @return A fmt vector
+#' @return A fmt vector
 #' @export
 vec_ptype2.double.tabxplor_fmt  <- function(x, y, ...) y # new_fmt() #double()
 #' Find common ptype between fmt and integer
 #' @param x A fmt vector
 #' @param y An integer vector
 #' @param ... Other parameter.
-#' #' @return A fmt vector
+#' @return A fmt vector
 #' @export
 vec_ptype2.tabxplor_fmt.integer <- function(x, y, ...) x # fmt() #double()
 #' Find common ptype between integer and fmt
 #' @param x An integer vector
 #' @param y A fmt vector
 #' @param ... Other parameter.
-#' #' @return A fmt vector
+#' @return A fmt vector
 #' @export
 vec_ptype2.integer.tabxplor_fmt <- function(x, y, ...) y # new_fmt() #double()
 
@@ -2258,7 +2323,7 @@ vec_ptype2.integer.tabxplor_fmt <- function(x, y, ...) y # new_fmt() #double()
 #' @param x A fmt vector
 #' @param to A fmt vector
 #' @param ... Other parameter.
-#' #' @return A fmt vector
+#' @return A fmt vector
 #' @export
 vec_cast.tabxplor_fmt.tabxplor_fmt  <- function(x, to, ...)
   new_fmt(display   = get_display (x),
@@ -2291,7 +2356,7 @@ vec_cast.tabxplor_fmt.tabxplor_fmt  <- function(x, to, ...)
 #' @param x A double vector
 #' @param to A fmt vector
 #' @param ... Other parameter.
-#' #' @return A fmt vector
+#' @return A fmt vector
 #' @export
 vec_cast.tabxplor_fmt.double   <- function(x, to, ...)
   fmt(n = NA_integer_            ,
@@ -2337,7 +2402,7 @@ vec_cast.tabxplor_fmt.integer <- function(x, to, ...)
 #' @param x A integer vector
 #' @param to A fmt vector
 #' @param ... Other parameter.
-#' #' @return An integer vector
+#' @return An integer vector
 #' @method vec_cast.integer tabxplor_fmt
 #' @export
 vec_cast.integer.tabxplor_fmt    <- function(x, to, ...) get_num(x) %>% as.integer() #vctrs::field(x, "pct") %>% as.integer()
@@ -2346,7 +2411,7 @@ vec_cast.integer.tabxplor_fmt    <- function(x, to, ...) get_num(x) %>% as.integ
 #' @param x A fmt vector
 #' @param to A character vector
 #' @param ... Other parameter
-#' #' @return A character vector
+#' @return A character vector
 #' @method vec_cast.character tabxplor_fmt
 #' @export
 vec_cast.character.tabxplor_fmt  <- function(x, to, ...) format(x)
@@ -2394,7 +2459,7 @@ vec_arith.tabxplor_fmt <- function(op, x, y, ...) {
 }
 
 #' @describeIn vec_arith.tabxplor_fmt default vec_arith method for fmt
-# @return A fmt vector
+#' @return A fmt vector
 #' @method vec_arith.tabxplor_fmt default
 #' @export
 vec_arith.tabxplor_fmt.default <- function(op, x, y, ...) {
@@ -2406,7 +2471,7 @@ vec_arith.tabxplor_fmt.default <- function(op, x, y, ...) {
 # positive_integer <- function(n) as.integer(n * sign(n))
 
 #' @describeIn vec_arith.tabxplor_fmt vec_arith method for fmt + fmt
-# @return A fmt vector
+#' @return A fmt vector
 #' @method vec_arith.tabxplor_fmt tabxplor_fmt
 #' @export
 vec_arith.tabxplor_fmt.tabxplor_fmt <- function(op, x, y, ...) {
@@ -2525,7 +2590,7 @@ vec_arith.tabxplor_fmt.tabxplor_fmt <- function(op, x, y, ...) {
 }
 
 #' @describeIn vec_arith.tabxplor_fmt vec_arith method for fmt + numeric
-# @return A fmt vector
+#' @return A fmt vector
 #' @method vec_arith.tabxplor_fmt numeric
 #' @export
 vec_arith.tabxplor_fmt.numeric <- function(op, x, y, ...) {
@@ -2540,7 +2605,7 @@ vec_arith.tabxplor_fmt.numeric <- function(op, x, y, ...) {
 }
 
 #' @describeIn vec_arith.tabxplor_fmt vec_arith method for numeric + fmt
-# @return A fmt vector
+#' @return A fmt vector
 #' @method vec_arith.numeric tabxplor_fmt
 #' @export
 vec_arith.numeric.tabxplor_fmt <- function(op, x, y, ...) {
@@ -2555,7 +2620,7 @@ vec_arith.numeric.tabxplor_fmt <- function(op, x, y, ...) {
 }
 
 #' @describeIn vec_arith.tabxplor_fmt vec_arith method for -fmt
-# @return A fmt vector
+#' @return A fmt vector
 #' @method vec_arith.tabxplor_fmt MISSING
 #' @export
 vec_arith.tabxplor_fmt.MISSING <- function(op, x, y, ...) { #unary + and - operators
