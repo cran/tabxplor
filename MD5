@@ -1,12 +1,12 @@
-0287f6a46d64e948a99750d0e56e09c1 *DESCRIPTION
+686be736bde3509942c5f0103943a7d8 *DESCRIPTION
 754535d33b4bd962b039ff266fd289b4 *NAMESPACE
-c9cfd38e6ca64d34b4846e147bf61f18 *NEWS.md
-a9e2fb8f59ab0dcd572f07fb4cb3efe3 *R/fmt_class.R
+8c0ff8bfbb657c72bdfab4295450ff8e *NEWS.md
+bfa37d93095f6cd442d8e005fdf4c2b7 *R/fmt_class.R
 4c7c2096ceab24637405dad0cf1c78c0 *R/tab.R
-6b69ad16cf62a5b9f33221303177750c *R/tab_classes.R
+651b860ddb15ec4d05a827bea3fe5b43 *R/tab_classes.R
 932471b95bd112cf6317ae13f15e2a75 *R/tab_xl.R
 d1e3003458f51b43082e332ed36c2985 *R/utils.R
-d81b050a0e920d6e31c83e352e10f0b4 *README.md
+aac1b66660243ecf8023624fd50d2db1 *README.md
 d607872cc33ec3a1822fe4b820b38342 *build/vignette.rds
 99c8b0f0b981dec0974bd20563069f53 *inst/doc/tabxplor.R
 1d39dbe8bd98dbbf1ad8107ca5f067f1 *inst/doc/tabxplor.Rmd
@@ -88,7 +88,7 @@ e5cf239da93ac9dd0ee3d4de35f94ceb *man/sub-subset-.tabxplor_grouped_tab.Rd
 fbccbed55fa300e18b19d884d0dee23e *man/tab_cast.Rd
 4b60c56dd4b08fcf99733ae8da8b9fc3 *man/tab_chi2.Rd
 267f8a99538fee50f13ad8778d765949 *man/tab_ci.Rd
-4f8da08fde6cbfc34575649385251589 *man/tab_kable.Rd
+1ee1c4e1f0dedccf6278fba306166036 *man/tab_kable.Rd
 a2f9d1e2e09178cf427e4cf8a9e54501 *man/tab_many.Rd
 a95ad1697a552a986927e3dffb740440 *man/tab_num.Rd
 61530d4c718de924210278aadf5877dc *man/tab_pct.Rd
