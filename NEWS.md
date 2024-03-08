@@ -1,3 +1,10 @@
+# tabxplor 1.1.3
+
+## Bug corrections :
+* `tab_kable()` : html tags in tables where no longer working and where appearing as text (`knitr::kable()` now needs a `format = "html"` argument)
+
+
+
 # tabxplor 1.1.2
 
 ## Added : 
