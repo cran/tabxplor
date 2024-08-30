@@ -704,3 +704,182 @@ bind_datas_for_tab <- function(data, vars) {
 }
 
 
+# Escaped characters ----
+#' @keywords internal
+unbrk <- stringi::stri_unescape_unicode("\\u202f") # unbreakable space
+
+sigma_sign <- stringi::stri_unescape_unicode("\\u03c3") # sigma for sd
+
+
+
+# # Not working
+# # Css link towards https://github.com/web-fonts/dejavu-sans-condensed
+# # @export
+# css_deja_vu_sans_condensed <- function() {
+#
+#   # "@font-face {
+#   #   font-family: 'DejaVu Sans Condensed';
+#   #     url('../inst/fonts/dejavu-sans-condensed-webfont.woff') format('woff'),
+#   #     url('../inst/fonts/dejavu-sans-condensed-webfont.ttf') format('truetype'),
+#   # }" |>
+#   #   stringr::str_remove("\n")
+#
+#   #"@font-face{font-family:'DejaVu Sans Condensed';src:url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.eot);src:url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.eot?#iefix) format('embedded-opentype'),url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.woff2) format('woff2'),url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.woff) format('woff'),url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.ttf) format('truetype'),url(https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.svg#dejavu_sans_condensedregular) format('svg')}"
+#
+#   "@font-face {
+#    font-family: 'DejaVu Sans Condensed';
+#     src: url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.eot'); /* IE9 Compat Modes */
+#       src: url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+#       url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.woff2') format('woff2'), /* Super Modern Browsers */
+#       url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+#       url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.ttf') format('truetype'), /* Safari, Android, iOS */
+#       url('https://github.com/web-fonts/dejavu-sans-condensed/fonts/dejavu-sans-condensed-webfont.svg#dejavu_sans_condensedregular') format('svg'); /* Legacy iOS */
+#   }"
+#
+#   }
+
+
+
+
+
+# ggpubr functions (for tab_plot() as tableGrob ) ----
+
+# ggpubr:::is_tablegrob
+#' @keywords internal
+is_tablegrob <- function (tab) {
+  inherits(tab, "gtable") & inherits(tab, "grob")
+}
+
+# ggpubr:::is_ggtexttable
+#' @keywords internal
+is_ggtexttable <- function (tab) {
+  !is.null(attr(tab, "ggtexttableGrob"))
+}
+
+# ggpubr:::as_ggtexttable
+#' @keywords internal
+as_ggtexttable <- function (tabgrob) {
+  res <- ggpubr::as_ggplot(tabgrob)
+  attr(res, "ggtexttableGrob") <- tabgrob
+  res
+}
+
+# ggpubr:::get_tablegrob
+#' @keywords internal
+get_tablegrob <- function (tab)
+{
+  if (is_ggtexttable(tab)) {
+    tabgrob <- attr(tab, "ggtexttableGrob")
+  }
+  else if (is_tablegrob(tab)) {
+    tabgrob <- tab
+  }
+  else {
+    stop("tab should be an object from either ggpubr::ggtexttable() or gridExtra::tableGrob().")
+  }
+  tabgrob
+}
+
+# ggpubr:::tab_return_same_class_as_input
+#' @keywords internal
+tab_return_same_class_as_input <- function (tabgrob, input) {
+  if (is_ggtexttable(input)) {
+    return(as_ggtexttable(tabgrob))
+  }
+  else if (is_tablegrob(input)) {
+    return(tabgrob)
+  }
+  tabgrob
+}
+
+### https://stackoverflow.com/questions/32106333/align-grob-at-fixed-top-center-position-regardless-of-size
+justify_grob <- function(grob, hjust = "left", vjust = "top", pad = 5){
+  w <- sum(grob$widths)
+  h <- sum(grob$heights)
+  xy <- list(x = switch(hjust,
+                        center = 0.5 + grid::unit(pad, "points"),
+                        left = 0.5*w + grid::unit(pad, "points"),
+                        right = grid::unit(1,"npc") - 0.5*w - grid::unit(pad, "points")),
+             y = switch(vjust,
+                        center = 0.5 + grid::unit(pad, "points"),
+                        bottom = 0.5*h + grid::unit(pad, "points"),
+                        top = grid::unit(1,"npc") - 0.5*h - grid::unit(pad, "points") ) )
+  if (is.null(grob$vp)) {
+    grob$vp <- grid::viewport(x = xy[[1]], y = xy[[2]] )
+  } else {
+    grob$vp$x <- xy[[1]]
+    grob$vp$y <- xy[[2]]
+  }
+
+  return(grob)
+}
+
+
+
+
+# # cowplot:::as_grob.ggplot
+# as_grob.ggplot <- function (plot, device = NULL) {
+#   if (is.null(device)) {
+#     device <- null_dev_env$current
+#   }
+#   cur_dev <- grDevices::dev.cur()
+#   device(width = 6, height = 6)
+#   null_dev <- grDevices::dev.cur()
+#   on.exit({
+#     grDevices::dev.off(null_dev)
+#     if (cur_dev > 1) grDevices::dev.set(cur_dev)
+#   })
+#   ggplot2::ggplotGrob(plot)
+# }
+
+
+
+# translation functions ----
+
+#' @keywords internal
+tr_ <- function(...) {
+  enc2utf8(gettext(paste0(...), domain = "R-tabxplor"))
+}
+
+#' @keywords internal
+po_to_dt <- function(file) {
+  po_base <- readLines(file, encoding = "UTF-8")
+  po_meta <- po_base[!dplyr::cumany(po_base == "")]
+
+  po <- tibble::tibble(base = po_base[dplyr::cumany(po_base == "")])
+
+
+  po <- po |>
+    dplyr::filter(.data$base != "") |>
+    dplyr::mutate(
+      ok = stringr::str_detect(.data$base, "#:|msgid|msgstr"),
+      ok = cumsum(as.integer(.data$ok))
+    ) |>
+    dplyr::group_by(!!rlang::sym("ok")) |>
+    dplyr::group_split() |>
+    purrr::map(
+      ~ paste0(.$base, collapse = "") |>
+        stringr::str_remove_all("\"")
+    ) |>
+    purrr::flatten_chr()
+
+  po <- tibble::tibble(text = po) |>
+    dplyr::mutate(
+      type  = stringr::str_extract(.data$text, "^[^ ]+ ") |> stringr::str_trim(),
+      group = cumsum(as.integer(.data$type == "#:")),
+      .before = 1
+    ) |>
+    dplyr::mutate(
+      text = stringr::str_remove(.data$text, "^[^ ]+ "),
+    ) |>
+    tidyr::pivot_wider(id_cols  = "group", names_from = "type", values_from = "text") |>
+    dplyr::select(-"group") |>
+    `attr<-`("meta", po_meta)
+
+  return(po)
+}
+
+
+
+
+

@@ -11,13 +11,14 @@
 \alias{as_totrow}
 \alias{is_tottab}
 \alias{as_tottab}
+\alias{set_display}
 \alias{is_totcol}
 \alias{as_totcol}
 \alias{is_refrow}
 \alias{as_refrow}
 \alias{get_comp_all}
 \alias{set_comp_all}
-\alias{get_diff_type}
+\alias{get_ref_type}
 \alias{set_diff_type}
 \alias{get_ci_type}
 \alias{set_ci_type}
@@ -44,11 +45,13 @@ fmt(
   ctr = rep(NA_real_, length(n)),
   var = rep(NA_real_, length(n)),
   ci = rep(NA_real_, length(n)),
+  rr = rep(NA_real_, length(n)),
+  or = rep(NA_real_, length(n)),
   in_totrow = rep(FALSE, length(n)),
   in_tottab = rep(FALSE, length(n)),
   in_refrow = rep(FALSE, length(n)),
   comp_all = NA,
-  diff_type = "",
+  ref = "",
   ci_type = "",
   col_var = "",
   totcol = FALSE,
@@ -74,6 +77,8 @@ is_tottab(x, ...)
 
 as_tottab(x, in_tottab = TRUE)
 
+set_display(x, value)
+
 is_totcol(x, ...)
 
 as_totcol(x, totcol = TRUE)
@@ -86,9 +91,9 @@ get_comp_all(x, replace_na = TRUE)
 
 set_comp_all(x, comp_all = FALSE)
 
-get_diff_type(x, ...)
+get_ref_type(x, ...)
 
-set_diff_type(x, diff_type)
+set_diff_type(x, ref)
 
 get_ci_type(x, ...)
 
@@ -161,23 +166,21 @@ Calculate with \code{tab_plain}.}
 Used to print colors (\code{"diff_ci"}, \code{"after_ci"}).
 Calculate with \code{tab_ci}.}
 
+\item{rr}{The relative risk, as a double vector the length of \code{n}.}
+
+\item{or}{The odds ratio or relative risk ratio, as a double vector the length of \code{n}.}
+
 \item{in_totrow}{\code{TRUE} when the cell is part of a total row}
 
 \item{in_tottab}{\code{TRUE} when the cell is part of a total table}
 
 \item{in_refrow}{\code{TRUE} when the cell is part of a reference row
-(cf. \code{diff_type})}
+(cf. \code{ref})}
 
 \item{comp_all}{\code{FALSE} when the comparison level is the subtable/group,
 \code{TRUE} when it is the whole table}
 
-\item{diff_type}{The type of difference of the vector (calculate
-with \code{\link{tab_pct}}) :
-\itemize{
-\item \code{""} or \code{"no"}: no differences have been calculated
-\item \code{"tot"}: the reference row (or column) is the total row (or column)
-\item \code{"first"}: the reference row (or column) is the first row (or column)
-}}
+\item{ref}{The type of difference of the vector. Cf. \code{\link{tab}}.}
 
 \item{ci_type}{The type of confidence intervals of the vector (calculate
 with \code{\link{tab_ci}}) :
@@ -185,7 +188,7 @@ with \code{\link{tab_ci}}) :
 \item \code{""} or \code{"no"}: no ci have been calculated
 \item \code{"cell"}: absolute confidence intervals of cells percentages.
 \item \code{"diff"}: confidence intervals of the difference between a cell and the
-relative total cell (or relative first cell when \code{diff_type = "first"}).
+relative total cell (or relative first cell when \code{ref = "first"}).
 \item \code{"auto"}: \code{"diff"} for means and row/col percentages,
 \code{"cell"} for frequencies ("all", "all_tabs").
 }}
@@ -200,7 +203,7 @@ relative total cell (or relative first cell when \code{diff_type = "first"}).
 \itemize{
 \item \code{"no"}: no colors are printed.
 \item \code{"diff"}: color percentages and means based on cells differences from
-totals (or from first cells when \code{diff = "first"}).
+totals (or from first cells when \code{ref = "first"}).
 \item \code{"diff_ci"}: color pct and means based on cells differences from totals
 or first cells, removing coloring when the confidence interval of this difference
 is higher than the difference itself.
@@ -241,6 +244,8 @@ A modified fmt vector with totrow field changed.
 A logical vector with the fmt vectors tottab field.
 
 A modified fmt vector with tottab field changed.
+
+The entered objects, with all fmt vectors with the wanted display.
 
 A logical vector with the fmt vectors totcol attribute.
 
@@ -312,6 +317,9 @@ using \pkg{vctrs}.
 
 \item \code{as_tottab()}: set the "in_tottab" field (belong to total table)
 
+\item \code{set_display()}: set the "display" vctrs::field of a \code{fmt} vector, or of
+all of them in the whole tibble.
+
 \item \code{is_totcol()}: test function for total columns
 (at \code{fmt} level or \code{tab} level)
 
@@ -326,7 +334,7 @@ using \pkg{vctrs}.
 
 \item \code{set_comp_all()}: set the comparison level attribute of a \code{fmt} vector
 
-\item \code{get_diff_type()}: get differences type of fmt columns (at \code{fmt} level or \code{tab} level)
+\item \code{get_ref_type()}: get differences type of fmt columns (at \code{fmt} level or \code{tab} level)
 
 \item \code{set_diff_type()}: set the differences type attribute of a \code{fmt} vector
 
@@ -398,7 +406,7 @@ set_color(f, "contrib")
 
 
 tabs <- tab(starwars, sex, hair_color, gender, na = "drop", pct = "row",
-            rare_to_other = TRUE, n_min = 5)
+            other_if_less_than = 5)
 
 # To identify the total columns, and work with them :
 is_totcol(tabs)

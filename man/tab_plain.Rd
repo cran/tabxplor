@@ -11,16 +11,18 @@ tab_plain(
   tab_vars,
   wt,
   pct = "no",
-  diff = "tot",
-  comp = "tab",
-  color = TRUE,
-  digits = 0,
+  color = "no",
+  OR = "no",
   na = "keep",
-  subtext = "",
+  ref = "auto",
+  ref2 = "first",
+  comp = "tab",
   totaltab = "line",
   totaltab_name = "Ensemble",
   tot = NULL,
   total_names = "Total",
+  subtext = "",
+  digits = 0,
   num = FALSE,
   df = FALSE
 )
@@ -47,26 +49,23 @@ are converted to factor.}
 \item \code{"all_tabs"}: frequencies for the whole (set of) table(s).
 }}
 
-\item{diff}{The reference cell to calculate differences (used to print \code{colors}) :
+\item{color}{The type of colors to print, as a single string :
 \itemize{
-\item \code{"tot"}: by default, cells differences from total rows are calculated with
-\code{pct = "row"}, and cells differences from total columns with \code{pct = "col"}.
-\item \code{"first"}: calculate cells differences from the first cell
-of the row or column (useful to color temporal developments).
-\item \code{"no"}: not use diffs to gain calculation time.
+\item \code{"no"}: by default, no colors are printed.
+\item \code{"diff"}: color percentages and means based on cells differences from
+totals (or from first cells when \code{ref = "first"}).
+\item \code{"OR"}: for \code{pct == "col"} or \code{pct == "row"},
+color based on odds ratios (or relative risks ratios)
 }}
 
-\item{comp}{Comparison level. When \code{tab_vars} are present, should the
-contributions to variance be calculated for each subtable/group (by default,
-\code{comp = "tab"}) ? Should they be calculated for the whole table
-(\code{comp = "all"}) ?
-\code{comp} must be set once and for all the first time you use \code{\link{tab_plain}},
-\code{\link{tab_num}} or \code{\link{tab_chi2}} with rows, or \code{\link{tab_ci}}.}
-
-\item{color}{\code{TRUE} print the color percentages and means based on cells differences from
-totals or reference cell, as provided by \code{diff}. Default to \code{FALSE}, no colors.}
-
-\item{digits}{The number of digits to print, as a single integer.}
+\item{OR}{With \code{pct = "row"} or \code{pct = "col"}, calculate and print odds ratios
+(for binary variables) or relative risks ratios (for variables with 3 levels
+or more).
+\itemize{
+\item \code{"no"}: by default, no OR are calculated.
+\item \code{"OR"}: print OR (instead of percentages).
+\item \code{"OR_pct"}: print OR, with percentages in bracket.
+}}
 
 \item{na}{The policy to adopt with missing values, as a single string.
 \itemize{
@@ -75,7 +74,33 @@ are printed as explicit "NA" level.
 \item \code{"drop"}: removes NA of row, col and tab variables.
 }}
 
-\item{subtext}{A character vector to print rows of legend under the table.}
+\item{ref}{The reference cell to calculate differences and ratios
+(used to print \code{colors}) :
+\itemize{
+\item \code{"auto"}: by default, cell difference from the corresponding total
+(rows or cols depending on \code{pct = "row"} or \code{pct = "col"}) is
+used for \code{diff} ; cell ratio from the first line (or col) is use for \code{OR}
+(odds ratio/relative risks ratio).
+\item \code{"tot"}: totals are always used.
+\item \code{"first"}: calculate cell difference or ratio from the first cell
+of the row or column (useful to color temporal developments).
+\item \code{n}: when \code{ref} is an integer, the nth row (or column) is used for comparison.
+\item \code{"regex"}: when \code{ref} is a string, it it used as a regular expression,
+to match with the names of the rows (or columns). Be precise enough to match only one
+column or row, otherwise you get a warning message.
+\item \code{"no"}: not use ref and not calculate diffs to gain calculation time.
+}}
+
+\item{ref2}{A second reference cell is needed to calculate odds ratios
+(or relative risks ratios). The first cell of the row or column is used by default.
+See \code{ref} above for the full list of possible values.}
+
+\item{comp}{Comparison level. When \code{tab_vars} are present, should the
+contributions to variance be calculated for each subtable/group (by default,
+\code{comp = "tab"}) ? Should they be calculated for the whole table
+(\code{comp = "all"}) ?
+\code{comp} must be set once and for all the first time you use \code{\link{tab_plain}},
+\code{\link{tab_num}} or \code{\link{tab_chi2}} with rows, or \code{\link{tab_ci}}.}
 
 \item{totaltab}{The total table,
 if there are subtables/groups (i.e. when \code{tab_vars} is provided) :
@@ -101,6 +126,10 @@ columns.
 \item{total_names}{The names of the totals, as a character vector of length one or two.
 Use syntax of type \code{c("Total row", "Total column")} to set different names for
 rows and cols.}
+
+\item{subtext}{A character vector to print rows of legend under the table.}
+
+\item{digits}{The number of digits to print, as a single integer.}
 
 \item{num}{Set to \code{TRUE} to obtain a table with normal numeric vectors (not fmt).}
 

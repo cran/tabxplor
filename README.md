@@ -67,7 +67,7 @@ in a “Others” level.
 
 ``` r
 tab(forcats::gss_cat, marital, race, pct = "row", na = "drop", 
-rare_to_other = TRUE, n_min = 1000, other_level = "Custom_other_level_name")
+other_if_less_than = 1000, other_level = "Custom_other_level_name")
 ```
 
 When a third variable is provided, `tab` makes a table with as many
@@ -86,8 +86,8 @@ it appears with shades of red/orange. A color legend is added below the
 table. In RStudio colors are adapted to the theme, light or dark.
 
 ``` r
-data <- forcats::gss_cat %>% 
-dplyr::filter(year %in% c(2000, 2006, 2012), !marital %in% c("No answer", "Widowed"))
+data <- forcats::gss_cat |> 
+  dplyr::filter(year %in% c(2000, 2006, 2012), !marital %in% c("No answer", "Widowed"))
 gss  <- "Source: General social survey 2000-2014"
 gss2 <- "Source: General social survey 2000, 2006 and 2012"
 tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff")
@@ -134,30 +134,30 @@ tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff", comp
 
 ![](.readme_images/tabxplor2_comp_all.jpg)
 
-With `diff = "first"`, each row (or column) is compared to the first row
+With `ref = "first"`, each row (or column) is compared to the first row
 (or column), which is particularly helpful to highlight historical
 evolutions. The first rows then appears in white (while rows totals are
 themselves colored like normal lines).
 
 ``` r
-data <- data %>% dplyr::mutate(year = as.factor(year))
-tab(data, year, marital, race, pct = "row", color = "diff", diff = "first", tot = "col",
+data <- data |> dplyr::mutate(year = as.factor(year))
+tab(data, year, marital, race, pct = "row", color = "diff", ref = "first", tot = "col",
 totaltab = "table")
 ```
 
 ![](.readme_images/tabxplor3_first.jpg)
 
-When `diff` is a number, the nth row (or column) is used for comparison.
+When `ref` is a number, the nth row (or column) is used for comparison.
 
 ``` r
-tab(data, year, marital, race, pct = "row", color = "diff", diff = 3)
+tab(data, year, marital, race, pct = "row", color = "diff", ref = 3)
 ```
 
-Finally, when `diff` is a string, it it used as a regular expression, to
+Finally, when `ref` is a string, it it used as a regular expression, to
 match with the names of the rows (or columns).
 
 ``` r
-tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", diff = "Married")
+tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", ref = "Married")
 ```
 
 ## Confidence intervals
@@ -214,7 +214,7 @@ from the independent hypothesis (the two variables may be independent).
 ``` r
 tab(forcats::gss_cat, race, marital, chi2 = TRUE)
 #> chi2 stats      marital
-#> df                   12
+#> df                   10
 #> variance         0.0464
 #> pvalue               0%
 #> count            21 483
@@ -250,8 +250,8 @@ transformed using most `dplyr` verbs, like a normal `tibble`.
 
 ``` r
 library(dplyr)
-tab(storms, category, status, sup_cols = c("pressure", "wind")) %>%
-filter(category != "-1") %>%
+tab(storms, category, status, sup_cols = c("pressure", "wind")) |>
+filter(category != "-1") |>
 dplyr::select(-`tropical depression`)
 arrange(is_totrow(.), desc(category)) # use is_totrow to keep total rows order
 ```
@@ -260,7 +260,7 @@ With `dplyr::arrange`, don’t forget to keep the order of tab variables
 and total rows:
 
 ``` r
-tab(data, race, marital, year, pct = "row") %>%
+tab(data, race, marital, year, pct = "row") |>
 arrange(year, is_totrow(.), desc(Married))
 ```
 
@@ -275,7 +275,7 @@ level like here):
 
 ``` r
 first_lvs <- c("Married", "$25000 or more", "Strong republican", "Protestant")
-data <- forcats::gss_cat %>% mutate(across(
+data <- forcats::gss_cat |> mutate(across(
 where(is.factor),
 ~ forcats::fct_relevel(., first_lvs[first_lvs %in% levels(.)])
 ))
@@ -305,7 +305,7 @@ NA_character_, "race"     , "no" , NULL                 , "Source: GSS 2000-2014
 data = forcats::gss_cat, color = "auto", chi2 = TRUE)
 ```
 
-## Export to html or Excel
+## Export to html, Excel or plot
 
 To export a table to html with colors, tabxplor uses `knitr::kable` and
 `kableExtra`. In this format differences from totals, confidence
@@ -315,7 +315,7 @@ available in a tooltip at cells hover.
 ``` r
 tabs <- tab(forcats::gss_cat, race, marital, subtext = "Source: GSS 2000-2014", 
 pct = "row", color = "diff")
-tabs %>% tab_kable()
+tabs |> tab_kable()
 ```
 
 ![](.readme_images/tabxplor8_tab_kable.jpg)
@@ -333,7 +333,13 @@ calculations on raw numbers (display is rounded but, below, decimals are
 kept).
 
 ``` r
-tabs %>% tab_xl(replace = TRUE, sheets = "unique")
+tabs |> tab_xl(replace = TRUE, sheets = "unique")
+```
+
+`tab_plot` exports any table as a plot image.
+
+``` r
+tabs |> tab_plot()
 ```
 
 ## Programming with `tabxplor`
@@ -344,13 +350,13 @@ speed. That way, it’s possible to write new functions to customize your
 tables even more.
 
 ``` r
-data <- dplyr::starwars %>%
-tab_prepare(sex, hair_color, gender, rare_to_other = TRUE,
-n_min = 5, na_drop_all = sex)
+data <- dplyr::starwars |>
+tab_prepare(sex, hair_color, gender, other_if_less_than = 5,
+na_drop_all = sex)
 
-data %>%
-tab_plain(sex, hair_color, gender, tot = c("row", "col"), pct = "row", comp = "all") %>%
-tab_ci("diff", color = "after_ci")  %>%
+data |>
+tab_plain(sex, hair_color, gender, tot = c("row", "col"), pct = "row", comp = "all") |>
+tab_ci("diff", color = "after_ci")  |>
 tab_chi2(calc = "p")
 ```
 
@@ -365,7 +371,7 @@ The simple way to recover the underlying numbers as numeric vectors is
 
 ``` r
 tabs <- tab(forcats::gss_cat, race, marital, pct = "row")
-tabs %>% dplyr::mutate(across(where(is_fmt), get_num))
+tabs |> dplyr::mutate(across(where(is_fmt), get_num))
 #> # A tabxplor tab: 4 × 8
 #>   race   `No answer` `Never married` Separated Divorced Widowed Married Total
 #>   <fct>        <dbl>           <dbl>     <dbl>    <dbl>   <dbl>   <dbl> <dbl>
@@ -378,7 +384,7 @@ tabs %>% dplyr::mutate(across(where(is_fmt), get_num))
 To render character vectors (without colors), use `format`:
 
 ``` r
-tabs %>% mutate(across(where(is_fmt), format))
+tabs |> mutate(across(where(is_fmt), format))
 ```
 
 The following fields compose any `fmt` column (though many can be `NA`
@@ -406,6 +412,10 @@ if not calculated) :
 
 - `ci` : confidence intervals
 
+- `rr` : relative risks, needed to calculate odds ratio
+
+- `or` : odds ratios (or relative risks ratios)
+
 - `in_totrow` : `TRUE` if the cell is part of a total row, `FALSE`
   otherwise (logical)
 
@@ -417,35 +427,43 @@ if not calculated) :
 
 ``` r
 vctrs::vec_data(tabs$Married)
-#>       n display digits wn       pct mean         diff ctr var ci in_totrow
-#> 1   932     pct      0 NA 0.4757529   NA  0.004822432  NA  NA NA     FALSE
-#> 2   869     pct      0 NA 0.2777245   NA -0.193205991  NA  NA NA     FALSE
-#> 3  8316     pct      0 NA 0.5072278   NA  0.036297310  NA  NA NA     FALSE
-#> 4 10117     pct      0 NA 0.4709305   NA  0.000000000  NA  NA NA      TRUE
-#>   in_tottab in_refrow
-#> 1     FALSE     FALSE
-#> 2     FALSE     FALSE
-#> 3     FALSE     FALSE
-#> 4     FALSE     FALSE
+#>       n display digits wn       pct mean         diff ctr var ci rr or
+#> 1   932     pct      0 NA 0.4757529   NA  0.004822432  NA  NA NA NA NA
+#> 2   869     pct      0 NA 0.2777245   NA -0.193205991  NA  NA NA NA NA
+#> 3  8316     pct      0 NA 0.5072278   NA  0.036297310  NA  NA NA NA NA
+#> 4 10117     pct      0 NA 0.4709305   NA  0.000000000  NA  NA NA NA NA
+#>   in_totrow in_tottab in_refrow
+#> 1     FALSE     FALSE     FALSE
+#> 2     FALSE     FALSE     FALSE
+#> 3     FALSE     FALSE     FALSE
+#> 4      TRUE     FALSE     FALSE
 ```
 
 To get those underlying fields you can either use `vctrs::fields` or,
 more simply, `$` :
 
 ``` r
-tabs %>% mutate(across(where(is_fmt), ~ vctrs::field(., "pct") ))
+tabs |> mutate(across(where(is_fmt), ~ vctrs::field(., "pct") ))
 
 tabs$Married$pct
 tabs$Married$n
-tabs %>% mutate(across(where(is_fmt), ~ .$n))
+tabs |> mutate(across(where(is_fmt), ~ .$n))
+```
+
+To change the field currently displayed, for the whole table or a single
+vector, you can use `set_display()`:
+
+``` r
+tabs |> set_display("diff")
+tabs |> mutate(across(where(is_fmt), ~ set_display(., "diff")))
 ```
 
 To modify a field, you can use `vctrs` `field<-`. For example, to change
-the displayed field :
+the number of digits :
 
 ``` r
-tab(data, race, marital, year, pct = "row") %>%
-mutate(across(where(is_fmt), ~ vctrs::`field<-`(., "display", rep("diff", length(.)))))
+tab(forcats::gss_cat, race, marital, pct = "row") |> 
+    mutate(across(where(is_fmt), ~ vctrs::`field<-`(., "digits", rep(2L, length(.)))))
 ```
 
 Faster to write and easier to read, you can also use `dplyr::mutate()`
@@ -470,7 +488,7 @@ rows (`is_totrow()` / `as_totrow()`, `is_tottab()` / `as_tottab()`,
 `is_refrow()` / `as_refrow()`) :
 
 ``` r
-tab(data, race, marital, year, pct = "row") %>%
+tab(data, race, marital, year, pct = "row") |>
   dplyr::mutate(across( 
     where(is_fmt),
     ~ dplyr::if_else(is_totrow(.), 
@@ -503,9 +521,9 @@ Each `fmt` column have attributes, which you can access or modify with
   `tab_vars`, is the reference for comparison the subtable (`FALSE`), or
   the total table (`TRUE`) ?
 
-- diff_type / `get_diff_type()` / `set_diff_type()` : the type of
-  difference calculated, either `"no"`, `"tot"` for totals, an index, or
-  a regular expression.
+- ref / `get_ref_type()` / `set_diff_type()` : the type of difference
+  calculated, either `"no"`, `"tot"` for totals, an index, or a regular
+  expression.
 
 - ci_type / `get_ci_type()` / `set_ci_type()` : the type of confidence
   interval, either `"cell"` or `"diff"`
@@ -513,7 +531,7 @@ Each `fmt` column have attributes, which you can access or modify with
 For example, to print the number of observations of the total column :
 
 ``` r
-tab(data, race, marital, year, pct = "row") %>%
+tab(data, race, marital, year, pct = "row") |>
   mutate(across(where(is_totcol), ~ mutate(., display = "n") ))
 ```
 

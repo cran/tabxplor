@@ -43,14 +43,14 @@ tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff", comp
 
 ## ----echo = TRUE--------------------------------------------------------------
 data <- data %>% dplyr::mutate(year = as.factor(year))
-tab(data, year, marital, race, pct = "row", color = "diff", diff = "first", tot = "col",
+tab(data, year, marital, race, pct = "row", color = "diff", ref = "first", tot = "col",
     totaltab = "table")
 
 ## ----echo = TRUE--------------------------------------------------------------
-tab(data, year, marital, race, pct = "row", color = "diff", diff = 3)
+tab(data, year, marital, race, pct = "row", color = "diff", ref = 3)
 
 ## ----echo = TRUE--------------------------------------------------------------
-tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", diff = "Married")
+tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", ref = "Married")
 
 ## ----echo = TRUE--------------------------------------------------------------
 tab(forcats::gss_cat, race, marital, pct = "row", ci = "cell")
