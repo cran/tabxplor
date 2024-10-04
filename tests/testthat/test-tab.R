@@ -94,11 +94,12 @@ testthat::test_that("tab_num works with missing, NULL, NA, etc.", {
   # set_color_breaks(mean_breaks = c(1.05, 1.10, 1.20, 1.50))
   tab_num(data, sex, height, na = "drop")                                       %>% testthat::expect_s3_class("tabxplor_tab")
   tab_num(data, sex, height, wt = mass)                                         %>% testthat::expect_s3_class("tabxplor_tab")
-  tab_num(data, sex, height, ref = "no", ci = "no", tot = "row")               %>% testthat::expect_s3_class("tabxplor_tab")
+  tab_num(data, sex, height, ref = "no", ci = "no", tot = "row")                %>% testthat::expect_s3_class("tabxplor_tab")
   tab_num(data, sex, c(height, birth_year))                                     %>% testthat::expect_s3_class("tabxplor_tab")
   tab_num(data, sex, c(height, birth_year), gender, tot = "row",totaltab = "table") %>% testthat::expect_s3_class("tabxplor_tab")
   tab_num(data, sex, c(height, birth_year), c(gender, eye_color), comp = "all") %>% testthat::expect_s3_class("tabxplor_tab")
-})
+  tab_num(data, col_var = birth_year)                                           %>% testthat::expect_s3_class("tabxplor_tab")
+  })
 
 
 testthat::test_that("tab_num works with diff and ci", {
@@ -465,6 +466,9 @@ testthat::test_that("tab colors are calculated with counts and pct", {
   tab(data, sex, hair_color, pct = "all"     , color = "auto") %>% dplyr::pull(`NA`) %>% expect_color()
   tab(data, sex, hair_color, pct = "all_tabs", color = "auto") %>% dplyr::pull(`NA`) %>% expect_color()
 
+  # breakss <- get_color_breaks()
+  # set_color_breaks(pct_breaks = c(0.05, 0.10, 0.20, 0.30, 2.00) )
+  # set_color_breaks(pct_breaks = c(0.05, 0.10, 0.20, 2.00, 0.30) )
  })
 
 testthat::test_that("tab colors are calculated with text supplementary columns", {
@@ -481,7 +485,21 @@ testthat::test_that("tab colors are calculated with mean supplementary columns",
 
   tab(dplyr::storms, category, status, sup_cols =  wind, color = "auto"    ) |> testthat::expect_s3_class("tabxplor_tab")
   tab(dplyr::storms, category, status, sup_cols = c("pressure", "wind")) |> testthat::expect_s3_class("tabxplor_tab")
-  })
+})
+
+testthat::test_that("tab_many works with and without add_n and add_pct", {
+  tab_many(data, "sex", "hair_color", pct = "row", color = "diff", add_n   = FALSE)                 |> testthat::expect_s3_class("tabxplor_tab")
+  tab_many(data, "sex", "hair_color", pct = "row", color = "diff", add_n   = FALSE, add_pct = TRUE) |> testthat::expect_s3_class("tabxplor_tab")
+  tab_many(data, "sex", "hair_color", pct = "row", color = "diff", add_pct = TRUE)                  |> testthat::expect_s3_class("tabxplor_tab")
+  tab_many(data, "sex", "hair_color", pct = "col", color = "diff", add_n   = FALSE)                 |> testthat::expect_s3_class("tabxplor_tab")
+  tab_many(data, "sex", "hair_color", pct = "col", color = "diff", add_n   = FALSE, add_pct = TRUE) |> testthat::expect_s3_class("tabxplor_tab")
+  tab_many(data, "sex", "hair_color", pct = "col", color = "diff", add_pct = TRUE)                  |> testthat::expect_s3_class("tabxplor_tab")
+})
+
+
+
+
+
 
 
 # #Performance profiles 2021 -------------------------------------------------------------

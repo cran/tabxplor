@@ -23,11 +23,13 @@ jmvtab(
   comp = "tab",
   ci = "auto",
   conf_level = 0.95,
-  ci_print = "moe",
+  ci_print = "ci",
   totaltab = "line",
   wrap_rows = 35,
   wrap_cols = 15,
   display = "auto",
+  add_n = TRUE,
+  add_pct = FALSE,
   subtext = "",
   digits = 0
 )
@@ -136,8 +138,8 @@ Means use classic method.}
 \item Default to 0.95 (95\\%).
 }}
 
-\item{ci_print}{By default confidence interval are printed with the pct+moe
-display. Set to "ci" to use the interval display instead.}
+\item{ci_print}{By default confidence interval are printed with the
+interval display. Set to "moe" to use pct +- moe instead.}
 
 \item{totaltab}{The total table, if there are subtables/groups   (i.e. when
 \code{tab_vars} is provided). Vectorised over \code{row_vars}.  \itemize{
@@ -154,6 +156,14 @@ characters.}
 
 \item{display}{The information to display in the table.}
 
+\item{add_n}{For \code{pct = "row"} or \code{pct = "col"}, set to
+\code{FALSE} not to add another column or row with unweighted counts
+(\code{n}).}
+
+\item{add_pct}{Set to \code{TRUE} to add a column with the frequencies of
+the row variable (for \code{pct = "row"}) or a row with the frequencies of
+the column variable (for  \code{pct = "col"})}
+
 \item{subtext}{A character vector to print rows of legend under the table.}
 
 \item{digits}{The number of digits to print, as a single integer, or an
@@ -162,9 +172,9 @@ integer vector the same length as \code{col_vars}.}
 \value{
 A results object containing:
 \tabular{llllll}{
-\code{results$plot} \tab \tab \tab \tab \tab an image \cr
 \code{results$html_table} \tab \tab \tab \tab \tab a html \cr
 \code{results$chi2_table} \tab \tab \tab \tab \tab a table \cr
+\code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

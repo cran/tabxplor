@@ -23,11 +23,13 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             comp = "tab",
             ci = "auto",
             conf_level = 0.95,
-            ci_print = "moe",
+            ci_print = "ci",
             totaltab = "line",
             wrap_rows = 35,
             wrap_cols = 15,
             display = "auto",
+            add_n = TRUE,
+            add_pct = FALSE,
             subtext = "",
             digits = 0, ...) {
 
@@ -166,9 +168,9 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ci_print",
                 ci_print,
                 options=list(
-                    "moe",
-                    "ci"),
-                default="moe")
+                    "ci",
+                    "moe"),
+                default="ci")
             private$..totaltab <- jmvcore::OptionList$new(
                 "totaltab",
                 totaltab,
@@ -205,6 +207,14 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "OR",
                     "OR_pct"),
                 default="auto")
+            private$..add_n <- jmvcore::OptionBool$new(
+                "add_n",
+                add_n,
+                default=TRUE)
+            private$..add_pct <- jmvcore::OptionBool$new(
+                "add_pct",
+                add_pct,
+                default=FALSE)
             private$..subtext <- jmvcore::OptionString$new(
                 "subtext",
                 subtext,
@@ -213,7 +223,7 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "digits",
                 digits,
                 min=0,
-                max=0,
+                max=10,
                 default=0)
 
             self$.addOption(private$..row_vars)
@@ -238,6 +248,8 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..wrap_rows)
             self$.addOption(private$..wrap_cols)
             self$.addOption(private$..display)
+            self$.addOption(private$..add_n)
+            self$.addOption(private$..add_pct)
             self$.addOption(private$..subtext)
             self$.addOption(private$..digits)
         }),
@@ -264,6 +276,8 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         wrap_rows = function() private$..wrap_rows$value,
         wrap_cols = function() private$..wrap_cols$value,
         display = function() private$..display$value,
+        add_n = function() private$..add_n$value,
+        add_pct = function() private$..add_pct$value,
         subtext = function() private$..subtext$value,
         digits = function() private$..digits$value),
     private = list(
@@ -289,6 +303,8 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..wrap_rows = NA,
         ..wrap_cols = NA,
         ..display = NA,
+        ..add_n = NA,
+        ..add_pct = NA,
         ..subtext = NA,
         ..digits = NA)
 )
@@ -436,8 +452,8 @@ jmvtabBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   Means use classic method.
 #' @param conf_level The confidence level, as a single numeric between 0 and
 #'   1. Default to 0.95 (95\%).
-#' @param ci_print By default confidence interval are printed with the pct+moe
-#'   display. Set to "ci" to use the interval display instead.
+#' @param ci_print By default confidence interval are printed with the
+#'   interval display. Set to "moe" to use pct +- moe instead.
 #' @param totaltab The total table, if there are subtables/groups   (i.e. when
 #'   \code{tab_vars} is provided). Vectorised over \code{row_vars}.  \itemize{
 #'   \item \code{"line"}: by default, add a general total line (necessary for
@@ -449,6 +465,12 @@ jmvtabBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param wrap_cols By default, colnames are wrapped when larger than 12
 #'   characters.
 #' @param display The information to display in the table.
+#' @param add_n For \code{pct = "row"} or \code{pct = "col"}, set to
+#'   \code{FALSE} not to add another column or row with unweighted counts
+#'   (\code{n}).
+#' @param add_pct Set to \code{TRUE} to add a column with the frequencies of
+#'   the row variable (for \code{pct = "row"}) or a row with the frequencies of
+#'   the column variable (for  \code{pct = "col"})
 #' @param subtext A character vector to print rows of legend under the table.
 #' @param digits The number of digits to print, as a single integer, or an
 #'   integer vector the same length as \code{col_vars}.
@@ -485,11 +507,13 @@ jmvtab <- function(
     comp = "tab",
     ci = "auto",
     conf_level = 0.95,
-    ci_print = "moe",
+    ci_print = "ci",
     totaltab = "line",
     wrap_rows = 35,
     wrap_cols = 15,
     display = "auto",
+    add_n = TRUE,
+    add_pct = FALSE,
     subtext = "",
     digits = 0) {
 
@@ -533,6 +557,8 @@ jmvtab <- function(
         wrap_rows = wrap_rows,
         wrap_cols = wrap_cols,
         display = display,
+        add_n = add_n,
+        add_pct = add_pct,
         subtext = subtext,
         digits = digits)
 

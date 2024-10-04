@@ -161,9 +161,11 @@ NULL
 #'    \item \code{"auto"}: \code{ci = "diff"} for means and row/col percentages,
 #'      \code{ci = "cell"} for frequencies ("all", "all_tabs").
 #'   }
-#'  By default, for percentages, with \code{ci = "cell"} Wilson's method is used,
+#'  By default, for percentages, with Wilson's method is used,
 #'  and with \code{ci = "diff"} Wald's method along Agresti and Caffo's adjustment.
-#'  Means use classic method. This can be changed in \code{\link{tab_ci}}.
+#'  Means use classic method. This can be changed in \code{\link{tab_many}}. By
+#'  default, with \code{ci = "cell"}, the result is printed in the `[inf;sup]` form.
+#'  Set `options("tabxplor.ci_print" = "moe")` to print `pct +- moe` instead.
 #' @param conf_level The confidence level, as a single numeric between 0 and 1.
 #' Default to 0.95 (95%).
 # @param ci_visible By default, confidence intervals are calculated and used to set
@@ -187,6 +189,11 @@ NULL
 #'   When \code{ci = "diff"}, row and col percentages are colored with "after_ci" ;
 #'   otherwise they are colored with "diff".
 #'  }
+#' @param add_n For `pct = "row"` or `pct = "col"`, set to `FALSE` not to add another
+#' column or row with unweighted counts (`n`).
+#' @param add_pct Set to `TRUE` to add a column with the frequencies of the row
+#' variable (for `pct = "row"`) or a row with the frequencies of the column variable
+#' (for  `pct = "col"`).
 #' @param subtext A character vector to print rows of legend under the table.
 #' @param cleannames Set to \code{TRUE} to clean levels names, by removing
 #' prefix numbers like "1-", and text in parenthesis. All data formatting arguments are
@@ -281,6 +288,7 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
                 ci = "no", conf_level = 0.95,
                 totaltab = "line", totaltab_name = "Ensemble",
                 tot = c("row", "col"), total_names = "Total",
+                add_n = TRUE, add_pct = FALSE,
                 subtext = "", digits = 0,
                 filter) {
 
@@ -289,7 +297,7 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 
   row_var_quo <- rlang::enquo(row_var)
   if (quo_miss_na_null_empty_no(row_var_quo)) {
-    data <- data %>% dplyr::mutate(no_row_var = factor("n"))
+    data <- data %>% dplyr::mutate(no_row_var = factor("no_row_var")) # "n"
     row_var <- rlang::sym("no_row_var")
   } else {
     row_var <- rlang::ensym(row_var)
@@ -362,6 +370,7 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
            conf_level = conf_level,
            OR = OR,
            color = color,
+           add_n = add_n, add_pct = add_pct,
            subtext = subtext)
 }
 
@@ -494,7 +503,10 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 #'   }
 #'  By default, for percentages, with \code{ci = "cell"} Wilson's method is used,
 #'  and with \code{ci = "diff"} Wald's method along Agresti and Caffo's adjustment.
-#'  Means use classic method. This can be changed in \code{\link{tab_ci}}.
+#'  Means use classic method. This can be changed with \code{method_cell}
+#'  and \code{method_diff}. By default, with \code{ci = "cell"}, the result is printed
+#'  in the `[inf;sup]` form. Set `options("tabxplor.ci_print" = "moe")` to print
+#'  `pct +- moe` instead.
 #' @param conf_level The confidence level, as a single numeric between 0 and 1.
 #' Default to 0.95 (95%).
 # @param ci_visible By default, confidence intervals are calculated and used to set
@@ -529,6 +541,11 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 #'   When \code{ci = "diff"}, row and col percentages are colored with "after_ci" ;
 #'   otherwise they are colored with "diff".
 #' }
+#' @param add_n For `pct = "row"` or `pct = "col"`, set to `FALSE` not to add another
+#' column or row with unweighted counts (`n`).
+#' @param add_pct Set to `TRUE` to add a column with the frequencies of the row
+#' variable (for `pct = "row"`) or a row with the frequencies of the column variable
+#' (for  `pct = "col"`).
 #' @param subtext A character vector to print rows of legend under the table.
 #' @param cleannames Set to \code{TRUE} to clean levels names, by removing
 #' prefix numbers like "1-", and text in parenthesis. All data formatting arguments are
@@ -588,6 +605,7 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                      method_cell = "wilson", method_diff = "ac",
                      totaltab = "line", totaltab_name = "Ensemble",
                      totrow = TRUE, totcol = "last", total_names = "Total",
+                     add_n = TRUE, add_pct = FALSE,
                      digits = 0, subtext = "",
                      filter #, listed = FALSE,
                      #spread_vars = NULL, names_prefix, names_sort = FALSE
@@ -601,7 +619,7 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
 
   row_vars <- rlang::enquo(row_vars)
   if (quo_miss_na_null_empty_no(row_vars)) {
-    data     <- data %>% dplyr::mutate(no_row_var = factor("n"))
+    data     <- data %>% dplyr::mutate(no_row_var = factor("no_row_var")) # "n"
     row_vars <- rlang::syms("no_row_var")
     pos_row_vars <- tidyselect::eval_select("no_row_var", data)
   } else {
@@ -1017,7 +1035,7 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                                             #subtext   = "",
                                             totaltab   = ..2,
                                             totaltab_name = totaltab_name,
-                                            tot        = c( "row", "col"), #totrow vectorised ? ----
+                                            tot        = c( "row", "col"), # vectorise totrow ?
                                             total_names= total_names)) %>%
                     purrr::set_names(col_vars[col_vars_text])
 
@@ -1083,6 +1101,187 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
     }
 
 
+    # return(tabs_text)
+
+
+    # Add column or row with n counts, or column or row with the other kind or percentages.
+    if (add_n | add_pct) {
+
+      # cols, with pct = "row"
+      last_totcols_pct_rows <- tabs_text |>
+        purrr::imap_chr(
+          ~ dplyr::last(names(.x)[is_totcol(.x) & get_type(.x) == "row" &
+                                    get_col_var(.x) != "no_col_var" &
+                                    tab_get_vars(.)$row_var != "no_row_var"]) |>
+            purrr::set_names(.y)
+        )
+
+      # last_totcols_pct_rows <- tabs_text |>
+      #   purrr::map(~ dplyr::mutate(., across(where(is_fmt), ~ set_type(., "col")))) |>
+      #   purrr::imap_chr(~ dplyr::last(names(.x)[is_totcol(.x) & get_type(.x) == "row"]) |>
+      #                 purrr::set_names(.y)
+      #
+      #   )
+      last_totcols_pct_rows <- last_totcols_pct_rows[!is.na(last_totcols_pct_rows)]
+
+      if (length(last_totcols_pct_rows) > 0) {
+        if (add_pct) {
+          tabs_text <- tabs_text |>
+            purrr::map2(
+              last_totcols_pct_rows,
+              ~ dplyr::mutate(
+                .x,
+                col_pct := dplyr::mutate(
+                  !!rlang::sym(.y),
+                  pct = get_wn(!!rlang::sym(.y)) /
+                    dplyr::last(get_wn(!!rlang::sym(.y)),
+                                #which(get_reference(!!rlang::sym(.y), "lines"))
+                    )
+                ) |>
+                  set_type("col") |> as_totcol(FALSE) |> set_color("no") |>
+                  set_diff(NA_real_) |> set_ci(NA_real_) |> set_mean(NA_real_) |>
+                  set_ctr(NA_real_) |> set_var(NA_real_)
+              )
+            )
+        }
+
+        if (add_n) {
+          tabs_text <- tabs_text |>
+            purrr::map2(
+              last_totcols_pct_rows, ~ dplyr::mutate(
+                .x, # !!rlang::sym(paste0(names(.y), "_n"))
+                n = set_display(!!rlang::sym(.y), "n") |>
+                  set_type("n") |> as_totcol(FALSE) |> set_color("no") |>
+                  set_diff(NA_real_) |> set_ci(NA_real_) |> set_mean(NA_real_) |>
+                  set_pct(NA_real_) |> set_ctr(NA_real_) |> set_var(NA_real_)
+              )
+            )
+        }
+
+      }
+
+
+      # rows, with pct = "col"
+      last_totrow <- tabs_text |>
+        purrr::map_int(
+          ~ dplyr::last(which(is_totrow(.) & tab_get_vars(.)$row_var != "no_row_var"),
+                        default = NA_integer_)
+        )
+      last_totrow <- last_totrow[!is.na(last_totrow)]
+      if (length(last_totrow) > 0) {
+
+
+        last_totrow_pct_cols <- tabs_text |>
+          purrr::map(~ names(.)[get_type(.) == "col" & get_col_var(.) != "no_col_var" &
+                                   names(.) != "col_pct"] )
+        last_totrow_pct_cols_no_empty <- purrr::map_lgl(last_totrow_pct_cols, ~ length(.) > 0)
+        # last_totrow_pct_cols <- last_totrow_pct_cols[last_totrow_pct_cols_no_empty]
+
+
+        if (any(last_totrow_pct_cols_no_empty)) {
+
+          if (add_pct) {
+            tabs_text <-
+              purrr::pmap(
+                list(tabs_text, last_totrow_pct_cols_no_empty, last_totrow, last_totrow_pct_cols),
+                ~ {
+                  totcols_ref <- purrr::map_chr(detect_totcols(..1), as.character)
+                  if (..2) {
+                    dplyr::bind_rows(
+                      ..1,
+                      dplyr::slice(..1, ..3) |>
+                        dplyr::mutate(
+                          dplyr::across(
+                            where(is_fmt),
+                            ~ dplyr::mutate(
+                              .,
+                              pct = get_wn(.) /
+                                get_wn(rlang::eval_tidy(
+                                  rlang::sym(totcols_ref[[dplyr::cur_column()]])
+                                ))
+                            )
+                          ),
+                          dplyr::across(where(is_fmt), ~ as_totrow(., FALSE) |>
+                                          set_diff(NA_real_) |> set_ci(NA_real_) |>
+                                          set_mean(NA_real_) |>
+                                          set_ctr(NA_real_) |> set_var(NA_real_)
+                                          ),
+                          dplyr::across(
+                            where(is_fmt) & -tidyselect::all_of(..4),
+                            ~ set_num(., value = NA_real_)
+                          ),
+                          dplyr::across(
+                            all_of(tab_get_vars(..1)$row_var),
+                            ~ factor("row_pct")
+                          )
+                        )
+
+                    )
+                  } else {
+                    ..1
+                  }
+                }
+              )
+          }
+
+          if (add_n) {
+            tabs_text <-
+              purrr::pmap(list(tabs_text, last_totrow_pct_cols_no_empty, last_totrow, last_totrow_pct_cols),
+                          ~ if (..2) {
+                            dplyr::bind_rows(
+                              ..1,
+                              dplyr::slice(..1, ..3) |> set_display("n") |>
+                                dplyr::mutate(
+                                  dplyr::across(where(is_fmt), ~ as_totrow(., FALSE)  |>
+                                                  set_diff(NA_real_) |> set_ci(NA_real_) |>
+                                                  set_mean(NA_real_) |> set_pct(NA_real_) |>
+                                                  set_ctr(NA_real_) |> set_var(NA_real_)
+                                                ),
+                                  dplyr::across(
+                                    where(is_fmt) & -tidyselect::all_of(..4),
+                                    ~ set_num(., value = NA_real_)
+                                  ),
+                                  dplyr::across(
+                                    all_of(tab_get_vars(..1)$row_var),
+                                    ~ factor("n")
+                                  )
+                                )
+
+                            )
+                          } else {
+                            ..1
+                          }
+              )
+          }
+
+        }
+
+      }
+
+
+      # tabs_text |>
+      #   purrr::map(
+      #     ~ dplyr::mutate(., dplyr::across(
+      #       dplyr::where(is_totcol),
+      #       ~ set_display(., "n") |> set_type("n") |>
+      #         as_totcol(FALSE) |> set_color("no"),
+      #       .names = "{.col}_.nnnnnn" # paste0(, "_n")
+      #     )
+      #     ) %>%
+      #       dplyr::rename(all_of(
+      #         purrr::set_names(
+      #           names(.)[stringr::str_detect(names(.), "_.nnnnnn$")],
+      #           paste0(get_col_var(.)[stringr::str_detect(names(.), "_.nnnnnn$")], "_n")
+      #         )
+      #       ))
+      #   )
+
+
+    }
+
+
+
+
     #Remove unwanted total columns
     if (!tot_cols_type %in% c("each", "no_no_create")) {
       if (tot_cols_type == "no_delete") tabs_text <- tabs_text %>%
@@ -1108,6 +1307,10 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
           )
       }
     }
+
+
+
+
 
     # Lone total column to "Total" with no col_var name
     totnames <-
@@ -1185,10 +1388,10 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
     tottab_rows <- purrr::map(tabs[no_totrow], ~ is_tottab(.))
     tottab_line <- purrr::map(tottab_rows[no_totrow], ~ length(.[.]) == 1 & .)
 
-  tabs[no_totrow] <-
-    purrr::pmap( list(tabs[no_totrow],totrows, tottab_line),
-                 ~ tibble::add_column(..1, totrows = ..2, tottab_line = ..3) %>%
-                   dplyr::filter(!.data$totrows | .data$tottab_line) %>%
+    tabs[no_totrow] <-
+      purrr::pmap( list(tabs[no_totrow],totrows, tottab_line),
+                   ~ tibble::add_column(..1, totrows = ..2, tottab_line = ..3) %>%
+                     dplyr::filter(!.data$totrows | .data$tottab_line) %>%
                      dplyr::select(-"totrows", -"tottab_line")
       )
   }
@@ -1203,6 +1406,10 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
   } else {
     tabs <- purrr::map2(tabs, chi2, ~ new_tab(.x, subtext = subtext, chi2 = .y))
   }
+
+
+
+
 
   # if (length(spread_vars) >= 1) {
   #   tabs <- tabs %>%
@@ -1712,7 +1919,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
 
   row_var_quo <- rlang::enquo(row_var)
   if (quo_miss_na_null_empty_no(row_var_quo)) {
-    data <- data %>% dplyr::mutate(no_row_var = factor("n"))
+    data <- data %>% dplyr::mutate(no_row_var = factor("no_row_var")) # "n"
     row_var <- rlang::sym("no_row_var")
   } else {
     row_var <- rlang::ensym(row_var)
@@ -1834,7 +2041,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
 
   #ref
   if (ref == "auto") {
-   ref <- if (OR != "no" | color %in% c("or", "OR")) {"first"} else {"tot"}
+    ref <- if (OR != "no" | color %in% c("or", "OR")) {"first"} else {"tot"}
   }
 
   #digits
@@ -2148,6 +2355,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
     #Differences and odds ratio
     if (ref != "no" & pct %in% c("row", "col")) {
       tabs_diff <- data.table::copy(tabs_pct)
+      tabs_mean <- data.table::copy(tabs_pct)
 
       if (pct == "row") {
 
@@ -2161,7 +2369,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
                             totrow_vector = totrow_vector,
                             #pct           = pct,
                             num_names     = names(cols)
-                            )
+          )
 
         comp_group <- if (comp == "tab") { as.character(tab_vars) } else { character() }
 
@@ -2177,6 +2385,22 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
                   .SDcols = c(names(cols), "ref_rows___")]
 
         tabs_diff[, "ref_rows___" := NULL] #keep it for ci ?
+
+
+        # with pct, tabs_mean are for the *2 rule : ratio is used instead of difference
+        tabs_mean[, "ref_rows___" := refrows]
+
+        tabs_mean[,
+                  c(names(cols), "ref_rows___") := purrr::map_if(
+                    .SD,
+                    purrr::map_lgl(.SD, is.numeric),
+                    ~ . / dplyr::nth(., tidyr::replace_na(which(eval(rlang::sym("ref_rows___")))[1], 0) )
+                  ),
+                  by = eval(comp_group),
+                  .SDcols = c(names(cols), "ref_rows___")]
+
+        tabs_mean[, "ref_rows___" := NULL]
+
 
 
         # Odds ratio (when pct = "row")
@@ -2236,6 +2460,9 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
           tabs_diff[, names(cols) := purrr::map(.SD,~ . - eval(rlang::sym(refcols)) ),
                     .SDcols = names(cols)]
 
+          #   with pct, tabs_mean are for the *2 rule : ratio is used instead of difference
+          tabs_mean[, names(cols) := purrr::map(.SD,~ . / eval(rlang::sym(refcols)) ),
+                    .SDcols = names(cols)]
         } else {
           warning(paste0(
             "in ref = '", ref, "' , no columns were found as reference for comparison ; ",
@@ -2243,7 +2470,11 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
             "until there is one column matched"
           ))
           tabs_diff[, names(cols) := purrr::map(.SD, ~ NA_real_), .SDcols = names(cols)]
+          tabs_mean[, names(cols) := purrr::map(.SD, ~ NA_real_), .SDcols = names(cols)]
         }
+
+
+
 
 
         # Odds ratio (when pct = "col")
@@ -2262,7 +2493,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
                               totrow_vector = totrow_vector,
                               #pct           = pct,
                               num_names     = names(cols)
-                              )
+            )
 
           comp_group <- if (comp == "tab") { as.character(tab_vars) } else { character() }
 
@@ -2289,13 +2520,13 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
 
           } else {
             tabs_or[, names(cols) := purrr::map(.SD, ~ NA_real_), .SDcols = names(cols)]
-            remove(refcols, refcols_vector) # test if exists after
+            # remove(refcols, refcols_vector) # test if exists after
           }
 
 
-        } else if (length(refcols) != 0 & !is.na(refcols)) {
-          remove(refcols, refcols_vector) # test if exists after
-        }
+        } #else if (length(refcols) != 0 & !is.na(refcols)) {
+          #remove(refcols, refcols_vector) # test if exists after
+        #}
 
 
 
@@ -2314,6 +2545,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
   if (exists("tabs_wn"  , rlang::current_env(), inherits = F)) tabs_wn  [, names(text_vars) := NULL]
   if (exists("tabs_pct" , rlang::current_env(), inherits = F)) tabs_pct [, names(text_vars) := NULL]
   if (exists("tabs_diff", rlang::current_env(), inherits = F)) tabs_diff[, names(text_vars) := NULL]
+  if (exists("tabs_mean", rlang::current_env(), inherits = F)) tabs_mean[, names(text_vars) := NULL]
   if (exists("tabs_rr"  , rlang::current_env(), inherits = F)) tabs_rr  [, names(text_vars) := NULL]
   if (exists("tabs_or"  , rlang::current_env(), inherits = F)) tabs_or  [, names(text_vars) := NULL]
   #if (exists("tabs_ci"  , rlang::current_env(), inherits = F)) tabs_ci  [, names(text_vars) := NULL]
@@ -2334,6 +2566,7 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
          if (exists("tabs_wn"  , rlang::current_env(), inherits = F)) { tabs_wn   } else { list(NA_reals) },
          if (exists("tabs_pct" , rlang::current_env(), inherits = F)) { tabs_pct  } else { list(NA_reals) },
          if (exists("tabs_diff", rlang::current_env(), inherits = F)) { tabs_diff } else { list(NA_reals) },
+         if (exists("tabs_mean", rlang::current_env(), inherits = F)) { tabs_mean } else { list(NA_reals) },
          if (exists("tabs_rr"  , rlang::current_env(), inherits = F)) { tabs_rr   } else { list(NA_reals) },
          if (exists("tabs_or"  , rlang::current_env(), inherits = F)) { tabs_or   } else { list(NA_reals) },
 
@@ -2348,20 +2581,21 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
         pct != "no"                                 ~ "pct",
         length(wt) != 0                             ~ "wn" ,
         TRUE                                        ~ "n"
-        ),
+      ),
       digits    = vec_recycle(as.integer(digits), length(..1)),
       n         = as.integer(..1),
       wn        = ..2,
       pct       = ..3,
       diff      = ..4,
-      rr        = ..5,
-      or        = ..6,
+      mean      = ..5,
+      rr        = ..6,
+      or        = ..7,
       #ci        = ,
       in_totrow = totrow_vector,
       in_tottab = tottab_vector,
       in_refrow = refrows,
-      totcol    = ..7,
-      refcol    = ..8,
+      totcol    = ..8,
+      refcol    = ..9,
       color     = dplyr::case_when(
         color %in% c("", "no")                            ~ "",
         row_var == "no_row_var" | col_var == "no_col_var" ~ "",
@@ -2420,6 +2654,61 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
     dplyr::rename(tidyselect::any_of(purrr::set_names("Total", total_names[2])))
 
 
+  # with no col_var
+  no_col_vars_cols <- get_col_var(tabs) == "no_col_var" #& pct %in% c("row", "col", "all", "all_tabs")
+  if (any(no_col_vars_cols) ) {
+    tabs <- tabs |>
+      dplyr::mutate(n = set_display(.data$n, "n") |> set_type("n") |> as_totcol(FALSE)) |>
+      dplyr::relocate("n", .after = tidyselect::last_col())
+
+    if (pct %in% c("row", "col", "all", "all_tabs")) {
+      tabs <- tabs |>
+        dplyr::rename(tidyselect::any_of(c("pct" = total_names[2]))) |> # if (total_names[2] == "Total")
+        dplyr::mutate(pct = as_totcol(pct, FALSE))
+         } else {
+      tabs <- tabs |> dplyr::select(-dplyr::where(is_totcol))
+    }
+
+    if (length(wt) != 0) tabs <- tabs |>
+        dplyr::mutate(wn = set_display(.data$n, "wn") |> set_type("n")) |>
+        dplyr::relocate("wn", .after = tidyselect::last_col() )
+  }
+
+  # # with no row_var : not needed, it's not the simplest way to get a one var table
+  # no_row_vars_cols <- any(names(tabs) == "no_row_var") #& pct %in% c("row", "col", "all", "all_tabs")
+  # if (no_row_vars_cols) {
+  #   tabs <- tabs |>
+  #     dplyr::mutate(
+  #       dplyr::across(
+  #       where(is_fmt),
+  #       ~ dplyr::if_else(!is_totrow(.), set_display(., "n"), .)
+  #     ),
+  #
+  #
+  #     dplyr::across(all_of(names(tabs)[which(names(tabs) == "no_row_var") + 1L]), is_tottab, .names = "tottab"),
+  #
+  #     cond = stringr::str_detect(no_row_var, total_names[1]) & !tottab,
+  #
+  #     no_row_var = dplyr::if_else(cond,
+  #                                 true  = forcats::fct_relabel(
+  #                                   no_row_var,
+  #                                   ~ stringr::str_replace(., total_names[1], "pct"),
+  #                                 ),
+  #                                 false = no_row_var
+  #     ) |>
+  #       forcats::fct_relevel("n", after = Inf),
+  #
+  #    ) |>
+  #     dplyr::select(-tottab, - cond)
+  #
+  #   if (length(wt) != 0) tabs <- tabs |>
+  #       dplyr::bind_rows(
+  #         dplyr::filter(tabs, no_row_var == "n") |> set_display("wn") |>
+  #           dplyr::mutate(no_row_var = factor("wn"))
+  #       )
+  #
+  #   tabs <- tabs |> dplyr::arrange(!!!tab_vars, no_row_var)
+  # }
 
 
   # if (row_var_type == "numeric") {
@@ -2532,9 +2821,6 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
 #'    \item \code{"auto"}: \code{ci = "diff"} for means and row/col percentages,
 #'      \code{ci = "cell"} for frequencies ("all", "all_tabs").
 #'   }
-#'  By default, for percentages, with \code{ci = "cell"} Wilson's method is used,
-#'  and with \code{ci = "diff"} Wald's method along Agresti and Caffo's adjustment.
-#'  Means use classic method. This can be changed in \code{\link{tab_ci}}.
 #' @param conf_level The confidence level for the confidence intervals,
 #'  as a single numeric between 0 and 1. Default to 0.95 (95%).
 #' @param num Set to \code{TRUE} to obtain a table with normal numeric vectors (not `fmt`).
@@ -2568,7 +2854,7 @@ tab_num <- function(data, row_var, col_vars, tab_vars, wt,
 
   row_var_quo <- rlang::enquo(row_var)
   if (quo_miss_na_null_empty_no(row_var_quo)) {
-    data <- data %>% dplyr::mutate(no_row_var = factor("n"))
+    data <- data %>% dplyr::mutate(no_row_var = factor("no_row_var")) # "n"
     row_var <- rlang::sym("no_row_var")
   } else {
     row_var <- rlang::ensym(row_var)
@@ -3379,7 +3665,9 @@ tab_num <- function(data, row_var, col_vars, tab_vars, wt,
 
 
   tabs_var  <-
-    data.table::setnames(tabs[, stringr::str_detect(names(tabs), "_var$"), with = FALSE],
+    data.table::setnames(tabs[, stringr::str_detect(names(tabs), "_var$") &
+                                names(tabs) != "no_row_var",
+                              with = FALSE],
                          function(.x) stringr::str_remove(.x, "_var$" ))
 
 
@@ -4170,7 +4458,9 @@ tab_pct <- function(tabs, pct = "row", #c("row", "col", "all", "all_tabs", "no")
 #' between a cell and the relative total cell (or the reference cell,
 #'  when `ref` is not `"tot"` in \code{\link{tab_plain}} or \code{\link{tab_num}}).
 #'  By default, "diff" ci are calculated for means and row and col percentages,
-#'  "cell" ci for frequencies ("all", "all_tabs").
+#'  "cell" ci for frequencies ("all", "all_tabs"). By default, with \code{ci = "cell"},
+#'  the result is printed in the `[inf;sup]` form. Set
+#'  `options("tabxplor.ci_print" = "moe")` to print `pct +- moe` instead.
 #' @param comp Comparison level. When \code{tab_vars} are present, should the
 #' contributions to variance be calculated for each subtable/group (by default,
 #'  \code{comp = "tab"}) ? Should they be calculated for the whole table
@@ -4231,7 +4521,16 @@ tab_ci <- function(tabs,
   subtext <- get_subtext(tabs)
   chi2    <- get_chi2(tabs)
 
+  # no_col_var <- get_col_var(tabs) == "no_col_var"
+  # no_col_var <- no_col_var[no_col_var]
+  # tabs <- tabs |> mutate(across(
+  #   all_of(no_col_var),
+  #   as_totcol,
+  #   .names = "{.col}_Total"
+  # ))
+
   get_vars          <- tab_get_vars(tabs)
+
   col_vars_with_all <- rlang::syms(get_vars$col_vars)
   col_vars_no_all   <- col_vars_with_all %>% purrr::discard(. == "all_col_vars")
 
@@ -4497,10 +4796,10 @@ tab_ci <- function(tabs,
       dplyr::mutate(dplyr::across(where(is_fmt), ~ set_comp_all(., comp[1] == "all")))
 
     # Change types for columns where visible = TRUE
-    if (any(visible)) {
+    if (any(visible & ci != "no" )) {
       tabs <-
         dplyr::mutate(tabs, dplyr::across(
-          tidyselect::all_of(names(visible)[visible]),
+          tidyselect::all_of(names(visible)[visible & ci != "no" ]),
           ~ switch(
             ci[dplyr::cur_column()],
             "cell" = set_display(., ifelse(get_type(.) == "mean",
@@ -4574,6 +4873,10 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
   if ("all" %in% calc) calc <- c("ctr", "p", "var", "counts")
   subtext         <- get_subtext(tabs)
 
+  if (all(get_col_var(tabs) %in% c("", "no_col_var")) |
+      "no_row_var" %in% names(tabs)
+  ) return(tabs)
+
   comp <- tab_validate_comp(tabs, comp = ifelse(is.null(comp), "null", comp))
   tabs <- tabs %>% tab_match_comp_and_tottab(comp)
 
@@ -4606,7 +4909,7 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
   if ("ctr" %in% calc | "var" %in% calc) {
     tabs <- tabs %>%
       dplyr::mutate(dplyr::across(
-        where(~ is_fmt(.) & !get_type(.) == "mean"),
+        where(~ is_fmt(.) & !get_type(.) == "mean" & ! get_col_var(.) == "no_col_var"),
         ~ set_var(., var_contrib(
           .,
           tot  = rlang::eval_tidy(tot_cols[[dplyr::cur_column()]]),
@@ -4772,8 +5075,8 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
       pvalue_warning <- if (length(result$warnings) != 0) {result$warnings} else {""}
       pvalue         <- result$result$p.value
       df             <- result$result$parameter
-
-      tibble::tibble(pvalue = pvalue, warnings = pvalue_warning, df = df)
+      statistic      <- result$result$statistic
+      tibble::tibble(pvalue = pvalue, warnings = pvalue_warning, df = df, statistic = statistic )
     }
 
     pvalues <-
@@ -4794,14 +5097,16 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
                                     .f = quiet_chisq_test,
                                     .else = ~ tibble::tibble(pvalue = NA_real_,
                                                              warnings = "",
-                                                             df = NA_integer_)
+                                                             df = NA_integer_,
+                                                             statistic = NA_real_)
                       ) %>% dplyr::bind_rows(),
 
                     .else = ~ tibble::tibble(pvalue = NA_real_, warnings = "",
-                                             df = NA_integer_)
+                                             df = NA_integer_, statistic = NA_real_)
       )
     pvalue_p     <- purrr::map(pvalues, ~ dplyr::pull(., .data$pvalue))
     #pvalue_w     <- purrr::map(pvalues, ~ dplyr::pull(., .data$warnings))
+    pvalue_statistic <- purrr::map(pvalues, ~ dplyr::pull(., .data$statistic))
     pvalue_df    <- purrr::map(pvalues, ~ dplyr::pull(., .data$df) %>% as.integer())
   }
 
@@ -4827,6 +5132,7 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
   if (!"p"      %in% calc) {
     pvalue_p  <- NA_real_
     #pvalue_w  <- NA_character_
+    pvalue_statistic <- NA_real_
     pvalue_df <- NA_integer_
   }
   if (!"var"    %in% calc) {
@@ -4843,9 +5149,10 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
 
   chi2 <-
     purrr::pmap(list(counts, pvalue_p, #pvalue_w,
-                     variances_by_group, cells_by_group, pvalue_df),
+                     variances_by_group, cells_by_group, pvalue_df, pvalue_statistic),
                 ~ dplyr::bind_cols(tables,
                                    tibble::tibble(count    = ..1,
+                                                  chi2     = ..6,
                                                   pvalue   = ..2,
                                                   #warnings = ..3,
                                                   variance = ..3,
@@ -4861,11 +5168,11 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
 
   chi2 <- chi2 %>% purrr::imap(
     ~ dplyr::mutate(.x, dplyr::across(
-      tidyselect::any_of(c("count", "pvalue",
+      tidyselect::any_of(c("count", "chi2", "pvalue",
                            "variance", "cells", "df")),
       as.double)) %>%
       tidyr::pivot_longer(cols = c("cells","df", "variance",
-                                   "pvalue", "count"),
+                                   "chi2", "pvalue", "count"),
                           names_to = "chi2 stats",
                           values_to = .y) %>%
       dplyr::mutate(dplyr::across(
@@ -4878,8 +5185,9 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
   ) %>% dplyr::bind_cols() %>%
     dplyr::mutate(dplyr::across(where(is_fmt), ~ dplyr::case_when(
       `chi2 stats` == "variance" ~ set_digits(., 4L),
-      `chi2 stats` == "pvalue"   ~ set_display(., "pct") %>%
-        set_pct(get_var(.)) %>% set_digits(2L),
+      `chi2 stats` == "chi2"     ~ set_digits(., 0L),
+      `chi2 stats` == "pvalue"   ~ set_display(., "pvalue") %>%
+        set_pct(get_var(.)), #  %>% set_digits(2L)
       `chi2 stats` == "count"    ~ as_totrow(.),
       TRUE                       ~ .
     ))) %>% new_tab()
@@ -5159,8 +5467,23 @@ var_contrib <- function(x, tot, calc = c("ctr", "expected_freq", "spread",
 quo_miss_na_null_empty_no <- function(quo) {
   if (rlang::quo_is_missing(quo)) return (TRUE)
   if (rlang::quo_is_null(quo)) return(TRUE)
+  base_quo <- quo
   quo <- rlang::get_expr(quo) %>% as.character()
-  all(is.na(quo) | quo %in% c("", "no"))
+  # message(paste0(quo, collapse = ", "))
+
+  # if (quo[1] %in% c("all_of", "any_of") & exists(quo[2])) {
+  #   if (is.character(rlang::eval_tidy(rlang::sym(quo[2])))) {
+  #     if (all(rlang::eval_tidy(rlang::sym(quo[2])) %in% c("", "no",
+  #                                                         "no_row_var",
+  #                                                         "no_col_var"))) {
+  #       return(TRUE)
+  #     }
+  #   }
+  # }
+
+  all(is.na(quo) | quo %in% c("", "no")) |
+    (quo[1] %in% c("all_of", "any_of") &
+       !is.na(quo[2]) & quo[2] %in% c("", "no", "no_row_var", "no_col_var"))
 }
 
 

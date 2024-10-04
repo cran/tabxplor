@@ -28,6 +28,8 @@ tab(
   totaltab_name = "Ensemble",
   tot = c("row", "col"),
   total_names = "Total",
+  add_n = TRUE,
+  add_pct = FALSE,
   subtext = "",
   digits = 0,
   filter
@@ -152,9 +154,11 @@ relative total cell (or relative first cell when \code{ref = "first"}).
 \item \code{"auto"}: \code{ci = "diff"} for means and row/col percentages,
 \code{ci = "cell"} for frequencies ("all", "all_tabs").
 }
-By default, for percentages, with \code{ci = "cell"} Wilson's method is used,
+By default, for percentages, with Wilson's method is used,
 and with \code{ci = "diff"} Wald's method along Agresti and Caffo's adjustment.
-Means use classic method. This can be changed in \code{\link{tab_ci}}.}
+Means use classic method. This can be changed in \code{\link{tab_many}}. By
+default, with \code{ci = "cell"}, the result is printed in the \verb{[inf;sup]} form.
+Set \code{options("tabxplor.ci_print" = "moe")} to print \code{pct +- moe} instead.}
 
 \item{conf_level}{The confidence level, as a single numeric between 0 and 1.
 Default to 0.95 (95\%).}
@@ -183,6 +187,13 @@ columns.
 \item{total_names}{The names of the totals, as a character vector of length one or two.
 Use syntax of type \code{c("Total row", "Total column")} to set different names for
 rows and cols.}
+
+\item{add_n}{For \code{pct = "row"} or \code{pct = "col"}, set to \code{FALSE} not to add another
+column or row with unweighted counts (\code{n}).}
+
+\item{add_pct}{Set to \code{TRUE} to add a column with the frequencies of the row
+variable (for \code{pct = "row"}) or a row with the frequencies of the column variable
+(for  \code{pct = "col"}).}
 
 \item{subtext}{A character vector to print rows of legend under the table.}
 
