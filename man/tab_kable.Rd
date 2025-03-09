@@ -23,7 +23,8 @@ tab_kable(
 )
 }
 \arguments{
-\item{tabs}{A table made with \code{\link{tab}} or \code{\link{tab_many}}.}
+\item{tabs}{A table made with \code{\link{tab}} or \code{\link{tab_many}},
+or a \code{list} of tab with the same \code{col_vars} and no \code{tab_vars}.}
 
 \item{theme}{By default, a white table with black text, Set to \code{"dark"} for a
 black table with white text.}

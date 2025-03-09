@@ -11,13 +11,17 @@ tab_xl(
   open = rlang::is_interactive(),
   colnames_rotation = 0,
   remove_tab_vars = TRUE,
-  colwidth = "auto",
-  print_ci = FALSE,
+  colwidth = 10,
   print_color_legend = TRUE,
-  sheets = "tabs",
+  sheets = "auto",
   n_min = 0,
   titles,
-  hide_near_zero = "auto",
+  font_text = "DejaVu Sans Condensed",
+  font_num = "DejaVu Sans",
+  text_size = 10,
+  text_size_headers = 9,
+  text_size_subtext = 9,
+  hide_near_zero = Inf,
   color_type = "text"
 )
 }
@@ -40,10 +44,7 @@ software associated with .xlsx files).}
 Set to \code{FALSE} to keep them.}
 
 \item{colwidth}{The standard width for numeric columns, as a number.
-Default to \code{"auto"}.}
-
-\item{print_ci}{Set to \code{TRUE} to print confidence intervals in another table,
-at the left of the base table.}
+Set to \code{"auto"} to let Excel choose.}
 
 \item{print_color_legend}{Should the color legends be printed with the subtexts ?}
 
@@ -51,7 +52,7 @@ at the left of the base table.}
 \itemize{
 \item \code{"tabs"}: a new sheet is created for each table
 \item \code{"unique"}: all tables are on the same sheet
-\item \code{"auto"}: subsequent tables with the same columns are printed on the
+\item \code{"auto"}: subsequent tables with the same column vars are printed on the
 same sheets
 }}
 
@@ -61,6 +62,10 @@ Default to 0 (not used).}
 
 \item{titles}{The titles of the different tables, as a character vector. When missing
 titles are given based on the names of the variables.}
+
+\item{font_text, font_num}{Font for text and for numbers.}
+
+\item{text_size, text_size_headers, text_size_subtext}{Font sizes of text elements.}
 
 \item{hide_near_zero}{By default all cells displayed as 0 (even rounded)
 turn pale grey, to make the distribution of empty cells (and other cells) more visible.

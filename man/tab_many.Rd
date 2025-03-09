@@ -24,6 +24,7 @@ tab_many(
   levels = "all",
   na_drop_all,
   cleannames = NULL,
+  compact = NULL,
   other_if_less_than = 0,
   other_level = "Others",
   ref = "auto",
@@ -155,6 +156,12 @@ Removes all observations with a \code{NA} in any of the chosen variables, for al
 \item{cleannames}{Set to \code{TRUE} to clean levels names, by removing
 prefix numbers like "1-", and text in parenthesis. All data formatting arguments are
 passed to \code{\link{tab_prepare}}.}
+
+\item{compact}{With several \code{row_vars}, set to \code{TRUE} to bind all tables
+in a single \code{tabxplor_tab}. If not provided, the value of
+\code{getOption("tabxplor.compact")} is taken (\code{FALSE} by default).
+Set \code{options(tabxplor.compact = TRUE)} to make this the default behaviour for
+all tables (but beware becauce it can break existing code).}
 
 \item{other_if_less_than}{When set to a positive integer, levels with less count
 than it will be merged into an "Others" level.}
@@ -352,7 +359,7 @@ The color breaks as a double vector, or list of double vectors.
 A full-featured function to create, manipulate and format many cross-tables
 as one, using colors to make the printed tab more easily readable (in R terminal or
 exported to Excel with \code{\link{tab_xl}}).
-Since objects of class \code{tab} are also of class \code{tibble}, you can then use all
+Since objects of class \code{tabxplor_tab} are also of class \code{tibble}, you can then use all
 \pkg{dplyr} verbs to modify the result, like \code{\link[dplyr:select]{select}},
 \code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
 or \code{\link[dplyr:mutate]{mutate}}.

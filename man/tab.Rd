@@ -219,7 +219,7 @@ using them in calculations, be sure they are of class \code{character}.
 A full-featured function to create, manipulate and format single
 cross-tables, using colors to make the printed tab more easily readable
 (in R terminal or exported to Excel with \code{\link{tab_xl}}).
-Since objects of class \code{tab} are also of class \code{tibble}, you can then use all
+Since objects of class \code{tabxplor_tab} are also of class \code{tibble}, you can then use all
 \pkg{dplyr} verbs to modify the result, like \code{\link[dplyr:select]{select}},
 like \code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
 or \code{\link[dplyr:mutate]{mutate}}.

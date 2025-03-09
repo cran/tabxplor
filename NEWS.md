@@ -1,7 +1,24 @@
+# tabxplor 1.3.0
+
+## Added : 
+* `tab_many()` : with several `row_vars`, adding `compact = TRUE` bind all tables
+ in a single one (but only works if no `tab_vars` are provided). 
+ `tab_compact()` can be used to do the same on `tab_plain()`.
+* by default, chi2 pvalue is now added as a row in the tables (below total rows):
+  there is no more chi2 table in attribute by default (but you can still add it 
+  manually with `tab_chi2()`). `tab_pvalue_lines()` do that from `attr(tabs, "chi2")`. 
+* by default with `tabxplor_tab`, `arrange()` now keeps the order of groups and totals
+* in `tab_num()`, if all means < 10, display 1 digit ; if all means < 1, display 2 digits
+* `tab_kable()` now works with a `list` of `tab`, if all `col_vars` are the same and there are no `tab_vars`
+
+## Bug corrections : 
+* in `tab_kable()`, escape signif stars * with \ in  .rmd only, otherwise it breaks the html
+* `ci = "cell"` didn't work with `pct = "col"` with non pct rows
+
+
 # tabxplor 1.2.1
 
 ## Added : 
-
 * in `tab()` and `tab_many()`, possibility to add unweighted counts (`add_n = TRUE`) ; and with row and column percentages a row or column with the other kind of percentage (`add_pct = TRUE`)
 * `kable_tabxplor_style()` : same html table style than `tab_kable()`, but for any data.frame.
 * with `color = "diff"`, a `×2` color rule was added 

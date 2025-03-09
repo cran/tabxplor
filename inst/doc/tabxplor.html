@@ -284,7 +284,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -565,7 +565,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tabxplor)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">set_color_style</span>(<span class="at">type =</span> <span class="st">&quot;text&quot;</span>, <span class="at">theme =</span> <span class="st">&quot;light&quot;</span>)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># # CRAN OMP THREAD LIMIT</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># threads_option &lt;- Sys.getenv(&quot;OMP_THREAD_LIMIT&quot;)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#Sys.setenv(&quot;OMP_THREAD_LIMIT&quot; = 2)</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">set_color_style</span>(<span class="at">type =</span> <span class="st">&quot;text&quot;</span>, <span class="at">theme =</span> <span class="st">&quot;light&quot;</span>)</span></code></pre></div>
 <style type="text/css">
 .lightable-classic tfoot {
 font-size: 90%;
@@ -764,25 +771,25 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2000
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 712">28%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 112">4%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 441">17%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 278">50%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 543">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 543</span>
 </td>
 </tr>
@@ -856,25 +863,25 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2006
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 080">26%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 156">4%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 732">18%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 2 170">52%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 138">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>4 138</span>
 </td>
 </tr>
@@ -948,48 +955,48 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2012
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 526">29%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 68">4%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 317">18%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 900">50%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 811">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 811</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Ensemble
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 2 318">27%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 336">4%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 490">18%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 4 348">51%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 8 492">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>8 492</span>
 </td>
 </tr>
@@ -1357,43 +1364,43 @@ NA
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>171</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 151</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>4 803</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 453</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>151</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>298</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>3 569</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>6 830</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>111</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>19 537</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 18.7 ; diff: ref ; n: 19 537">993 (σ19)</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 25.5 ; diff: ref ; n: 19 537">50 (σ25)</span>
 </td>
 </tr>
@@ -1548,25 +1555,25 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2000
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 712">28%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 112">4%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 441">17%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 1 278">50%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 543">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>2 543</span>
 </td>
 </tr>
@@ -1640,25 +1647,25 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2006
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 1 080">26%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 156">4%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 732">18%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 2 170">52%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 138">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>4 138</span>
 </td>
 </tr>
@@ -1732,48 +1739,48 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total 2012
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 526">29%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 68">4%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 317">18%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -2% ; n: 900">50%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 811">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 811</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Ensemble
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 2 318">27%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 336">4%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 490">18%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 4 348">51%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 8 492">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>8 492</span>
 </td>
 </tr>
@@ -1923,25 +1930,25 @@ n
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 2012
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 70">37%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 11">6%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(255, 179, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 13">7%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 96">51%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 190">100%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>190</span>
 </td>
 </tr>
@@ -1992,25 +1999,25 @@ n
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 2012
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 120">43%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(255, 179, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -7% ; n: 13">5%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(26, 230, 214, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +6% ; n: 59">21%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 85">31%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 277">100%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>277</span>
 </td>
 </tr>
@@ -2061,25 +2068,25 @@ n
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 2012
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 336">25%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 44">3%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 245">18%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 719">53%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 344">100%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 344</span>
 </td>
 </tr>
@@ -2130,25 +2137,25 @@ n
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 2012
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 526">29%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 68">4%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 317">18%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; n: 900">50%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 811">100%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 811</span>
 </td>
 </tr>
@@ -2312,25 +2319,25 @@ n
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Other
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(255, 179, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -5% ; n: 295">32%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 59">6%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +4% ; n: 98">11%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 476">51%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 928">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>928</span>
 </td>
 </tr>
@@ -2404,25 +2411,25 @@ Total Other
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Black
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +1% ; n: 547">44%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +3% ; n: 91">7%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -3% ; n: 221">18%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 379">31%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 238">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 238</span>
 </td>
 </tr>
@@ -2496,48 +2503,48 @@ Total Black
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total White
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -2% ; n: 1 476">23%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -0% ; n: 186">3%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; n: 1 171">19%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +2% ; n: 3 493">55%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 6 326">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>6 326</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Ensemble
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 318">27%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 336">4%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 490">18%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 348">51%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 8 492">100%</span>
 </td>
-<td style="text-align:right;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>8 492</span>
 </td>
 </tr>
@@ -2677,19 +2684,19 @@ Married
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Other
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 295">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 59">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 98">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 476">100%</span>
 </td>
 </tr>
@@ -2745,19 +2752,19 @@ Total Other
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Black
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 547">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 91">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 221">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 379">100%</span>
 </td>
 </tr>
@@ -2813,36 +2820,36 @@ Total Black
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total White
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 476">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 186">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 171">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 493">100%</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total Ensemble
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 2 318">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 336">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 490">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 4 348">100%</span>
 </td>
 </tr>
@@ -3032,31 +3039,31 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 17">0%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 5 416">25%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 743">3%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 3 383">16%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 1 807">8%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; n: 10 117">47%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 21 483">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
 </td>
 </tr>
@@ -3233,31 +3240,31 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 17">0%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 5 416">25%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 743">3%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 3 383">16%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 1 807">8%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 10 117">47%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="; n: 21 483">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
 </td>
 </tr>
@@ -3451,31 +3458,31 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 17">0%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 5 416">25%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 743">3%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 3 383">16%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 1 807">8%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref  ; n: 10 117">47%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="; n: 21 483">100%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
 </td>
 </tr>
@@ -3511,13 +3518,7 @@ metric: degrees of freedom (df), unweighted count, pvalue and
 5%, and in red when superior or equal to 5%, meaning that the table is
 not significantly different from the independent hypothesis (the two
 variables may be independent).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; Warning: [1m[22mThere were 6 warnings in `dplyr::mutate()`.</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; The first warning was:</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m In argument: `dplyr::across(...)`.</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; Caused by warning in `sqrt()`:</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; [33m![39m NaNs produced</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">chi2 =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <style type="text/css">
 .lightable-classic caption {
 text-align: center;
@@ -3669,29 +3670,55 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>17</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>5 416</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>743</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>3 383</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 807</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>10 117</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+pvalue
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
 </td>
 </tr>
 </tbody>
@@ -3704,13 +3731,7 @@ highlights the cells which would stand out in a correspondence analysis
 (the two related categories would be located at the edges of the first
 axes ; here, being black is associated with never married and being
 separated).</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">color =</span> <span class="st">&quot;contrib&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; Warning: [1m[22mThere were 6 warnings in `dplyr::mutate()`.</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; The first warning was:</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m In argument: `dplyr::across(...)`.</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; Caused by warning in `sqrt()`:</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; [33m![39m NaNs produced</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">tab</span>(forcats<span class="sc">::</span>gss_cat, race, marital, <span class="at">color =</span> <span class="st">&quot;contrib&quot;</span>)</span></code></pre></div>
 <style type="text/css">
 .lightable-classic caption {
 text-align: center;
@@ -3862,29 +3883,55 @@ White
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>17</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>5 416</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>743</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>3 383</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 807</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>10 117</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+pvalue
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style=" font-weight: bold;    color: rgba(0, 25, 255, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;min-width: 11; border-left:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
 </td>
 </tr>
 </tbody>
@@ -3937,21 +3984,15 @@ specific level like here):</p>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">tab_many</span>(data, race, <span class="fu">c</span>(marital, rincome, partyid, relig, age, tvhours),</span>
 <span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>         <span class="at">levels =</span> <span class="st">&quot;first&quot;</span>, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">chi2 =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">&quot;auto&quot;</span>)</span>
 <span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>tabs</span></code></pre></div>
-<pre class="r-output"><code>#&gt; <span style="text-decoration: underline;">chi2 stats      marital    rincome    partyid      relig</span>
-#&gt; df                    2          2          2          2
-#&gt; variance         0.0259     0.0033     0.0214     0.0630
-#&gt; chi2                556         70        460      1 353
-#&gt; pvalue           <span style="color: #0000FF;">&lt;0.01%</span>     <span style="color: #0000FF;">&lt;0.01%</span>     <span style="color: #0000FF;">&lt;0.01%</span>     <span style="color: #0000FF;">&lt;0.01%</span>
-#&gt; <span style="text-decoration: underline;">count            21 483     21 483     21 483     21 483</span>
-#&gt; 
-#&gt; <span style="color: #555555;"># A tabxplor tab: 4 × 9</span>
-#&gt;   race   Married `$25000 or more` `Strong republican` Protestant  Total      n
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;fct&gt; </span>  <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>           <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>              <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span> <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;n&gt;</span>
-#&gt; <span style="color: #555555;">1</span> Other      <span style="color: #555555;">48%</span>              <span style="color: #555555;">32%</span>                  <span style="color: #FFAF5F;">4%</span>        <span style="color: #FF0000;">20%</span>   100%  1 959
-#&gt; <span style="color: #555555;">2</span> Black      <span style="color: #FF8700;">28%</span>              <span style="color: #FFAF5F;">28%</span>                  <span style="color: #FFAF5F;">2%</span>        <span style="color: #0087FF;">73%</span>   100%  3 129
-#&gt; <span style="color: #555555;">3</span> White      <span style="color: #555555;">51%</span>              <span style="color: #555555;">36%</span>                 <span style="color: #555555;">13%</span>        <span style="color: #555555;">50%</span>   100% 16 395
-#&gt; <span style="color: #555555;">4</span> Total      47%              34%                 11%        50%   100% 21 483
-#&gt; <span style="color: #555555;"># ℹ 2 more variables: age &lt;mean&gt;, tvhours &lt;mean&gt;</span>
+<pre class="r-output"><code>#&gt; <span style="color: #555555;"># A tabxplor tab: 5 × 8</span>
+#&gt;   race   Married `$25000 or more` `Strong republican` Protestant      n      age
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;char&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>           <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>              <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;row%&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;n&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;mean&gt;</span>
+#&gt; <span style="color: #555555;">1</span> Other      <span style="color: #555555;">48%</span>              <span style="color: #555555;">32%</span>                  <span style="color: #FFAF5F;">4%</span>        <span style="color: #FF0000;">20%</span>  1 959 <span style="color: #FFAF5F;">39 (σ14)</span>
+#&gt; <span style="color: #555555;">2</span> Black      <span style="color: #FF8700;">28%</span>              <span style="color: #FFAF5F;">28%</span>                  <span style="color: #FFAF5F;">2%</span>        <span style="color: #0087FF;">73%</span>  3 129 <span style="color: #555555;">44 (σ16)</span>
+#&gt; <span style="color: #555555;">3</span> White      <span style="color: #555555;">51%</span>              <span style="color: #555555;">36%</span>                 <span style="color: #555555;">13%</span>        <span style="color: #555555;">50%</span> 16 395 <span style="color: #555555;">49 (σ17)</span>
+#&gt; <span style="color: #555555;">4</span> Total      47%              34%                 11%        50% 21 483 47 (σ17)
+#&gt; <span style="color: #555555;">5</span> pvalue  <span style="color: #555555;">&lt;0.01%</span>           <span style="color: #555555;">&lt;0.01%</span>              <span style="color: #555555;">&lt;0.01%</span>     <span style="color: #555555;">&lt;0.01%</span>                
+#&gt; <span style="color: #555555;"># ℹ 1 more variable: tvhours &lt;mean&gt;</span>
 #&gt; <span style="color: #555555;"># marital, rincome, partyid: </span>x &gt; tot <span style="color: #5FFFFF;">+5%</span><span style="color: #555555;">; </span><span style="color: #00D7FF;">+10%</span><span style="color: #555555;">; </span><span style="color: #0087FF;">+20%</span><span style="color: #555555;">; </span><span style="color: #875FD7;">×2</span><span style="color: #555555;">; </span><span style="color: #0000FF;">+30%</span><span style="color: #555555;">; </span><span style="color: #FFAF5F;">-5%</span><span style="color: #555555;">; </span><span style="color: #FF8700;">-10%</span><span style="color: #555555;">; </span><span style="color: #FF5F5F;">-20%</span><span style="color: #555555;">; </span><span style="color: #FF0000;">-30%</span>
 #&gt; <span style="color: #555555;"># age, tvhours             : </span>x &gt; tot <span style="color: #5FFFFF;">×1.15</span><span style="color: #555555;">; </span><span style="color: #00D7FF;">×1.5</span><span style="color: #555555;">; </span><span style="color: #0087FF;">×2</span><span style="color: #555555;">; </span><span style="color: #0000FF;">×4</span><span style="color: #555555;">; </span>x &lt; tot <span style="color: #FFAF5F;">/1.15</span><span style="color: #555555;">; </span><span style="color: #FF8700;">/1.5</span><span style="color: #555555;">; </span><span style="color: #FF5F5F;">/2</span><span style="color: #555555;">; </span><span style="color: #FF0000;">/4</span>
 </code></pre>
@@ -3980,13 +4021,7 @@ current vignette, tabxplor uses <code>knitr::kable</code> and
 <code>kableExtra</code>. In this format differences from totals,
 confidence intervals, contribution to variance, and unweighted counts,
 are available in a tooltip at cells hover.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_kable</span>()</span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; Warning: [1m[22mThere were 4 warnings in `dplyr::mutate()`.</span></span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; The first warning was:</span></span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m In argument: `dplyr::across(...)`.</span></span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; Caused by warning in `sqrt()`:</span></span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt; [33m![39m NaNs produced</span></span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; [1m[22m[36mℹ[39m Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> <span class="fu">tab_kable</span>()</span></code></pre></div>
 <style type="text/css">
 .lightable-classic caption {
 text-align: center;
@@ -4048,9 +4083,6 @@ Strong<br>republican
 Protestant
 </th>
 <th style="text-align:right;font-weight: bold;color: rgba(0, 0, 0, 255) !important;border-top: 0px solid ; border-bottom: 1px solid ;font-size: 90%;vertical-align: bottom;line-height: 0.9;padding: 3px;text-align: center;">
-Total
-</th>
-<th style="text-align:right;font-weight: bold;color: rgba(0, 0, 0, 255) !important;border-top: 0px solid ; border-bottom: 1px solid ;font-size: 90%;vertical-align: bottom;line-height: 0.9;padding: 3px;text-align: center;">
 n
 </th>
 <th style="text-align:right;font-weight: bold;color: rgba(0, 0, 0, 255) !important;border-top: 0px solid ; border-bottom: 1px solid ;font-size: 90%;vertical-align: bottom;line-height: 0.9;padding: 3px;text-align: center;">
@@ -4078,9 +4110,6 @@ Other
 <td style="text-align:right;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(203, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -31% ; contrib: 27% ; n: 387">20%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 1 959">100%</span>
-</td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>1 959</span>
 </td>
@@ -4088,7 +4117,7 @@ Other
 <span style=" font-weight: bold;    color: rgba(255, 179, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 14.4 ; diff: ××0.8 ; n: 1 951">39 (σ14)</span>
 </td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.4 ; diff: ××0.9 ; n: 1 027">3 (σ2)</span>
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.41 ; diff: ××0.9 ; n: 1 027">2.8 (σ2.4)</span>
 </td>
 </tr>
 <tr>
@@ -4107,9 +4136,6 @@ Black
 <td style="text-align:right;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(30, 136, 229, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: +22% ; contrib: 22% ; n: 2 271">73%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 3 129">100%</span>
-</td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>3 129</span>
 </td>
@@ -4117,7 +4143,7 @@ Black
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 16.1 ; diff: ××0.9 ; n: 3 115">44 (σ16)</span>
 </td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(26, 230, 214, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 3.5 ; diff: ××1.4 ; n: 1 700">4 (σ4)</span>
+<span style=" font-weight: bold;    color: rgba(26, 230, 214, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 3.51 ; diff: ××1.4 ; n: 1 700">4.2 (σ3.5)</span>
 </td>
 </tr>
 <tr>
@@ -4136,9 +4162,6 @@ White
 <td style="text-align:right;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: -1% ; contrib: 0% ; n: 8 188">50%</span>
 </td>
-<td style="text-align:right;white-space: nowrap;min-width: 11; border-left:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 16 395">100%</span>
-</td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>16 395</span>
 </td>
@@ -4146,36 +4169,59 @@ White
 <span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 17.5 ; diff: ××1.0 ; n: 16 341">49 (σ17)</span>
 </td>
 <td style="text-align:right;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.3 ; diff: ××0.9 ; n: 8 610">3 (σ2)</span>
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.31 ; diff: ××0.9 ; n: 8 610">2.8 (σ2.3)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:left;font-weight: bold;border-top: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; vertical-align: top; line-height: 0.85;padding: 3px;">
 Total
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 10 117">47%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 7 363">34%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 2 314">11%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="diff: ref ; mean_ctr: 17% ; n: 10 846">50%</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;min-width: 11; border-left:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="n: 21 483">100%</span>
-</td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title>21 483</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
 <span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 17.3 ; diff: ref ; n: 21 407">47 (σ17)</span>
 </td>
-<td style="text-align:right;font-weight: bold;border-top: 1px solid ; border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 1px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
-<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.6 ; diff: ref ; n: 11 337">3 (σ3)</span>
+<td style="text-align:right;font-weight: bold;border-top: 1px solid ;white-space: nowrap;border-right:1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style=" font-weight: bold;    color: rgba(0, 0, 0, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="sd: 2.59 ; diff: ref ; n: 11 337">3.0 (σ2.6)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;border-bottom: 1px solid ;border-right:1px solid;border-left:1px solid;min-width: 20; border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+pvalue
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="0% ; diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="0% ; diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="0% ; diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title="0% ; diff: +0% ; contrib: 0%">&lt;0.01%</span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(17, 17, 17, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
+</td>
+<td style="text-align:right;border-bottom: 1px solid ;white-space: nowrap;border-right:1px solid;border-bottom: 2px solid;border-bottom: 1px solid;vertical-align: top; line-height: 0.85;padding: 3px;">
+<span style="     color: rgba(136, 136, 136, 255) !important;" data-toggle="tooltip" data-container="body" data-placement="right" title></span>
 </td>
 </tr>
 </tbody>
@@ -4604,6 +4650,9 @@ grouped and all operations are made within groups. To remove grouping
 <code>tibble</code>) :</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">num =</span> <span class="cn">TRUE</span>) <span class="co"># counts as a numeric vector</span></span>
 <span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">tab_plain</span>(data, race, marital, <span class="at">df =</span> <span class="cn">TRUE</span>)  <span class="co"># same, with unique class = &quot;data.frame&quot;</span></span></code></pre></div>
+<!-- ``` {r exit, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE} -->
+<!-- Sys.setenv("OMP_THREAD_LIMIT" = threads_option) -->
+<!-- ``` -->
 </div>
 
 

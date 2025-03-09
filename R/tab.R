@@ -55,7 +55,7 @@ NULL
 #' @description A full-featured function to create, manipulate and format single
 #' cross-tables, using colors to make the printed tab more easily readable
 #' (in R terminal or exported to Excel with \code{\link{tab_xl}}).
-#' Since objects of class \code{tab} are also of class \code{tibble}, you can then use all
+#' Since objects of class \code{tabxplor_tab} are also of class \code{tibble}, you can then use all
 #' \pkg{dplyr} verbs to modify the result, like \code{\link[dplyr:select]{select}},
 #' like \code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
 #' or \code{\link[dplyr:mutate]{mutate}}.
@@ -282,7 +282,8 @@ NULL
 #'   }
 tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
                 pct = "no", color = "no", OR = "no", chi2 = FALSE,
-                na = "keep",  cleannames = NULL,
+                na = "keep",
+                cleannames = NULL, #compact = NULL, # pvalue_line = NULL,
                 other_if_less_than = 0, other_level = "Others",
                 ref = "auto", ref2 = "first", comp = "tab",
                 ci = "no", conf_level = 0.95,
@@ -294,6 +295,10 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 
   cleannames <-
     if (is.null(cleannames)) { getOption("tabxplor.cleannames") } else {cleannames}
+
+  # pvalue_line <-
+  #   if (is.null(pvalue_line)) { getOption("tabxplor.pvalue_lines") } else {pvalue_line}
+
 
   row_var_quo <- rlang::enquo(row_var)
   if (quo_miss_na_null_empty_no(row_var_quo)) {
@@ -356,7 +361,8 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
            levels = c("all", rep("first", length(sup_cols))),
            na = na, na_drop_all = tidyselect::all_of(na_drop_all),
            filter = if (!missing(filter)) !!rlang::enquo(filter),
-           digits = digits, cleannames = cleannames,
+           digits = digits,
+           cleannames = cleannames, compact = FALSE, #pvalue_line = pvalue_line,
            other_if_less_than = other_if_less_than, other_level = other_level,
            totaltab = totaltab, totaltab_name = totaltab_name,
            totrow = "row" %in% tot,
@@ -381,7 +387,7 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 #' @description A full-featured function to create, manipulate and format many cross-tables
 #' as one, using colors to make the printed tab more easily readable (in R terminal or
 #' exported to Excel with \code{\link{tab_xl}}).
-#' Since objects of class \code{tab} are also of class \code{tibble}, you can then use all
+#' Since objects of class \code{tabxplor_tab} are also of class \code{tibble}, you can then use all
 #' \pkg{dplyr} verbs to modify the result, like \code{\link[dplyr:select]{select}},
 #' \code{\link[dplyr:arrange]{arrange}}, \code{\link[dplyr:filter]{filter}}
 #' or \code{\link[dplyr:mutate]{mutate}}.
@@ -547,6 +553,11 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 #' variable (for `pct = "row"`) or a row with the frequencies of the column variable
 #' (for  `pct = "col"`).
 #' @param subtext A character vector to print rows of legend under the table.
+#' @param compact With several `row_vars`, set to `TRUE` to bind all tables
+#' in a single `tabxplor_tab`. If not provided, the value of
+#' `getOption("tabxplor.compact")` is taken (`FALSE` by default).
+#' Set `options(tabxplor.compact = TRUE)` to make this the default behaviour for
+#' all tables (but beware becauce it can break existing code).
 #' @param cleannames Set to \code{TRUE} to clean levels names, by removing
 #' prefix numbers like "1-", and text in parenthesis. All data formatting arguments are
 #' passed to \code{\link{tab_prepare}}.
@@ -598,7 +609,8 @@ tab <- function(data, row_var, col_var, tab_vars, wt, sup_cols,
 #' }
 tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                      pct = "no", color = "no", OR = "no", chi2 = FALSE,
-                     na = "keep", levels = "all", na_drop_all, cleannames = NULL,
+                     na = "keep", levels = "all", na_drop_all,
+                     cleannames = NULL, compact = NULL, #pvalue_line = NULL,
                      other_if_less_than = 0, other_level = "Others",
                      ref = "auto", ref2 = "first", comp = "tab",
                      ci = "no", conf_level = 0.95, #ci_visible = FALSE,
@@ -607,12 +619,20 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                      totrow = TRUE, totcol = "last", total_names = "Total",
                      add_n = TRUE, add_pct = FALSE,
                      digits = 0, subtext = "",
+
                      filter #, listed = FALSE,
                      #spread_vars = NULL, names_prefix, names_sort = FALSE
 ) {
 
   cleannames <-
     if (is.null(cleannames)) { getOption("tabxplor.cleannames") } else {cleannames}
+
+  compact <-
+    if (is.null(compact)) { getOption("tabxplor.compact") } else {compact}
+
+  # pvalue_line <-
+  #   if (is.null(pvalue_line)) { getOption("tabxplor.pvalue_lines") } else {pvalue_line}
+
 
   stopifnot(levels %in% c("first", "all", "auto"))
   lvs <- levels
@@ -696,6 +716,9 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
   digits      <- vctrs::vec_recycle(digits, ncolvars)
   if (totcol[1] %in% c("last", "all_col_vars")) {
     totcol <- col_vars_text[col_vars_text] %>% names() %>% dplyr::last()
+    if (all(lvs == "first") & all(pct == "row") & ncolvars > 1) {
+      totcol <- NULL
+    }
   } else if (totcol[1] == "each") {
     totcol <- col_vars[col_vars_text]
   } else if (all(totcol %in% col_vars)) {
@@ -714,7 +737,8 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
     identical(totcol, col_vars)                                ~ "each",
     identical(totcol, col_vars[ncolvars])                      ~ "all_col_vars",
     length(totcol) == 0 &
-      (any(chi2 != FALSE) | any(pct != "no") | any(ci != "no"))~ "no_delete",
+      (any(chi2 != FALSE) | any(pct != "no") | any(ci != "no") |
+         any(OR != "no") )                                     ~ "no_delete",
     length(totcol) == 0                                        ~ "no_no_create",
     TRUE                                                       ~ "some"
   )
@@ -1069,7 +1093,8 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
     if (any(chi2)) {
       tabs_text[chi2] <-
         purrr::pmap(list(tabs_text[chi2], comp[chi2], color_ctr[chi2]),
-                    ~ tab_chi2(tabs = ..1, comp = ..2, color = ..3))
+                    ~ tab_chi2(tabs = ..1, calc = c("ctr", "p"),
+                               comp = ..2, color = ..3))
     }
     chi2 <- purrr::map(tabs_text, get_chi2)
     chi2 <- purrr::map_if(chi2, purrr::map_lgl(chi2, is.null), ~ attr(new_tab(), "chi2"))
@@ -1407,8 +1432,19 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
     tabs <- purrr::map2(tabs, chi2, ~ new_tab(.x, subtext = subtext, chi2 = .y))
   }
 
+  # Compact tables into one
+  if ((compact | (getOption("tabxplor.output_kable") == TRUE & length(tab_vars) == 0)) &
+      !(is.list(tabs) & !is.data.frame(tabs) & length(tabs) == 1 ) ) {
+    tabs <- tabs |> tab_compact() # pvalue_lines = FALSE
+  }
 
 
+  if (is.data.frame(tabs)) {
+    tabs <- tabs |> tab_pvalue_lines()
+
+  } else {
+    tabs <- purrr::map(tabs, tab_pvalue_lines)
+  }
 
 
   # if (length(spread_vars) >= 1) {
@@ -1586,7 +1622,8 @@ tab_spread <- function(tabs, spread_vars, names_prefix, names_sort = FALSE,
     new_levels <- tabs %>%
       dplyr::filter(.data$totrows & !.data$tottab_line) %>%
       dplyr::select(!!!tab_vars, !!row_var) %>%
-      dplyr::arrange(!!!rlang::syms(tab_vars_new)) %>%
+      dplyr::arrange(!!!rlang::syms(tab_vars_new), .by_group = FALSE,
+                     .by_totals = FALSE, .only_main_display = FALSE) %>%
       dplyr::mutate(
         new_levels = paste(totname, paste(!!!rlang::syms(tab_vars_new), sep = " / ")) %>%
           stringr::str_to_upper()
@@ -1642,7 +1679,9 @@ tab_spread <- function(tabs, spread_vars, names_prefix, names_sort = FALSE,
     )
   }
 
-  tabs <- tabs %>%  dplyr::arrange(!!!rlang::syms(tab_vars_new), !!rlang::sym(row_var))
+  tabs <- tabs %>%
+    dplyr::arrange(!!!rlang::syms(tab_vars_new), !!rlang::sym(row_var),
+                   .only_main_display = FALSE)
 
   tabs <- complete_partial_totals(tabs)
 
@@ -1970,7 +2009,9 @@ tab_plain <- function(data, row_var, col_var, tab_vars, wt,
 
   vctrs::vec_assert(pct, size = 1)
   vctrs::vec_assert(ref, size = 1)
+  ref <- stringr::str_squish(ref)
   vctrs::vec_assert(ref2, size = 1)
+  ref2 <- stringr::str_squish(ref2)
   vctrs::vec_assert(OR, size = 1)
   vctrs::vec_assert(na, size = 1)
   stopifnot(na %in% c("keep", "drop"))
@@ -3698,7 +3739,11 @@ tab_num <- function(data, row_var, col_vars, tab_vars, wt,
     list(tabs_n, tabs_wn, tabs_mean, tabs_var, tabs_diff, tabs_ci, as.character(col_vars), digits) |>
     purrr::pmap_dfc(~ new_fmt(
       display   = if (ci_visible) { "mean_ci" } else { "mean" },
-      digits    = vec_recycle(..8, length(..1)),
+      digits    = dplyr::case_when(
+        max(..3, na.rm = TRUE) <= 1   ~ vec_recycle(max(..8, 2L), length(..1)),
+        max(..3, na.rm = TRUE) <= 10  ~ vec_recycle(max(..8, 1L), length(..1)),
+        TRUE                          ~ vec_recycle(..8, length(..1)),
+      ),
       n         = ..1,
       wn        = ..2,
       mean      = ..3,

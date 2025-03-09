@@ -21,72 +21,21 @@ NULL
 
 
 
-#' fct_recode helper to recode multiple variables
-#'
-#' @param .data The data frame.
-#' @param .cols <\link[tidyr:tidyr_tidy_select]{tidy-select}> The variables to recode.
-#' @param .data_out_name The name of the output data frame, if different from the
-#' input data frame.
-#' @param cat By default the result is written in the console if there are less than
-#' 6 variables, written in a temporary file and opened otherwise. Set to
-#' false to get a data frame with a character variable instead.
-#'
-#' @return When the number of variables is less than 5, a text in console as a side effect.
-#' With more than 5 variables, a temporary R file. A `tibble` with the recode text as a
-#' character variable is returned invisibly (or as main result if `cat = TRUE`).
-#' @export
-fct_recode_helper <- function(.data, .cols = -where(is.numeric), .data_out_name, cat = TRUE) {
-  .data_in_name <- rlang::enquo(.data) %>% rlang::as_name()
-  if(missing(.data_out_name)) .data_out_name <- .data_in_name
-
-  pos_cols <- tidyselect::eval_select(rlang::enquo(.cols), .data)
-  .data <- .data[pos_cols]
-  .data <- .data %>% dplyr::mutate(dplyr::across(.cols = dplyr::everything(), .fns = as.factor))
-
-  recode <- .data %>%
-    purrr::map(~ paste0("\"",
-                        #stringi::stri_escape_unicode(
-                        stringr::str_replace_all(
-                          levels(.), "\"", "'"
-                          #)
-                        ),
-                        "\"")) %>%
-    purrr::map(
-      ~ paste0(stringr::str_pad(., max(stringr::str_length(.)), "right"), " = ",
-               stringr::str_pad(., max(stringr::str_length(.)), "right"), collapse = ",\n")
-    ) %>%
-    purrr::imap(~ paste0(.data_out_name, "$", .y, " <- fct_recode(\n",
-                         .data_in_name, "$", .y, ",\n",
-                         .x, "\n)\n\n"
-
-    )) %>% purrr::flatten_chr() %>%
-    tibble::tibble(recode = .)
-
-  if (cat == FALSE) return(recode)
-
-  if (ncol(.data) <= 5) {
-    cat(recode$recode)
-  } else {
-    path <- tempfile("", fileext = ".R")
-    writeLines(recode$recode, path, useBytes = TRUE)
-
-    if (requireNamespace("rstudioapi", quietly = TRUE)) {
-      rstudioapi::navigateToFile(path)
-    } else {
-      file.show(path)
-    }
-
-  }
-
-  invisible(recode)
-}
-
-
 
 
 #' @keywords internal
 .onLoad <- function(libname, pkgname) {
   # options "tabxplor.color_style_type" and "tabxplor.color_style_theme" :
+
+  # # CRAN OMP THREAD LIMIT
+  # if (Sys.info()[['sysname']] == "Linux") {
+  #  Sys.setenv("OMP_THREAD_LIMIT" = 2)
+  # }
+
+  # data.table::setDTthreads(threads = 2)
+  # data.table::getDTthreads(verbose = getOption("datatable.verbose"))
+
+
   set_color_style()
 
   # option "tabxplor.color_breaks" :
@@ -109,6 +58,10 @@ fct_recode_helper <- function(.data, .cols = -where(is.numeric), .data_out_name,
   options("tabxplor.kable_popover" = FALSE)
 
   options("tabxplor.ci_print" = "ci") # or "moe"
+
+  options("tabxplor.compact" = FALSE)
+
+  # options("tabxplor.pvalue_lines" = FALSE)
 
   options("tabxplor.always_add_css_in_tab_kable" = TRUE)
 
@@ -156,11 +109,15 @@ cleannames_condition <- function()
 #'   tab(group, score, digits = 1)
 score_from_lv1 <- function (data, name, vars_list) {
   name <- rlang::ensym(name)
-  data <- data |> dplyr::mutate(!!rlang::sym(name) := 0L)
 
+  data <- data |> dplyr::select(-tidyselect::any_of(as.character(name)))
+
+  new_data <- data |> dplyr::mutate(!!rlang::sym(name) := 0L)
+
+  new_data <-
   purrr::reduce(
     vars_list,
-    .init = dplyr::mutate(data, dplyr::across(
+    .init = dplyr::mutate(new_data, dplyr::across(
       tidyselect::all_of(vars_list), ~ forcats::fct_na_value_to_level(., "NA"))),
 
     .f = ~ dplyr::mutate(.x, !!name := dplyr::if_else(
@@ -170,7 +127,149 @@ score_from_lv1 <- function (data, name, vars_list) {
     )
     )
   )
+
+  var_final_ <- dplyr::pull(new_data, as.character(name))
+    #dplyr::select(new_data, tidyselect::all_of(as.character(name)))
+
+  data |> tibble::add_column(!!rlang::sym(name) := var_final_)
 }
+
+
+# data <- dplyr::select(forcats::gss_cat, -where(is.numeric))
+# name_in = "data"
+# name_out = "data"
+# style = "base"
+# reminder = TRUE
+# cat = TRUE
+
+
+
+
+#' fct_recode helper to recode multiple variables
+#'
+#' @param data The data frame.
+#' @param .cols <\link[tidyr:tidyr_tidy_select]{tidy-select}> The variables to recode.
+#' @param name_in The name of the input data frame. Default to the expression given in `data`.
+#' @param name_out The name of the output data frame, if different from the
+#' input data frame.
+#' @param style Default is to use `dplyr::mutate()`. Set to `base` to use `data$var <-` style.
+#' @param reminder By default, a reminder of the syntax (`"new" = "old"`) is printed.
+#'  Set to `FALSE` to remove it.
+#' @param cat By default the result is written in the console if there are less than
+#' 6 variables, written in a temporary file and opened otherwise. Set to
+#' false to get a data frame with a character variable instead.
+#'
+#' @return When the number of variables is less than 5, a text in console as a side effect.
+#' With more than 5 variables, a temporary R file. A `tibble` with the recode text as a
+#' character variable is returned invisibly (or as main result if `cat = TRUE`).
+#' If the `labelled` package in installed, the variable label is used as title in a comment.
+#' @export
+fct_recode_helper <- function(data, .cols = -where(is.numeric), name_in, name_out,
+                              style = c("mutate", "base"), reminder = TRUE, cat = TRUE) {
+  no_name_in <- missing(name_in)
+  if (no_name_in) {
+    name_in <- deparse(substitute(data))
+    if (stringr::str_detect(name_in, "\\(")) {
+      name_in <-
+        stringr::str_extract(name_in, "[^\\(]+$") |>
+        stringr::str_remove_all("\\).*$")
+      # name_in <- "data"
+    }
+  }
+  if (missing(name_out)) name_out <- name_in # if (missing(name_in)) {"data"} else {name_in}
+
+  pos_cols <- tidyselect::eval_select(rlang::enquo(.cols), data)
+  data <- data[pos_cols]
+  data <- data |> dplyr::mutate(dplyr::across(.cols = dplyr::everything(), .fns = as.factor))
+
+  with_variable_label_as_title <- requireNamespace("openxlsx", quietly = TRUE)
+  if (with_variable_label_as_title) {
+    var_labs <- labelled::get_variable_labels(data)
+    var_labs <- var_labs[purrr::map_lgl(var_labs, ~ !is.null(.))]
+    if (length(var_labs) == 0) with_variable_label_as_title <- FALSE
+
+    # var_labs <- purrr::imap(var_labs, ~ paste0(.y, " with a lot of text"))
+  }
+
+  recode <- data |>
+    purrr::map(~ paste0("\"",
+                        #stringi::stri_escape_unicode(
+                        stringr::str_replace_all(
+                          levels(.), "\"", "'"
+                          #)
+                        ),
+                        "\"")) |>
+    purrr::map(
+      ~ paste0(stringr::str_pad(., max(stringr::str_length(.)), "right"), " = ",
+               stringr::str_pad(., max(stringr::str_length(.)), "right"), collapse = ",\n")
+    )
+
+
+  if (with_variable_label_as_title) {
+  titles <- purrr::map(
+    names(recode),
+    ~ dplyr::if_else(. %in% names(var_labs),
+                     true  = paste0("# ", ., " : ", var_labs[[.]] , "\n"),
+                     false = ""
+    )
+  )
+
+  } else {
+    titles <- purrr::map(recode, ~ "")
+  }
+
+
+  reminder <- if (reminder) {'   # "new" = "old" '} else {''}
+
+  recode <-
+    switch(
+      style[1],
+      "base"   = purrr::pmap(
+        list(recode, names(recode), titles),
+        ~ paste0(..3,
+                 name_out, "$", ..2, " <- fct_recode(\n",
+                 name_in, "$", ..2, ',', reminder, '\n',
+                 ..1, "\n)\n\n"
+        )) |>
+        purrr::flatten_chr(),
+
+      "mutate" =
+        c(
+          paste0(name_in, " |>\n", "mutate(", "\n"), # reminder
+          purrr::pmap(
+            list(recode, names(recode), titles),
+            ~ paste0(..3,
+                     ..2, " = fct_recode(", reminder, "\n",
+                     ..2, ',', '\n',
+                     ..1, "\n),\n\n"
+            )) |> purrr::flatten_chr(),
+          ")\n"
+        )
+    ) |>
+    tibble::as_tibble() |>
+    rename("recode" = "value")
+
+  if (cat == FALSE) return(recode)
+
+  if (ncol(data) <= 5) {
+    cat(recode$recode)
+  } else {
+    path <- tempfile("", fileext = ".R")
+    writeLines(recode$recode, path, useBytes = TRUE)
+
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      rstudioapi::navigateToFile(path)
+    } else {
+      file.show(path)
+    }
+
+  }
+
+  invisible(recode)
+}
+
+
+
 
 
 
@@ -568,6 +667,19 @@ where <- function (fn)
 
 
 
+# path <- "~/Data/Enquêtes élections/Enquête Participation électorale 2017/Doc/Formats/formats_sas.txt"
+# name_in = "pa17"
+# name_out = "pa17"
+# open = TRUE
+# remove_at_end_of_var = "f"
+# not_if_numeric = TRUE
+# text_aposthophe = "'"
+# # path_out
+#
+# load_all()
+# tabxplor:::formats_SAS_to_R("~/Data/Enquêtes élections/Enquête Participation électorale 2017/Doc/Formats/formats_sas.txt",
+#                             name_in = "pa17", name_out = "pa17")
+
 
 #' INSEE SAS formats to R : translate code
 #'
@@ -597,11 +709,14 @@ formats_SAS_to_R <- function (path, name_in, name_out, open = TRUE, remove_at_en
     stringr::str_remove_all("\t") |>
     stringr::str_replace_all(text_aposthophe, stringi::stri_unescape_unicode("\\u2019")) |>
     stringr::str_replace_all("\"", "'") |>
+    stringr::str_replace_all(";value", "value") |>
     stringr::str_squish()
 
   f <- f[stringr::str_detect(f, "^value|=") & !stringr::str_detect(f, "^proc")] # "^value *\\$|="
-  f[stringr::str_detect(f, "=")] <- f[stringr::str_detect(f, "=")] |>
-    stringr::str_replace("^([^ ]+) ", "'\\1' ") |>
+  f[stringr::str_detect(f, "=")] <-
+    f[stringr::str_detect(f, "=")] |>
+    stringr::str_replace("^([^ =]+) ", "'\\1' ") |>
+    #stringr::str_replace("^([^ ]+) ", "'\\1' ") |>
     stringr::str_replace("''", "'") |>
     stringr::str_replace("' += +'", "'='") |>
     stringr::str_replace("'([^']+)'='([^']+)'", "'\\1-\\2' = '\\1',") |>
@@ -609,6 +724,7 @@ formats_SAS_to_R <- function (path, name_in, name_out, open = TRUE, remove_at_en
   f_var <- stringr::str_extract(f[stringr::str_detect(f, "^value")],  "[^ ]+$")
   if (!is.null(remove_at_end_of_var)) f_var <- stringr::str_remove(f_var, paste0(remove_at_end_of_var, "$"))
 
+  f[1:30]
 
   if (not_if_numeric) {
     f[stringr::str_detect(f, "^value")] <-

@@ -267,7 +267,7 @@ print_chi2 <- function(x, width = NULL) {
   if (nrow(chi2) == 0) return(NULL)
   # if (is.na(chi2)) return(NULL)
 
-  chi2 <- chi2 %>% dplyr::select(-"row_var") %>%
+  chi2 <- chi2 %>% # dplyr::select(-"row_var") %>%
     dplyr::filter(!.data$`chi2 stats` %in% c("cells"))
 
   fmt_cols <- purrr::map_lgl(chi2, is_fmt) %>% purrr::keep(. == TRUE) %>%
@@ -355,7 +355,7 @@ tbl_sum.tabxplor_grouped_tab <- function(x, ...) {
 tbl_format_footer.tabxplor_tab <- function(x, setup, ...) {
   default_footer <- NextMethod()
 
-  print_colors <- tab_color_legend(x)
+  print_colors <- suppressWarnings(tab_color_legend(x))
   subtext <- get_subtext(x) %>% purrr::discard(. == "")
   if (length(print_colors) != 0) print_colors <- paste0(
     pillar::style_subtle("# "), print_colors
@@ -391,7 +391,8 @@ tbl_format_body.tabxplor_tab <- function(x, setup, ...) {
 
 #' Print a tabxplor table in html
 #'
-#' @param tabs A table made with \code{\link{tab}} or \code{\link{tab_many}}.
+#' @param tabs A table made with \code{\link{tab}} or \code{\link{tab_many}},
+#'   or a `list` of tab with the same `col_vars` and no `tab_vars`.
 #' @param color_type  Set to \code{"text"} to color the text, \code{"bg"} to color the
 #' background. By default it takes \code{getOption("tabxplor.color_style_type")}.
 #' @param theme By default, a white table with black text, Set to \code{"dark"} for a
@@ -463,6 +464,46 @@ tab_kable <- function(tabs,
 
 
   popover <- if (is.null(popover)) {getOption("tabxplor.kable_popover")} else {popover}
+
+  # with a list of tab, bind them all in a single tab if possible
+  if (is.list(tabs) & !is.data.frame(tabs)) {
+    same_col_vars <- purrr::map(tabs, ~ tab_get_vars(.)$col_vars)
+    same_col_vars <- same_col_vars |>
+      purrr::map(~ .[!. %in% c("all_col_vars", "", "no") & !is.na(.)])
+    longest_col_vars <- purrr::map_int(same_col_vars, length)
+    longest_col_vars <-
+      dplyr::first(which(longest_col_vars == max(longest_col_vars, na.rm = TRUE)))
+    longest_col_vars <- same_col_vars[[longest_col_vars]]
+    same_col_vars <- same_col_vars |> purrr::map_lgl(~ all(. %in% longest_col_vars))
+    if(!all(same_col_vars)) {
+      stop("tab_kable() can only be used with a list of tab if they have the same col_vars")
+    }
+
+    if (any(purrr::map_lgl(tabs, ~ length(tab_get_vars(.)$tab_vars) > 0 )) ) {
+      stop("tab_kable() can only be used with a list of tab if they have no tab_vars")
+    }
+
+    tabs <- tab_compact(tabs) # pvalue_lines = TRUE
+  }
+
+
+  #   otherwise signif stars * break the html
+  if(!is.null(knitr::opts_knit$get("out.format"))) {
+    tabs <- tabs |>
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::where(is.character) ,  # & tidyselect::starts_with("s")
+          ~ stringr::str_replace_all(., "\\*", "\\\\*")
+        ),
+
+        # dplyr::across(
+        #   dplyr::where(is.factor) ,  # & tidyselect::starts_with("s")
+        #   ~ forcats::fct_relabel(., ~ stringr::str_replace_all(., "\\*", "\\\\*"))
+        # )
+
+      )
+  }
+
 
   tab_vars <- tab_get_vars(tabs)$tab_vars
   subtext  <- get_subtext(tabs) %>% purrr::discard(. == "")
@@ -606,14 +647,15 @@ tab_kable <- function(tabs,
   #       ))
 
   if (color_legend) {
-  if (length(color_cols) != 0) subtext <- c(tab_color_legend(tabs,
-                                                             mode = "html",
-                                                             html_type  = color_type[1],
-                                                             html_theme = theme[1],
-                                                             html_24_bit = html_24_bit[1],
-                                                             text_color = text_color,
-                                                             grey_color = grey_color),
-                                            subtext)
+    if (length(color_cols) != 0) subtext <- c(
+   suppressWarnings(tab_color_legend(tabs,
+                       mode = "html",
+                       html_type  = color_type[1],
+                       html_theme = theme[1],
+                       html_24_bit = html_24_bit[1],
+                       text_color = text_color,
+                       grey_color = grey_color)),
+      subtext)
   }
 
 
@@ -651,11 +693,26 @@ tab_kable <- function(tabs,
 
   }
 
-  # # what the fuck ? Needed to make rownames in bold
+  # # Needed to make refrows or if not totrows in bold,
   # tot_or_ref <- tabs[[fmt_cols[1]]] %>% get_reference(mode = "all_totals") %>% which()
   refref <- purrr::map_dfr(tabs[fmt_cols] , ~ get_reference(., mode = "all_totals") )
   refref <- refref |> dplyr::select(-where(all), -where(~ !any(.)))
   tot_or_ref <- which(rowSums(refref) == ncol(refref))
+
+  tot_n_pval <- is_totrow(tabs) |
+    (!is_totrow(tabs) & dplyr::pull(tabs, row_var) %in% c("n", "pvalue", "row_pct"))
+
+  tot_rows_1 <- which(
+    dplyr::if_else(tot_n_pval,
+                   !dplyr::lag(tot_n_pval),
+                   FALSE)
+  )
+  tot_rows_last <- which(
+    dplyr::if_else(tot_n_pval,
+                   !dplyr::lead(tot_n_pval, default = FALSE),
+                   FALSE)
+  )
+
 
 
 if (length(subtext) != 0) {
@@ -669,17 +726,19 @@ out <- out %>%
     extra_css = "border-top: 0px solid ; border-bottom: 1px solid ;font-size: 90%;vertical-align: bottom;line-height: 0.9;padding: 3px;text-align: center;" #
   ) %>%
   kableExtra::row_spec(tot_or_ref, bold = TRUE) %>%
-  kableExtra::row_spec(
-    totrows, #bold = TRUE,
-    extra_css = "border-top: 1px solid ; border-bottom: 1px solid ;"
-  ) %>%
+  # kableExtra::row_spec(
+  #   totrows, #bold = TRUE,
+  #   extra_css = "border-top: 1px solid ; border-bottom: 1px solid ;"
+  # ) %>%
+  kableExtra::row_spec(tot_rows_1, extra_css = "border-top: 1px solid ;") %>%
+  kableExtra::row_spec(tot_rows_last, extra_css = "border-bottom: 1px solid ;") %>%
   #kableExtra::row_spec(no_totrows, extra_css = "border-top: 0px solid ;") %>%
   kableExtra::column_spec(fmt_cols, extra_css = "white-space: nowrap;") %>%
   kableExtra::column_spec(unique(c(new_col_var, ncol(tabs))), border_right = TRUE) %>%
   kableExtra::column_spec(other_cols, border_left = TRUE) %>%
   kableExtra::column_spec(totcols, border_left = TRUE, width_min = 11) %>% # bold = TRUE
   kableExtra::column_spec(row_var, width_min = 20) %>%
-  kableExtra::row_spec(new_group, extra_css = "border-bottom: 1px solid;") %>%
+  kableExtra::row_spec(new_group, extra_css = "border-bottom: 2px solid;") %>%
   kableExtra::row_spec(nrow(tabs), extra_css = "border-bottom: 1px solid;") |>
   kableExtra::row_spec(1:nrow(tabs), extra_css = "vertical-align: top; line-height: 0.85;padding: 3px;")
 
@@ -692,7 +751,8 @@ if (getOption("tabxplor.always_add_css_in_tab_kable") | interactive()) {
     # "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [[\"$\",\"$\"]]}})</script>",
     # "<script async src=\"https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>",
     # "\n",
-    as.character(out) #|>
+    as.character(out) |>
+      stringr::str_replace_all(">NA</span>", "></span>") #|>
     #stringr::str_replace_all("<td style", '<td class = "align-top"; style')
   ) |>
     vctrs::vec_restore(out)
@@ -867,6 +927,276 @@ kable_tabxplor_style <- function(tabs,
   out
 }
 
+
+
+
+#' Bind a list of tabs with the same col_vars (and no tab_vars) into a single tab
+#'
+#' @param tabs A `list` of `tabxplor_tab` (or a `tabxplor_tab`)
+# @param pvalue_lines Set to `TRUE` to add a line with chi2 pvalues under each table.
+#'
+#' @returns A `tabxplor_tab`
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' forcats::gss_cat |>
+#'   tab_many(c(race, rincome), marital, pct = "row", color = "diff") |>
+#'   tab_compact()
+#' }
+tab_compact <- function(tabs) { # pvalue_lines = FALSE
+
+  if (is.data.frame(tabs)) {tabs <- list(tabs) |> purrr::set_names(names(tabs)[1]) }
+
+  same_col_vars <- purrr::map(tabs, ~ tab_get_vars(.)$col_vars)
+  same_col_vars <- same_col_vars |>
+    purrr::map(~ .[!. %in% c("all_col_vars", "", "no") & !is.na(.)])
+  longest_col_vars <- purrr::map_int(same_col_vars, length)
+  longest_col_vars <-
+    dplyr::first(which(longest_col_vars == max(longest_col_vars, na.rm = TRUE)))
+  longest_col_vars <- same_col_vars[[longest_col_vars]]
+  same_col_vars <- same_col_vars |> purrr::map_lgl(~ all(. %in% longest_col_vars))
+  if(!all(same_col_vars)) {
+    stop("tab_compact() can only be used with the same col_vars in each tab")
+  }
+
+  if (any(purrr::map_lgl(tabs, ~ length(tab_get_vars(.)$tab_vars) > 0 )) ) {
+    stop("tab_compact() can't be used with tab_vars")
+  }
+
+  subtext <- get_subtext(tabs[[1]])
+
+  tabs_chi2 <- purrr::map_df(tabs, ~get_chi2(.) )
+
+  # var_type <- tabs |> map(get_type) |> first()
+  # var_type <- first(unique(type[!type %in% c("", "n")]))
+  #
+  # color_type <- tabs |> map(get_color) |> first()
+  # color_type <- first(unique(color_type[!color_type %in% c("", "no") &
+  #                                         !names(color_type) %in% ("n")]))
+
+
+
+
+  tabs <- tabs |> purrr::imap_dfr(
+    ~ dplyr::rename_with(.x, ~"levels", .cols =  1) |>
+      dplyr::mutate(row_var = as.factor(.y), .before = 1) |>
+      dplyr::mutate(dplyr::across(
+        dplyr::where(is_fmt),
+        ~ dplyr::if_else(is_totrow(.) & !any(is_refrow(.)),
+                         true  = as_refrow(.),
+                         false = .
+        )
+      ))
+  )
+
+  # tabs$Danser |> vctrs::vec_data()
+  # tabs |> tab_kable()
+
+
+  # col_vars <- get_col_var(tabs)[ get_col_var(tabs) != "" &
+  #                                  names(get_col_var(tabs)) != "n" &
+  #                                  !str_detect(names(get_col_var(tabs)), "^Total") ]
+
+  if (sum(stringr::str_detect(names(tabs), "^Total_")) == 1) {
+    tabs <- tabs |>
+      dplyr::rename_with(~ "Total", .cols = tidyselect::starts_with("Total_"))
+  }
+
+  tabs <- new_tab(tabs, subtext = subtext, chi2 = tabs_chi2) |>
+    dplyr::group_by(!!rlang::sym("row_var"))
+
+  # if (pvalue_lines) {
+  #   tabs <- tabs |> tab_pvalue_lines()
+  # }
+
+  tabs
+}
+
+
+# tabs_bind <- function(tabs) {
+#
+#   if (is.data.frame(tabs)) return(tabs)
+#
+#   if (!(is.list(tabs) & all(purrr::map_lgl(tabs, is_tab)) )) {
+#     stop("tabs must be a list of tabxplor_tab (or a single data.frame)")
+#   }
+#
+#   col_vars <- purrr::map(tabs, ~ tab_get_vars(.)$col_vars)
+#   col_vars <- col_vars |>
+#     purrr::map(~ .[!. %in% c("all_col_vars", "", "no") & !is.na(.)])
+#   # longest_col_vars <- purrr::map_int(col_vars, length)
+#   # longest_col_vars <-
+#   #   dplyr::first(which(longest_col_vars == max(longest_col_vars, na.rm = TRUE)))
+#   # longest_col_vars <- col_vars[[longest_col_vars]]
+#   # same_col_vars <- col_vars |> purrr::map_lgl(~ all(. %in% longest_col_vars))
+#
+#   same_col_vars <- purrr::map2_lgl(col_vars, dplyr::lag(col_vars),
+#                                    identical
+#   )
+#
+#   same_col_vars <- cumsum(!same_col_vars)
+#
+#
+#
+#
+#
+#   same_color <-
+#     purrr::map2(
+#       tabs, col_vars,
+#       ~ dplyr::select(
+#         dplyr::ungroup(.x),
+#         dplyr::where(
+#           function(.var) is_fmt(.var) & !is_totcol(.var) &
+#             get_col_var(.var) %in% .y) & -any_of(c("n"))
+#       ) |>
+#         purrr::map_chr(get_color)
+#     )
+#
+#
+#   if(!all(same_col_vars)) {
+#     stop("tab_kable() can only be used with a list of tab if they have the same col_vars")
+#   }
+#
+#   if (any(purrr::map_lgl(tabs, ~ length(tab_get_vars(.)$tab_vars) > 0 )) ) {
+#     stop("tab_kable() can only be used with a list of tab if they have no tab_vars")
+#   }
+#
+#   tabs <- tab_compact(tabs, pvalue_lines = TRUE)
+#
+#
+#
+# }
+
+
+
+# # tab_kable_multi tests
+# # tabs <- tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "row", color = "diff")
+# tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "row", color = "diff") |>
+#   tab_kable_multi()
+# tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "row", color = "after_ci", chi2 = TRUE) |>
+# tab_kable_multi()
+# tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "col", color = "diff", chi2 = TRUE) |>
+#   tab_kable_multi()
+# tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "row", color = "diff", chi2 = TRUE) |>
+#   tab_kable_multi()
+# tab(pc18, CRITAGE, DIPLOM, wt = POND, pct = "row", color = "diff", ref = 2, chi2 = TRUE) |>
+#   tab_kable_multi()
+#
+#
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "row", color = "diff", levels = "first", chi2 = TRUE) |>
+#   tab_kable_multi()
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "row", color = "diff") |>
+#   tab_kable_multi()
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "row", color = "after_ci", ref = c(1, "tot"), chi2 = TRUE) |>
+# tab_kable_multi()
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "col", color = "diff", chi2 = TRUE, ref = c(3, 2)) |>
+#   tab_kable_multi()
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "row", color = "diff", chi2 = TRUE) |>
+#   tab_kable_multi()
+# tab_many(pc18, c(CRITAGE, SEXE), c(DIPLOM, REVENU4), wt = POND, pct = "row", color = "diff", ref = "auto", chi2 = TRUE) |>
+#   tab_kable_multi()
+
+
+
+#' Transform chi2 attribute table of a tabxplor_tab into rows with pvalues.
+#'
+#' @param tabs A tabxplor_tab (with chi2 table as attribute).
+#'
+#' @return A tabxplor_tab.
+# @export
+#
+# @examples
+# \donttest{
+# forcats::gss_cat |>
+#   tab_many(race, marital, pct = "row", color = "diff", add_n = FALSE) |>
+#   tab_chi2() |>
+#   tab_pvalue_lines()
+# }
+tab_pvalue_lines <- function(tabs) {
+  subtext   <- get_subtext(tabs)
+  tabs_chi2 <- get_chi2(tabs)
+  are_chi2 <- nrow(tabs_chi2) > 0
+
+  if(!are_chi2) return(tabs)
+
+  groups   <- dplyr::groups(tabs)
+  row_var  <- tab_get_vars(tabs)$row_var
+  col_vars <- tab_get_vars(tabs)$col_vars_levels |> purrr::map_chr(first)
+  col_vars <- purrr::set_names(names(col_vars), col_vars)
+  col_vars <- col_vars[get_type(tabs[names(col_vars)]) != "mean"]
+  tab_vars <- tab_get_vars(tabs)$tab_vars
+
+
+  # are_chi2 <- all(purrr::map_int(tabs, ~nrow(get_chi2(.)))) > 0
+
+  if (!"row_var" %in% names(tabs)) {
+    tabs_chi2 <- tabs_chi2 |> dplyr::select(-"row_var")
+  }
+
+  tabs_pvalue_lines <- tabs_chi2 |>
+    dplyr::filter(.data$`chi2 stats` == "pvalue") |>
+    dplyr::rename(tidyselect::all_of(purrr::set_names("chi2 stats", row_var))) |>
+    dplyr::mutate(!!rlang::sym(row_var) := forcats::as_factor(!!rlang::sym(row_var))) |>
+    dplyr::mutate(dplyr::across(
+      dplyr::where(is_fmt),
+      ~ set_display(., "pvalue") |>
+        dplyr::mutate(n = NA_integer_,
+                      ci = 0,
+                      ctr = 0,
+                      diff = dplyr::if_else(.$pct > 0.05, -0.5, 0),
+                      #in_totrow = TRUE,
+                      digits = 2L)
+    )) |>
+    dplyr::rename(tidyselect::any_of(col_vars))
+
+  # tabs_pvalue_lines <- tabs_pvalue_lines |>
+  #   purrr::map_df(
+  #     ~get_chi2(.) |>
+  #       dplyr::filter(`chi2 stats` == "pvalue") |>
+  #       dplyr::rename(levels = `chi2 stats`) |>
+  #       dplyr::mutate(levels = forcats::as_factor(levels)) |>
+  #       dplyr::mutate(dplyr::across(
+  #         dplyr::where(is_fmt),
+  #         ~ set_display(., "pvalue") |>
+  #           dplyr::mutate(n = NA_integer_,
+  #                         ci = 0,
+  #                         ctr = 0,
+  #                         diff = dplyr::if_else(.$pct > 0.05, -0.5, 0),
+  #                         digits = 2L)
+  #       ))
+  #   )
+
+  # tabs_pvalue_lines <- tabs_pvalue_lines |> dplyr::rename(tidyselect::any_of(col_vars))
+
+  tabs <- # keep all attributes
+    purrr::map2_df(
+      tabs |> dplyr::bind_rows(tabs_pvalue_lines),
+      tabs,
+      ~ if (is_fmt(.x)) {vctrs::vec_restore(.x, .y) } else {.x}
+    )
+
+  tabs <- tabs |>
+    dplyr::group_by(!!!rlang::syms(groups)) |>
+    dplyr::arrange(.by_group = TRUE) |>
+    dplyr::mutate(dplyr::across(
+      dplyr::where(is_fmt),   #where(is_totcol) | any_of(c("n")),
+      ~ dplyr::if_else(
+        !is.na(.$display),
+        true  = .,
+        false = fmt0(first(.$display),
+                     type = get_type(.)) |>
+          dplyr::mutate(n = NA_integer_) #  in_totrow = TRUE
+      ) |>
+        vctrs::vec_restore(.)
+    ))
+  # filter(levels == "pvalue") |>
+  # pull(Danser) |> vctrs::vec_data()
+  # pull( `Total_ART_MONTAGES`) |> vctrs::vec_data()
+
+  new_tab(tabs, subtext = subtext) |>
+    dplyr::group_by(!!!rlang::syms(groups))
+}
 
 
 
@@ -1210,13 +1540,13 @@ if (color_type == "text") {
 
 if (color_legend & length(color_cols) != 0) {
 
-  color_legend <- tab_color_legend(tabs,
+  color_legend <- suppressWarnings(tab_color_legend(tabs,
                                    mode = "html",
                                    html_type   = color_type[1],
                                    html_theme  = theme[1],
                                    html_24_bit = html_24_bit[1],
                                    text_color  = text_color,
-                                   grey_color  = grey_color) |>
+                                   grey_color  = grey_color)) |>
     stringr::str_split("</span>|<span style=\"") |>
     purrr::imap_dfr(
       ~ tibble::tibble(n = as.integer(.y), base = .x)
@@ -1529,7 +1859,7 @@ tab_kable_print_tooltip <- function(x, popover = FALSE) {
     condition = type == "mean" & !is.na(get_var(x)) & !get_display(x) == "var",
     true      = dplyr::if_else(
       x$var >= 0,
-      true  = paste0("sd: ", format(set_display(set_digits(set_var(x, sqrt(x$var)), x$digits + 1L), "var"))),
+      true  = paste0("sd: ", format(set_display(set_digits(set_var(x, suppressWarnings(sqrt(x$var))), x$digits + 1L), "var"))),
       false = ""),
     false     = ""
   )
@@ -1739,6 +2069,132 @@ group_by.tabxplor_tab <- function(.data,
   new_grouped_tab(out, groups,
                   subtext = get_subtext(.data), chi2 = get_chi2(.data))
 }
+
+
+
+#' arrange method for class tabxplor_tab
+#' @importFrom dplyr arrange
+#' @param .data A tibble of class tabxplor_tab.
+#' @param ... <[`data-masking`][rlang::args_data_masking]> Variables, or
+#'   functions of variables. Use `desc()` to sort a variable in descending
+#'   order.
+#' @param .by_group By default, will sort first by grouping variable.
+#'   Set to `FALSE` to avoid this behaviour.
+#' @param .by_totals By default, will put totals at the end of their group.
+#'   Set to `FALSE` to avoid this behaviour.
+#' @param .only_main_display By default, only the rows with the same display
+#'   than the first row are arranged : if the first row of the group displays
+#'   percentages, rows with n or pvalues are kept at the same place
+#'   (typically, at the end of the group). Rows with the text `"row_pct"`, `"n"`
+#'   or `"pvalue"` in the `row_var` name are also kept at the same place.
+#'   Set to `FALSE` to avoid this behaviour.
+#' @param .locale The locale to sort character vectors in.
+#' @method arrange tabxplor_tab
+#' @return A tibble of class \code{tabxplor__tab} or \code{tabxplor_grouped_tab}.
+#' @export
+ arrange.tabxplor_tab <-
+  function(.data, ..., .by_group = TRUE, .by_totals = TRUE,
+           .only_main_display = TRUE, .locale = NULL) {
+
+    dots <- rlang::enquos(...)
+    groups <- dplyr::groups(.data) #dplyr::group_data(.data)
+
+    if (.by_totals) {
+      .totrows <- is_totrow(.data)
+      .data <- .data |>
+        dplyr::select(-tidyselect::any_of(".totrows")) |>
+        tibble::add_column(.totrows = .totrows)
+      dots <- c(rlang::quo(.totrows), dots)
+
+    }
+
+    if (.only_main_display) {
+      row_var <- tab_get_vars(.data)$row_var
+
+      several_displays <- purrr::map_lgl(
+        dplyr::select(dplyr::ungroup(.data), dplyr::where(is_fmt)),
+        ~ length(unique(get_display(.))) > 1
+      )
+      several_displays <- names(several_displays)[several_displays]
+
+
+      if (length(several_displays) > 1) {
+        .secondary_display <-
+          dplyr::select(.data, !!!groups, tidyselect::all_of(c(row_var)),
+                        tidyselect::all_of(several_displays)) |>
+          dplyr::transmute(
+            secondary_display = dplyr::if_any(
+              tidyselect::all_of(several_displays),
+              ~ get_display(.) != dplyr::first(get_display(.))
+            ) | !!rlang::sym(row_var) %in% c("row_pct", "n", "pvalue"),
+
+            secondary_display = dplyr::if_else(.data$secondary_display,
+                                               true  = dplyr::row_number(),
+                                               false = 0L
+            )
+          ) |>
+          dplyr::pull("secondary_display")
+
+      } else {
+        .secondary_display <-
+          dplyr::select(.data, !!!groups, tidyselect::all_of(c(row_var)),
+                        tidyselect::all_of(several_displays)) |>
+          dplyr::transmute(
+            secondary_display = dplyr::if_else(
+              !!rlang::sym(row_var) %in% c("row_pct", "n", "pvalue"),
+              true  = dplyr::row_number(),
+              false = 0L
+            )
+          ) |>
+          dplyr::pull("secondary_display")
+      }
+
+      .data <- .data |>
+        dplyr::select(-tidyselect::any_of(".secondary_display")) |>
+        tibble::add_column(.secondary_display = .secondary_display)
+      dots <- c(rlang::quo(.secondary_display), dots)
+    }
+
+    if (.by_group) {
+      dots <- c(rlang::quos(!!!dplyr::groups(.data)), dots)
+    }
+
+    out <-
+      dplyr::arrange(.data = tibble::as_tibble(.data),
+                     ... = !!!dots,
+                     .by_group = FALSE,
+                     .locale = .locale
+      )
+
+    if (.by_totals | .only_main_display) {
+      out <- out |>
+        dplyr::select(-tidyselect::any_of(c(".totrows", ".secondary_display")))
+    }
+
+
+    # out <- NextMethod()
+
+    if (length(groups) > 0) out <- out |> dplyr::group_by(!!!groups)
+
+    if (lv1_group_vars(out)) {
+      new_tab(out, subtext = get_subtext(.data), chi2 = get_chi2(.data))
+
+    } else {
+      groups <- dplyr::group_data(out)
+      new_grouped_tab(out, groups, subtext = get_subtext(.data), chi2 = get_chi2(.data))
+    }
+
+}
+# tabs <- tab(forcats::gss_cat, race, marital, year, pct = "row", color = "diff")
+# arrange(tabs, `Never married`)
+# arrange(tabs, `Never married`, .by_group = FALSE)
+# arrange(tabs, `Never married`, .by_totals = FALSE)
+# arrange(tabs, `Never married`, .by_group = FALSE, .by_totals = FALSE)
+# ungroup_tabs <- tab(forcats::gss_cat, race, marital, pct = "row", color = "diff")
+# arrange(ungroup_tabs, `Never married`)
+# arrange(ungroup_tabs, `Never married`, .by_group = FALSE)
+# arrange(ungroup_tabs, `Never married`, .by_totals = FALSE)
+# arrange(ungroup_tabs, `Never married`, .by_group = FALSE, .by_totals = FALSE)
 
 #' rowwise method for class tabxplor_tab
 #' @importFrom dplyr rowwise

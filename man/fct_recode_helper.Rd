@@ -5,19 +5,29 @@
 \title{fct_recode helper to recode multiple variables}
 \usage{
 fct_recode_helper(
-  .data,
+  data,
   .cols = -where(is.numeric),
-  .data_out_name,
+  name_in,
+  name_out,
+  style = c("mutate", "base"),
+  reminder = TRUE,
   cat = TRUE
 )
 }
 \arguments{
-\item{.data}{The data frame.}
+\item{data}{The data frame.}
 
 \item{.cols}{<\link[tidyr:tidyr_tidy_select]{tidy-select}> The variables to recode.}
 
-\item{.data_out_name}{The name of the output data frame, if different from the
+\item{name_in}{The name of the input data frame. Default to the expression given in \code{data}.}
+
+\item{name_out}{The name of the output data frame, if different from the
 input data frame.}
+
+\item{style}{Default is to use \code{dplyr::mutate()}. Set to \code{base} to use \verb{data$var <-} style.}
+
+\item{reminder}{By default, a reminder of the syntax (\code{"new" = "old"}) is printed.
+Set to \code{FALSE} to remove it.}
 
 \item{cat}{By default the result is written in the console if there are less than
 6 variables, written in a temporary file and opened otherwise. Set to
@@ -27,6 +37,7 @@ false to get a data frame with a character variable instead.}
 When the number of variables is less than 5, a text in console as a side effect.
 With more than 5 variables, a temporary R file. A \code{tibble} with the recode text as a
 character variable is returned invisibly (or as main result if \code{cat = TRUE}).
+If the \code{labelled} package in installed, the variable label is used as title in a comment.
 }
 \description{
 fct_recode helper to recode multiple variables
