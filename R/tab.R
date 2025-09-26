@@ -940,7 +940,9 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
       lvs,
       dplyr::select(data, !!!col_vars),
       ~ if (.x == "auto") {
-        if(nlevels(forcats::fct_drop(.y)) == 2L) "first" else "all"
+        if(!(is.factor(.y) | is.character(.y))) {"first"} else {
+          if(nlevels(forcats::fct_drop(.y)) == 2L) "first" else "all"
+        }
       } else {
         .x
       }
@@ -1164,6 +1166,7 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                     )
                 ) |>
                   set_type("col") |> as_totcol(FALSE) |> set_color("no") |>
+                  set_col_var("all_col_vars") |>
                   set_diff(NA_real_) |> set_ci(NA_real_) |> set_mean(NA_real_) |>
                   set_ctr(NA_real_) |> set_var(NA_real_)
               )
@@ -1177,6 +1180,7 @@ tab_many <- function(data, row_vars, col_vars, tab_vars, wt,
                 .x, # !!rlang::sym(paste0(names(.y), "_n"))
                 n = set_display(!!rlang::sym(.y), "n") |>
                   set_type("n") |> as_totcol(FALSE) |> set_color("no") |>
+                  set_col_var("all_col_vars") |>
                   set_diff(NA_real_) |> set_ci(NA_real_) |> set_mean(NA_real_) |>
                   set_pct(NA_real_) |> set_ctr(NA_real_) |> set_var(NA_real_)
               )
@@ -4954,7 +4958,7 @@ tab_chi2 <- function(tabs, calc = c("ctr", "p", "var", "counts"),
   if ("ctr" %in% calc | "var" %in% calc) {
     tabs <- tabs %>%
       dplyr::mutate(dplyr::across(
-        where(~ is_fmt(.) & !get_type(.) == "mean" & ! get_col_var(.) == "no_col_var"),
+        where(~ is_fmt(.) & !get_type(.) == "mean" & !get_col_var(.) %in% c("no_col_var", "all_col_vars") ),
         ~ set_var(., var_contrib(
           .,
           tot  = rlang::eval_tidy(tot_cols[[dplyr::cur_column()]]),

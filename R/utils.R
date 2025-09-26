@@ -180,9 +180,8 @@ fct_recode_helper <- function(data, .cols = -where(is.numeric), name_in, name_ou
 
   pos_cols <- tidyselect::eval_select(rlang::enquo(.cols), data)
   data <- data[pos_cols]
-  data <- data |> dplyr::mutate(dplyr::across(.cols = dplyr::everything(), .fns = as.factor))
 
-  with_variable_label_as_title <- requireNamespace("openxlsx", quietly = TRUE)
+  with_variable_label_as_title <- requireNamespace("labelled", quietly = TRUE)
   if (with_variable_label_as_title) {
     var_labs <- labelled::get_variable_labels(data)
     var_labs <- var_labs[purrr::map_lgl(var_labs, ~ !is.null(.))]
@@ -190,6 +189,8 @@ fct_recode_helper <- function(data, .cols = -where(is.numeric), name_in, name_ou
 
     # var_labs <- purrr::imap(var_labs, ~ paste0(.y, " with a lot of text"))
   }
+
+  data <- data |> dplyr::mutate(dplyr::across(.cols = dplyr::everything(), .fns = as.factor))
 
   recode <- data |>
     purrr::map(~ paste0("\"",
@@ -270,6 +271,91 @@ fct_recode_helper <- function(data, .cols = -where(is.numeric), name_in, name_ou
 
 
 
+#' @keywords internal
+get_user_documents <- function() {
+
+  # 1. Windows: query Known Folder via PowerShell
+  if (.Platform$OS.type == "windows") {
+    docs <- tryCatch({
+      out <- system(
+        'powershell -NoProfile -Command "[Environment]::GetFolderPath(\'MyDocuments\')"',
+        intern = TRUE
+      )
+      out1 <- out[1]
+      if (nzchar(out1) && dir.exists(out1)) out1 else stop()
+    }, error = function(e) NULL)
+    if (!is.null(docs))
+      return(normalizePath(docs, winslash = "\\", mustWork = FALSE))
+  }
+
+  # 2. macOS standard
+  if (Sys.info()[["sysname"]] == "Darwin") {
+    docs <- file.path(path.expand("~"), "Documents")
+    if (dir.exists(docs))
+      return(normalizePath(docs, mustWork = FALSE))
+  }
+
+  # 3. Linux XDG user dirs
+  xdg_conf <- Sys.getenv("XDG_CONFIG_HOME", unset = NA)
+  if (is.na(xdg_conf))
+    xdg_conf <- file.path(path.expand("~"), ".config")
+  user_dirs <- file.path(xdg_conf, "user-dirs.dirs")
+  if (file.exists(user_dirs)) {
+    lines <- readLines(user_dirs, warn = FALSE)
+    line <- grep("^XDG_DOCUMENTS_DIR=", lines, value = TRUE)
+    if (length(line)) {
+      path_raw <- sub('^XDG_DOCUMENTS_DIR="?', "",
+                      sub('"$', "", line))
+      # Expand $HOME
+      path_raw <- gsub("\\$HOME", path.expand("~"), path_raw)
+      if (dir.exists(path_raw))
+        return(normalizePath(path_raw, mustWork = FALSE))
+    }
+  }
+
+  # 4. Fallback to common defaults (only if they exist)
+  candidates <- c(
+    file.path(path.expand("~"), "Documents"),
+    file.path(path.expand("~"), "My Documents")
+  )
+  for (cnd in candidates) {
+    if (dir.exists(cnd))
+      return(normalizePath(cnd, mustWork = FALSE))
+  }
+
+  # 5. Last resort: home directory
+  normalizePath(path.expand("~"), mustWork = FALSE)
+
+
+  # # fs::path_home() gives home dir on all OS
+  # home <- fs::path_home()
+  # # Candidate Documents folder
+  # docs <- fs::path(home, "Documents")
+  # # On Windows, read from registry if localized
+  # if (fs::dir_exists(docs))
+  #   return(docs)
+  #
+  # # Try Windows registry query for the personal folder
+  # if (.Platform$OS.type == "windows") {
+  #   reg <- tryCatch({
+  #     utils::readRegistry(
+  #       key = "HCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
+  #       hive = "HCU"
+  #     )["Personal"]
+  #   }, error = function(e) NULL)
+  #   if (!is.null(reg) && nzchar(reg)) {
+  #     # Registry value can contain %USERPROFILE% variable
+  #     reg <- Sys.getenv("USERPROFILE", unset = reg)
+  #     reg <- normalizePath(reg, winslash = "\\", mustWork = FALSE)
+  #     return(reg)
+  #   }
+  # }
+  #
+  # # Fallback to ~/Documents (even if it doesn’t exist yet)
+  # fs::path(home, "Documents")
+
+
+  }
 
 
 

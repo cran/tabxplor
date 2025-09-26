@@ -945,8 +945,17 @@ kable_tabxplor_style <- function(tabs,
 #'   tab_compact()
 #' }
 tab_compact <- function(tabs) { # pvalue_lines = FALSE
+  tabs_base <- tabs
 
   if (is.data.frame(tabs)) {tabs <- list(tabs) |> purrr::set_names(names(tabs)[1]) }
+
+  if (any(purrr::map_lgl(tabs, ~ length(tab_get_vars(.)$tab_vars) > 0 )) ) {
+    if (!getOption("tabxplor.compact")) {
+      message("since some tab_vars were provided, tab_compact() was not used")
+    }
+    return(tabs_base)
+    #stop("tab_compact() can't be used with tab_vars")
+  }
 
   same_col_vars <- purrr::map(tabs, ~ tab_get_vars(.)$col_vars)
   same_col_vars <- same_col_vars |>
@@ -960,9 +969,6 @@ tab_compact <- function(tabs) { # pvalue_lines = FALSE
     stop("tab_compact() can only be used with the same col_vars in each tab")
   }
 
-  if (any(purrr::map_lgl(tabs, ~ length(tab_get_vars(.)$tab_vars) > 0 )) ) {
-    stop("tab_compact() can't be used with tab_vars")
-  }
 
   subtext <- get_subtext(tabs[[1]])
 

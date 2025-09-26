@@ -31,21 +31,25 @@ jmvtab(
   add_n = TRUE,
   add_pct = FALSE,
   subtext = "",
-  digits = 0
+  digits = 0,
+  exportExcel,
+  xl_path = "S:/Documents",
+  xl_filename = "Table1.xlsx"
 )
 }
 \arguments{
 \item{data}{A data.frame.}
 
 \item{row_vars}{The row variable, which will be printed with one level per
-line. If numeric, it will be converted to factor.}
+line. If numeric, it will be converted to factor. If several row variables
+are provided, it's not possible to add any tab_vars.}
 
 \item{col_vars}{One column is printed for each level of each column
 variable. For numeric variables means are calculated, in a single column.}
 
 \item{tab_vars}{One subtable is made for each combination of levels of the
 tab variables. All tab variables are converted to factor. Leave empty to
-make a simple table.}
+make a simple table. Not used when there are several row_vars.}
 
 \item{wt}{A weight variable, of class numeric. Leave empty for unweighted
 results.}
@@ -168,20 +172,19 @@ the column variable (for  \code{pct = "col"})}
 
 \item{digits}{The number of digits to print, as a single integer, or an
 integer vector the same length as \code{col_vars}.}
+
+\item{exportExcel}{Press to export the table to Excel.}
+
+\item{xl_path}{"Folder in which to save exported Excel file"}
+
+\item{xl_filename}{"Name of exported Excel file"}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$html_table} \tab \tab \tab \tab \tab a html \cr
-\code{results$chi2_table} \tab \tab \tab \tab \tab a table \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 }
-
-Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
-
-\code{results$chi2_table$asDF}
-
-\code{as.data.frame(results$chi2_table)}
 }
 \description{
 Crosstables

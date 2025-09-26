@@ -16,9 +16,38 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
   #   }
   # ),
   private = list(
+
+
+    # .showExportMessage = FALSE,
+    # .exportMessage     = NULL,
+
+
+# get_user_documents() is not working in Jamovi
+# "D:/Documents/Excel_test.xlsx"
+# go to "C:/Rtools/home/builder/Excel.xlsx"
+
+
     .run = function() {
 
+
+      # # Clear export message flag if not exporting
+      # if (!is.null(self$options$exportExcel)) {
+      #   if (!self$options$exportExcel) {
+      #     private$.showExportMessage = FALSE
+      #   }
+      # }
+
       data <- self$data
+
+
+      # if (is.null(self$options$xl_path) || self$options$xl_path == "") {
+      #   # docs <- get_user_documents() # for all platforms and languages
+      #   # default_path <- file.path(docs, "Excel_test.xlsx") |>
+      #   #   stringr::str_replace_all("\\\\", "/")
+      #   self$options$xl_path$setValue("D:/Documents/Excel_test.xlsx")
+      #   #self$options$xl_path <- default_path
+      #   #self$options$xl_path$setValue(default_path)
+      # }
 
       # Note : self$data only contains the selected variables,
       #  but not wt if it was given in Jamovi with Data >>> Weights) :
@@ -50,11 +79,11 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
       # row_var  <- self$options$row_vars[1]
       # col_vars <- self$options$col_vars
 
-      row_var  <- if(is.null(self$options$row_vars)) {
+      row_vars  <- if(is.null(self$options$row_vars)) {
         data <- data |> dplyr::mutate(no_row_var = factor("no_row_var")) # "n"
-        row_var <- "no_row_var"
+        row_vars <- "no_row_var"
       } else {
-        self$options$row_vars[1]
+        self$options$row_vars #[1]
       }
 
       col_vars <- if(is.null(self$options$col_vars)) {
@@ -67,11 +96,15 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
 
 
       # for now, error without at least row_var and col_vars
-      if (length(row_var) > 0 | length(col_vars) > 0) {
+      if (length(row_vars) > 0 | length(col_vars) > 0) {
+
+        if(length(row_vars) >= 2 & length(tab_vars) >= 1) {
+          stop(gettext("Not possible to use tab_vars when several row_vars are provided.", domain = "R-tabxplor"))
+        }
 
         tabs <- tab_many(
           data               = data,
-          row_vars           = all_of(row_var),
+          row_vars           = all_of(row_vars),
           col_vars           = all_of(col_vars),
           tab_vars           = all_of(tab_vars),
           wt                 = !!wt,
@@ -88,6 +121,8 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
           cleannames         = self$options$cleannames,
           levels             = self$options$lvs,
           totaltab           = self$options$totaltab,
+
+          compact            = TRUE,
 
           digits             = self$options$digits,
           other_if_less_than = self$options$other_if_less_than,
@@ -114,8 +149,6 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
         }
 
 
-
-
         ci_print_option <- getOption('tabxplor.ci_print')
 
         if (self$options$ci_print == "moe") {
@@ -124,16 +157,92 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
           options('tabxplor.ci_print' = "ci")
         }
 
-        tabs_hmtl <- tab_kable(tabs,
+
+
+
+        # # Handle Excel export
+        if (!is.null(self$options$exportExcel)) {
+          if (self$options$exportExcel) {
+
+            folder_path <- path.expand(self$options$xl_path)
+            file_path   <- file.path(folder_path, self$options$xl_filename)
+
+
+            # Check if a file was selected
+            if (!is.null(file_path) && file_path != "") {
+              # Ensure file has .xlsx extension
+              if (!grepl("\\.xlsx$", file_path, ignore.case = TRUE)) {
+                file_path <- paste0(file_path, ".xlsx")
+              }
+
+              # Export the table
+              tab_xl(tabs, path = file_path,
+                     sheets = "unique", open = FALSE, replace = TRUE)
+            } else {
+              # Show error message if no file selected
+              jmvcore::reject("Please select a valid file location for the Excel export",
+                              code="no_file_selected")
+            }
+
+             # Reset the action button (not working ?)
+             self$options$exportExcel$setValue(FALSE)
+          }
+        }
+
+        # if (!is.null(self$options$exportExcel) && self$options$exportExcel) {
+        #   tryCatch({
+        #     # Create full path with filename and extension
+        #     export_path <- file.path(self$options$xl_path, paste0(self$options$xl_filename, ".xlsx"))
+        #
+        #     # Perform the export
+        #     tab_xl(tabs,
+        #            path = export_path,
+        #            sheets = "unique",
+        #            open = FALSE,
+        #            replace = TRUE)
+        #
+        #     # # Create success message
+        #     # private$.exportMessage <- paste0(
+        #     #   "<div style='padding: 10px; margin: 15px 0; background-color: #dff0d8; ",
+        #     #   "border: 1px solid #d6e9c6; border-radius: 4px; color: #3c763d;'>",
+        #     #   "Excel file successfully exported to: <br>",
+        #     #   export_path,
+        #     #   "</div>"
+        #     # )
+        #     # private$.showExportMessage = TRUE
+        #
+        #   }, error = function(e) {
+        #     # # Create error message
+        #     # private$.exportMessage <- paste0(
+        #     #   "<div style='padding: 10px; margin: 15px 0; background-color: #f2dede; ",
+        #     #   "border: 1px solid #ebccd1; border-radius: 4px; color: #a94442;'>",
+        #     #   "Error exporting Excel file: <br>",
+        #     #   e$message,
+        #     #   "</div>"
+        #     # )
+        #     # private$.showExportMessage = TRUE
+        #   })
+        #
+        #   # Reset button state
+        #   self$options$exportExcel$setValue(FALSE)
+        # }
+
+
+
+
+        # Create HTML table
+        tabs_html <- tab_kable(tabs,
                                wrap_rows = self$options$wrap_rows,
                                wrap_cols = self$options$wrap_cols)
 
 
+        # Adjust class for proper rendering
         # Formatting not working with kableExtra : we remove "kableExtra" class
         #   and add lightable css and custom css manually
-        class(tabs_hmtl) <-  "knitr_kable"
+        class(tabs_html) <-  "knitr_kable"
 
-        tabs_hmtl <-
+        # Include required CSS
+        tabs_html <-
           paste0(
             # Add css manually
             htmltools::includeCSS(# lightable css
@@ -172,7 +281,7 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
             # "</style>\n\n",
 
 
-            # # Add javascripts manually (n  need, all are already in Jamovi)
+            # # Add javascripts manually (no need, all are already in Jamovi)
             #
             # # htmltools::includeScript( # jquery # no seem to need it, already in Jamovi
             # #   system.file("lib/3.6.0/jquery-3.6.0.min.js", package = "jquerylib")
@@ -217,22 +326,23 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
             #
             # "</script>\n\n",
 
-            "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [[\"$\",\"$\"]]}})</script>",
-            "<script async src=\"https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>",
+            ## Jamovi does not launch Mathjax scripts, for security reasons
+            #"<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [[\"$\",\"$\"]]}})</script>",
+            #"<script async src=\"https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>",
 
-            as.character(tabs_hmtl)
+            as.character(tabs_html)
           ) |>
-          vctrs::vec_restore(tabs_hmtl)
-        # tabs_hmtl |> htmltools::HTML() |> htmltools::browsable()
+          vctrs::vec_restore(tabs_html)
+        # tabs_html |> htmltools::HTML() |> htmltools::browsable()
 
-        # what is still missing ? tabs_hmtl |> attr("kable_meta") ?
-
-
+        # what is still missing ? tabs_html |> attr("kable_meta") ?
 
 
 
 
-        # tabs_hmtl <- tabs |>
+
+
+        # tabs_html <- tabs |>
         #   knitr::kable(format = "html") |>
         #   kableExtra::kable_classic(lightable_options = "hover") |> # bootstrap_options = c("striped", "responsive")
         #   kableExtra::add_footnote("This should be a very small footnote (font-size: 30%).",
@@ -258,18 +368,18 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
         #             )
         #
         # )
-        # tabs_hmtl <- htmltools::browsable(
+        # tabs_html <- htmltools::browsable(
         #   htmltools::HTML(
-        #     as.character(tabs_hmtl),
+        #     as.character(tabs_html),
         #     "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [[\"$\",\"$\"]]}})</script>
         #     <script async src=\"https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>"
         #   )
         # )
         #
-        # htmltools::htmlDependencies(tabs_hmtl) <- dep
-        # #htmltools::attachDependencies(tabs_hmtl, dep)
+        # htmltools::htmlDependencies(tabs_html) <- dep
+        # #htmltools::attachDependencies(tabs_html, dep)
 
-        # if (interactive()) tabs_hmtl <- htmltools::browsable(tabs_hmtl)
+        # if (interactive()) tabs_html <- htmltools::browsable(tabs_html)
 
         # # Error in the jmvcore::analysis$results$html_table$setContent function,
         # #  trying to overwrite it.
@@ -306,127 +416,158 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
         #   private$.stale <- FALSE
         # }
 
-        self$results$html_table$setContent(tabs_hmtl)
+
+        # # After you've created tabs_html, append the message AFTER the entire HTML content:
+        # if (private$.showExportMessage && !is.null(private$.exportMessage)) {
+        #   # Make sure we're working with the character representation of the HTML
+        #   html_content <- as.character(tabs_html)
+        #
+        #   # Simply append the message at the end (after everything)
+        #   html_content <- paste0(html_content, private$.exportMessage)
+        #
+        #   # Restore the HTML object properties
+        #   tabs_html <- html_content |> vctrs::vec_restore(tabs_html)
+        # }
+
+        # Set the content
+        self$results$html_table$setContent(tabs_html)
 
 
 
-        # Chi2 table
-        chi2_tab <- tabs |> get_chi2()
-        fmtnm <- purrr::map_lgl(tabs, ~ is_fmt(.) & get_type(.) != "mean")
-        col_vars_text  <- get_col_var(tabs[fmtnm]) %>% purrr::discard(is.na(.))
-
-        if (!is.null(chi2_tab) & !length(col_vars_text) == 0) {
-          if (nrow(chi2_tab) > 0) {
-
-            chi2_tab <- chi2_tab |>
-              dplyr::mutate(
-                dplyr::across(dplyr::where(is_fmt), format),
-                dplyr::across(dplyr::where(is.factor), as.character),
-                dplyr::across(
-                  all_of(col_vars_text),
-                  ~ dplyr::if_else(
-                    `chi2 stats` == "pvalue",
-                    true  = dplyr::if_else(
-                      . >= 0.05,
-                      true  = paste0('<b><p style = "color:red;margin:0;padding:0;">',
-                                     format(.),
-                                     '</p></b>'),
-                      false = paste0('<b><p style = "color:green;margin:0;padding:0">',
-                                     format(.),
-                                     '</p></b>')
-                    ),
-                    false = .
-                  )
-                )
-              )
-
-            # for (i in (1:ncol(chi2))[names(chi2) != "row_var"] ) {
-            #   self$results$chi2_table$addColumn(
-            #     name = names(chi2)[i],
-            #     index = dplyr::if_else(tidyr::replace_na(names(chi2)[i] %in% tab_vars, FALSE),
-            #                            true  = i,
-            #                            false = Inf),
-            #     combineBelow = tidyr::replace_na(names(chi2)[i] %in% tab_vars, FALSE),
-            #     type = "text"
-            #   )
-            # }
-
-            if (length(tab_vars) > 0) {
-              if(self$options$comp == "tab") {
-                for (i in 1:length(tab_vars)) {
-                  self$results$chi2_table$addColumn(name = tab_vars[i],
-                                                    index = i,
-                                                    combineBelow = TRUE,
-                                                    type = "text")
-                }
-
-              } else { # If comp == "all"
-                cross <- paste0(" ", stringi::stri_unescape_unicode("\\u00d7"), " ") # * as cross
-                chi2_tab <- chi2_tab |>
-                  dplyr::mutate(row_var = paste0(dplyr::first(.data$row_var),
-                                                 cross,
-                                                 paste0(tab_vars, collapse = cross)
-                  )
-                  )
-              }
-            }
-
-            # self$results$chi2_table$addColumn(name = "row_var",
-            #                                   type = "text",
-            #                                   content = row_var)
-
-            self$results$chi2_table$addColumn(name = "chi2 stats")
-
-            if (length(col_vars_text) > 0) {
-              for (i in 1:length(col_vars_text)) {
-                self$results$chi2_table$addColumn(name = col_vars_text[i],
-                                                  type = "text")
-
-              }
-            }
-
-            # if (self$options$pcRow) {
-            #   freqs$addColumn(
-            #     name='.total[pcRow]',
-            #     title=.('Total'),
-            #     type='number',
-            #     format='pc')
-            # }
-
-            # if (length(tab_vars) == 0 | self$options$comp == "tab") {
-            #   chi2_new_group <- chi2 |>
-            #     dplyr::group_by(!!!rlang::syms(tab_vars)) |>
-            #     dplyr::group_indices()
-            #   chi2_new_group <-
-            #     which(chi2_new_group != dplyr::lead(chi2_new_group,
-            #                                         default = max(chi2_new_group) + 1))
-            #
-            # } else { # If length(tab_vars) > 0 & self$options$comp == "all"
-            #   chi2_new_group <-  rep(1, nrow(chi2))
-            #   chi2_new_group <-
-            #     which(chi2_new_group != dplyr::lead(chi2_new_group,
-            #                                         default = max(chi2_new_group) + 1))
-            # }
+        # if (!is.null(self$options$exportExcel)) {
+        #   if (self$options$exportExcel) {
+        #     full_path <-
+        #       file.path(self$options$xl_path,
+        #                 paste0(self$options$xl_filename, ".xlsx") |>
+        #                   stringr::str_replace(".xlsx.xlsx", ".xlsx")
+        #
+        #       )
+        #     tab_xl(tabs, path = full_path,
+        #            sheets = "unique", open = FALSE, replace = TRUE)
+        #
+        #     #self$options$exportExcel <- FALSE
+        #     self$options$exportExcel$setValue(FALSE)
+        #   }
+        # }
 
 
-
-            for (i in 1:nrow(chi2_tab)) {
-              self$results$chi2_table$addRow(rowKey = i, values = as.list(chi2_tab[i, ]) )
-
-              # # formats not working, why ? rowNo = i or i-1 ?
-              # if (i %in% chi2_new_group + 1L) {
-              #   self$results$chi2_table$addFormat(rowNo = i, col = 1, format = "Cell.BEGIN_GROUP")
-              # }
-              # # "Cell.BEGIN_GROUP" "Cell.END_GROUP" "Cell.BEGIN_END_GROUP" "Cell.NEGATIVE"
-
-            }
-
-
-          }
-          #NULL
-        } #else {
-        #  NULL
-        #}
+        # # Chi2 table
+        # chi2_tab <- tabs |> get_chi2()
+        # fmtnm <- purrr::map_lgl(tabs, ~ is_fmt(.) & get_type(.) != "mean")
+        # col_vars_text  <- get_col_var(tabs[fmtnm]) %>% purrr::discard(is.na(.))
+        #
+        # if (!is.null(chi2_tab) & !length(col_vars_text) == 0) {
+        #   if (nrow(chi2_tab) > 0) {
+        #
+        #     chi2_tab <- chi2_tab |>
+        #       dplyr::mutate(
+        #         dplyr::across(dplyr::where(is_fmt), format),
+        #         dplyr::across(dplyr::where(is.factor), as.character),
+        #         dplyr::across(
+        #           all_of(col_vars_text),
+        #           ~ dplyr::if_else(
+        #             `chi2 stats` == "pvalue",
+        #             true  = dplyr::if_else(
+        #               . >= 0.05,
+        #               true  = paste0('<b><p style = "color:red;margin:0;padding:0;">',
+        #                              format(.),
+        #                              '</p></b>'),
+        #               false = paste0('<b><p style = "color:green;margin:0;padding:0">',
+        #                              format(.),
+        #                              '</p></b>')
+        #             ),
+        #             false = .
+        #           )
+        #         )
+        #       )
+        #
+        #     # for (i in (1:ncol(chi2))[names(chi2) != "row_var"] ) {
+        #     #   self$results$chi2_table$addColumn(
+        #     #     name = names(chi2)[i],
+        #     #     index = dplyr::if_else(tidyr::replace_na(names(chi2)[i] %in% tab_vars, FALSE),
+        #     #                            true  = i,
+        #     #                            false = Inf),
+        #     #     combineBelow = tidyr::replace_na(names(chi2)[i] %in% tab_vars, FALSE),
+        #     #     type = "text"
+        #     #   )
+        #     # }
+        #
+        #     if (length(tab_vars) > 0) {
+        #       if(self$options$comp == "tab") {
+        #         for (i in 1:length(tab_vars)) {
+        #           self$results$chi2_table$addColumn(name = tab_vars[i],
+        #                                             index = i,
+        #                                             combineBelow = TRUE,
+        #                                             type = "text")
+        #         }
+        #
+        #       } else { # If comp == "all"
+        #         cross <- paste0(" ", stringi::stri_unescape_unicode("\\u00d7"), " ") # * as cross
+        #         chi2_tab <- chi2_tab |>
+        #           dplyr::mutate(row_var = paste0(dplyr::first(.data$row_var),
+        #                                          cross,
+        #                                          paste0(tab_vars, collapse = cross)
+        #           )
+        #           )
+        #       }
+        #     }
+        #
+        #     # self$results$chi2_table$addColumn(name = "row_var",
+        #     #                                   type = "text",
+        #     #                                   content = row_var)
+        #
+        #     self$results$chi2_table$addColumn(name = "chi2 stats")
+        #
+        #     if (length(col_vars_text) > 0) {
+        #       for (i in 1:length(col_vars_text)) {
+        #         self$results$chi2_table$addColumn(name = col_vars_text[i],
+        #                                           type = "text")
+        #
+        #       }
+        #     }
+        #
+        #     # if (self$options$pcRow) {
+        #     #   freqs$addColumn(
+        #     #     name='.total[pcRow]',
+        #     #     title=.('Total'),
+        #     #     type='number',
+        #     #     format='pc')
+        #     # }
+        #
+        #     # if (length(tab_vars) == 0 | self$options$comp == "tab") {
+        #     #   chi2_new_group <- chi2 |>
+        #     #     dplyr::group_by(!!!rlang::syms(tab_vars)) |>
+        #     #     dplyr::group_indices()
+        #     #   chi2_new_group <-
+        #     #     which(chi2_new_group != dplyr::lead(chi2_new_group,
+        #     #                                         default = max(chi2_new_group) + 1))
+        #     #
+        #     # } else { # If length(tab_vars) > 0 & self$options$comp == "all"
+        #     #   chi2_new_group <-  rep(1, nrow(chi2))
+        #     #   chi2_new_group <-
+        #     #     which(chi2_new_group != dplyr::lead(chi2_new_group,
+        #     #                                         default = max(chi2_new_group) + 1))
+        #     # }
+        #
+        #
+        #
+        #     for (i in 1:nrow(chi2_tab)) {
+        #       self$results$chi2_table$addRow(rowKey = i, values = as.list(chi2_tab[i, ]) )
+        #
+        #       # # formats not working, why ? rowNo = i or i-1 ?
+        #       # if (i %in% chi2_new_group + 1L) {
+        #       #   self$results$chi2_table$addFormat(rowNo = i, col = 1, format = "Cell.BEGIN_GROUP")
+        #       # }
+        #       # # "Cell.BEGIN_GROUP" "Cell.END_GROUP" "Cell.BEGIN_END_GROUP" "Cell.NEGATIVE"
+        #
+        #     }
+        #
+        #
+        #   }
+        #   #NULL
+        # } #else {
+        # #  NULL
+        # #}
 
 
 
@@ -443,14 +584,15 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
                     #1 # color legend length
         )*20) |> # 20
           round() |> as.integer()
-
+        }
 
         # # Plot size
         # # https://forum.jamovi.org/viewtopic.php?t=472
         # self$results$plot$setSize(width, height)
-        if (width > 1080) {
-          self$results$plot$setSize(width, 0) # empty plot
-        }
+
+        # if (width > 1080) {
+        #   self$results$plot$setSize(width, 0) # empty plot
+        # }
 
 
 
@@ -477,14 +619,14 @@ jmvtabClass <- if (requireNamespace('jmvcore', quietly = TRUE) ) R6::R6Class(
         #image$setState(tabs)
 
         options('tabxplor.ci_print' = ci_print_option)
-      }
     },
     .plot = function(image, ...) {
       # plotData <- image$state
       # plot <- tab_plot(plotData, wrap_rows = Inf, wrap_cols = Inf, color_legend = FALSE)
       # print(plot)
       TRUE
-    }
+    } #,
+
   )
 )
 

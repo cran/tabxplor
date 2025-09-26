@@ -31,7 +31,10 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             add_n = TRUE,
             add_pct = FALSE,
             subtext = "",
-            digits = 0, ...) {
+            digits = 0,
+            exportExcel = NULL,
+            xl_path = "S:/Documents",
+            xl_filename = "Table1.xlsx", ...) {
 
             super$initialize(
                 package="tabxplor",
@@ -39,7 +42,7 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..row_vars <- jmvcore::OptionVariable$new(
+            private$..row_vars <- jmvcore::OptionVariables$new(
                 "row_vars",
                 row_vars,
                 permitted=list(
@@ -225,6 +228,17 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 min=0,
                 max=10,
                 default=0)
+            private$..exportExcel <- jmvcore::OptionAction$new(
+                "exportExcel",
+                exportExcel)
+            private$..xl_path <- jmvcore::OptionString$new(
+                "xl_path",
+                xl_path,
+                default="S:/Documents")
+            private$..xl_filename <- jmvcore::OptionString$new(
+                "xl_filename",
+                xl_filename,
+                default="Table1.xlsx")
 
             self$.addOption(private$..row_vars)
             self$.addOption(private$..col_vars)
@@ -252,6 +266,9 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..add_pct)
             self$.addOption(private$..subtext)
             self$.addOption(private$..digits)
+            self$.addOption(private$..exportExcel)
+            self$.addOption(private$..xl_path)
+            self$.addOption(private$..xl_filename)
         }),
     active = list(
         row_vars = function() private$..row_vars$value,
@@ -279,7 +296,10 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         add_n = function() private$..add_n$value,
         add_pct = function() private$..add_pct$value,
         subtext = function() private$..subtext$value,
-        digits = function() private$..digits$value),
+        digits = function() private$..digits$value,
+        exportExcel = function() private$..exportExcel$value,
+        xl_path = function() private$..xl_path$value,
+        xl_filename = function() private$..xl_filename$value),
     private = list(
         ..row_vars = NA,
         ..col_vars = NA,
@@ -306,7 +326,10 @@ jmvtabOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..add_n = NA,
         ..add_pct = NA,
         ..subtext = NA,
-        ..digits = NA)
+        ..digits = NA,
+        ..exportExcel = NA,
+        ..xl_path = NA,
+        ..xl_filename = NA)
 )
 
 jmvtabResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -314,7 +337,6 @@ jmvtabResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         html_table = function() private$.items[["html_table"]],
-        chi2_table = function() private$.items[["chi2_table"]],
         plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
@@ -327,16 +349,6 @@ jmvtabResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="html_table",
                 title="Table"))
-            self$add(jmvcore::Table$new(
-                options=options,
-                name="chi2_table",
-                title="Chi2 Test",
-                rows=0,
-                columns=list(
-                    list(
-                        `name`="row_var", 
-                        `title`="row_var", 
-                        `type`="text"))))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -371,12 +383,13 @@ jmvtabBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data A data.frame.
 #' @param row_vars The row variable, which will be printed with one level per
-#'   line. If numeric, it will be converted to factor.
+#'   line. If numeric, it will be converted to factor. If several row variables
+#'   are provided, it's not possible to add any tab_vars.
 #' @param col_vars One column is printed for each level of each column
 #'   variable. For numeric variables means are calculated, in a single column.
 #' @param tab_vars One subtable is made for each combination of levels of the
 #'   tab variables. All tab variables are converted to factor. Leave empty to
-#'   make a simple table.
+#'   make a simple table. Not used when there are several row_vars.
 #' @param wt A weight variable, of class numeric. Leave empty for unweighted
 #'   results.
 #' @param pct The type of percentages to calculate :  \itemize{    \item
@@ -474,18 +487,14 @@ jmvtabBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param subtext A character vector to print rows of legend under the table.
 #' @param digits The number of digits to print, as a single integer, or an
 #'   integer vector the same length as \code{col_vars}.
+#' @param exportExcel Press to export the table to Excel.
+#' @param xl_path "Folder in which to save exported Excel file"
+#' @param xl_filename "Name of exported Excel file"
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$html_table} \tab \tab \tab \tab \tab a html \cr
-#'   \code{results$chi2_table} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #' }
-#'
-#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
-#'
-#' \code{results$chi2_table$asDF}
-#'
-#' \code{as.data.frame(results$chi2_table)}
 #'
 #' @export
 jmvtab <- function(
@@ -515,7 +524,10 @@ jmvtab <- function(
     add_n = TRUE,
     add_pct = FALSE,
     subtext = "",
-    digits = 0) {
+    digits = 0,
+    exportExcel,
+    xl_path = "S:/Documents",
+    xl_filename = "Table1.xlsx") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("jmvtab requires jmvcore to be installed (restart may be required)")
@@ -560,7 +572,10 @@ jmvtab <- function(
         add_n = add_n,
         add_pct = add_pct,
         subtext = subtext,
-        digits = digits)
+        digits = digits,
+        exportExcel = exportExcel,
+        xl_path = xl_path,
+        xl_filename = xl_filename)
 
     analysis <- jmvtabClass$new(
         options = options,
