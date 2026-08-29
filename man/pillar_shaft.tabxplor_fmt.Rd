@@ -4,12 +4,17 @@
 \alias{pillar_shaft.tabxplor_fmt}
 \title{Pillar_shaft method to print class fmt in a \code{\link[tibble:tibble]{tibble}} column}
 \usage{
-\method{pillar_shaft}{tabxplor_fmt}(x, ...)
+\method{pillar_shaft}{tabxplor_fmt}(x, ..., .ref = NULL)
 }
 \arguments{
 \item{x}{A fmt object.}
 
 \item{...}{Other parameter.}
+
+\item{.ref}{Internal: precomputed reference masks, as
+\code{list(cells =, all_totals =)}, threaded to \code{format()} to avoid deriving them again
+(exporters compute them once for the whole table). \code{NULL} (the default, and the console
+path) recomputes them. Not for direct use.}
 }
 \value{
 A fmt printed in a pillar.
@@ -17,3 +22,4 @@ A fmt printed in a pillar.
 \description{
 Pillar_shaft method to print class fmt in a \code{\link[tibble:tibble]{tibble}} column
 }
+\keyword{internal}

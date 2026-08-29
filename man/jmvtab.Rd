@@ -12,29 +12,43 @@ jmvtab(
   wt = NULL,
   pct = "no",
   color = "no",
-  chi2 = TRUE,
-  OR = "no",
+  color_signif = "ignore",
+  test = FALSE,
+  anova = "welch",
   na = "keep",
   lvs = "all",
-  other_if_less_than = 0,
   cleannames = TRUE,
+  ref_levels = NULL,
+  levels_order = NULL,
+  levels_collapse = NULL,
+  shape = NULL,
   ref = "auto",
   ref2 = "first",
   comp = "tab",
   ci = "auto",
   conf_level = 0.95,
-  ci_print = "ci",
+  stars = FALSE,
+  design_effect = FALSE,
+  ci_method_cell = "wilson",
+  ci_method_diff = "newcombe",
+  ci_method_mean_diff = "welch",
+  ci_method_mean_ratio = "robust",
+  tab_theme = "light",
   totaltab = "line",
   wrap_rows = 35,
   wrap_cols = 15,
   display = "auto",
-  add_n = TRUE,
+  n = "range",
   add_pct = FALSE,
   subtext = "",
-  digits = 0,
-  exportExcel,
-  xl_path = "S:/Documents",
-  xl_filename = "Table1.xlsx"
+  digits = "0",
+  n_min = 0,
+  export_format = "excel",
+  exportExcel = FALSE,
+  export_dir = "~/Documents",
+  export_filename = "Table",
+  resetPath = FALSE,
+  xl_replace = FALSE
 )
 }
 \arguments{
@@ -60,36 +74,53 @@ results.}
 \code{tab_vars}.    \item \code{"all_tabs"}: frequencies for the whole (set
 of) table(s).  }}
 
-\item{color}{The type of colors to print, as a single string. Vectorised
-over \code{row_vars}.  \itemize{    \item \code{"no"}: by default, no
-colors are printed.    \item \code{"diff"}: color percentages and means
-based on cells differences from    totals (or from first cells when
-\code{ref = "first"}).    \item \code{"diff_ci"}: color pct and means based
-on cells differences from totals    or first cells, removing coloring when
-the confidence interval of this difference    is higher than the difference
-itself.    \item \code{"after_ci"}: idem, but cut off the confidence
-interval from the    difference first.    \item \code{"contrib"}: color
-cells based on their contribution to variance    (except mean columns, from
-numeric variables).    \item \code{"OR"}: for \code{pct == "col"} or
-\code{pct == "row"},    color based on odds ratios (or relative risks
-ratios)  }}
+\item{color}{Which measure to use for color helpers, as a single string.
+The values are the measure  names \code{tab()} itself takes (the short
+spellings \code{"diff"} / \code{"OR"} stay  valid aliases in R).  \itemize{
+\item \code{"no"}: by default, no colors are printed.    \item
+\code{"auto"}: a smart per-column-type default (percentage-point difference
+on    the text plus a relative-risk highlight on the background for
+factors, mean ratio for    numeric columns).    \item \code{"difference"}:
+color the difference of each cell from its total (or    reference cell).
+For factors this is a percentage-point difference; for numeric columns
+the standardized (SD-scaled) mean difference.    \item \code{"ratio"}:
+color the relative risk (factors) or mean ratio (numeric).    \item
+\code{"odds_ratio"}: for \code{pct == "col"} or \code{pct == "row"}, color
+based on odds    ratios. To PRINT them, set \code{display} (the colour and
+the printed quantity are two    questions).    \item \code{"contrib"}:
+color cells based on their contribution to variance    (factor columns
+only).  } How significance gates these colors is set separately by
+\code{color_signif}.}
 
-\item{chi2}{Set to \code{TRUE} to make a Chi2 and add summary stats. Also
-useful to color cells based on their contribution to variance.}
+\item{color_signif}{How statistical significance gates the colors, as a
+single string.  \itemize{    \item \code{"ignore"}: by default, color every
+deviation by its observed size.    \item \code{"grey_non_signif"}: color by
+observed size, but grey out cells whose    deviation is not significant (at
+\code{conf_level}). A confidence interval on the    difference is computed
+automatically.    \item \code{"guaranteed_effect"}: color by the guaranteed
+(confidence-bound) effect --    all cells whose interval clears the
+threshold show, with dimmer colors.  }}
 
-\item{OR}{With \code{pct = "row"} or \code{pct = "col"}, calculate and
-print odds ratios  (for binary variables) or relative risks ratios (for
-variables with 3 levels  or more). \itemize{  \item \code{"no"}: by
-default, no OR are calculated.  \item \code{"OR"}: print OR (instead of
-percentages).  \item \code{"OR_pct"}: print OR, with percentages in
-bracket. }}
+\item{test}{Set to \code{TRUE} to add a test p-value row: a Chi-square test
+for categorical column variables and an ANOVA F-test for numeric ones
+(chosen automatically per column type). Also enables colouring cells by
+their contribution to variance.}
+
+\item{anova}{Which F statistic to display for numeric column variables when
+the test is on: Welch's F (default, does not assume equal variances) or the
+classic pooled F.}
 
 \item{na}{The policy to adopt with missing values. It must be a single
 string.  \itemize{    \item \code{na = "keep"}: by default, prints
 \code{NA}'s as explicit \code{"NA"} level.    \item \code{na = "drop"}:
-removes \code{NA} levels before making each table    (tabs made with
-different column variables may have a different number of    observations,
-and won't exactly have the same total columns).    }}
+each column variable drops its own \code{NA}'s, so tables    made with
+different column variables may have a different number of observations.
+\item \code{na = "drop_all"}: drops every observation missing on the row
+variable,    any column variable or a tab variable (all columns then share
+one base).    \item \code{na = "common_base"}: fixes a single population
+(non-missing on the row    variable and the first column variable), while
+secondary column variables keep their    own \code{NA}'s. Reproduces the
+historical \code{tab()} behaviour.    }}
 
 \item{lvs}{The levels of \code{col_vars} to keep.  \itemize{    \item
 \code{"all"}: by default, all levels are kept.    \item \code{"first"}:
@@ -97,12 +128,17 @@ only keep the first level of each \code{col_vars}    \item \code{"auto"}:
 keep the first level when \code{col_var} is only two levels,    keep all
 levels otherwise.    }}
 
-\item{other_if_less_than}{When set to a positive integer, levels with less
-count than that will be merged into an "Others" level.}
-
 \item{cleannames}{By default, clean levels names, by removing prefix
 numbers like "1-", and text in parenthesis. Set to \code{FALSE} to avoid
 this behaviour.}
+
+\item{ref_levels}{.}
+
+\item{levels_order}{.}
+
+\item{levels_collapse}{.}
+
+\item{shape}{.}
 
 \item{ref}{The reference cell to calculate differences and ratios   (used
 to print \code{colors}) :   \itemize{    \item \code{"auto"}: by default,
@@ -119,31 +155,62 @@ it it used as a regular expression,    to match with the names of the rows
 otherwise you get a warning message.    \item \code{"no"}: not use ref and
 not calculate diffs to gain calculation time.  }}
 
-\item{ref2}{A second reference cell is needed to calculate odds ratios  (or
-relative risks ratios). The first cell of the row or column is used by
-default.  See \code{ref}  for the full list of possible values.}
+\item{ref2}{With \code{OR = OR} (odds-ratios) and a 3+ levels factor, a
+second reference cell  is needed to calculate relative risks ratios. First
+cell by default.}
 
 \item{comp}{The comparison level : by subtables/groups, or for the whole
 table.}
 
-\item{ci}{The type of confidence intervals to calculate, passed to
-\code{\link{tab_ci}}.     \itemize{      \item \code{"cell"}: absolute
-confidence intervals of cells percentages.      \item \code{"diff"}:
-confidence intervals of the difference between a cell and the      relative
-total cell (or relative first cell when \code{ref = "first"}).      \item
-\code{"auto"}: \code{ci = "diff"} for means and row/col percentages,
-\code{ci = "cell"} for frequencies ("all", "all_tabs").     } By default,
-for percentages, with \code{ci = "cell"} Wilson's method is used, and with
-\code{ci = "diff"} Wald's method along Agresti and Caffo's adjustment.
-Means use classic method.}
+\item{ci}{\strong{What the confidence interval is anchored on} -- one
+question, four answers. The  GEOMETRY of the interval is not asked here: it
+follows the comparison the table makes  (set by \code{color} /
+\code{display}), so a difference table gets a difference  interval and a
+ratio table a ratio one.  \itemize{   \item \code{"auto"}: build the
+comparison interval when something reads it   (\code{stars}, or a
+\code{color_signif} policy), and none otherwise.   \item \code{"no"}: no
+interval at all.   \item \code{"cell"}: each cell's own interval (a
+percentage / a mean with its own   bounds). It anchors nothing to compare,
+so \code{stars} and \code{color_signif} are   informed and switched off.
+\item \code{"ref"}: the interval of the comparison with the reference cell
+-- what   \code{stars} and \code{color_signif} read.  }}
 
-\item{conf_level}{The confidence level, as a single numeric between 0 and
-\enumerate{
-\item Default to 0.95 (95\\%).
-}}
+\item{conf_level}{The confidence level, a single numeric between 0 and 1
+--- 0.95 by default.}
 
-\item{ci_print}{By default confidence interval are printed with the
-interval display. Set to "moe" to use pct +- moe instead.}
+\item{stars}{With \code{ci = "diff"}, print significance stars (\code{*}
+\code{**} \code{***}) for the difference of each cell from its reference.
+Read from the same confidence interval that is displayed, so stars and
+bracket always agree.}
+
+\item{design_effect}{For a WEIGHTED table, make the confidence intervals,
+the significance stars, the colour thresholds AND the p-values account for
+the unequal weighting (the exact flat survey-design variance) instead of
+using the raw number of respondents. Sets options(tabxplor.design_effect).
+Off by default; it moves every interval in the table, not only the p-value.}
+
+\item{ci_method_cell}{The proportion confidence-interval method for
+\code{ci = "cell"}: \code{"wilson"} (the score interval, default) or
+\code{"wald"} (the normal approximation).}
+
+\item{ci_method_diff}{The proportion confidence-interval method for
+\code{ci = "diff"}. \code{"newcombe"} (default) is the dual of the
+two-proportion score test, so the interval and the significance stars
+always agree.}
+
+\item{ci_method_mean_diff}{The confidence-interval method for the
+difference of numeric means (means with \code{ci = "diff"}): Welch
+(default), Student (the two groups pooled) or OLS (pooled over every level
+of the variable, i.e. the interval a linear model gives that coefficient).}
+
+\item{ci_method_mean_ratio}{The confidence-interval method for a ratio of
+numeric means (means with \code{ci = "ratio"}).}
+
+\item{tab_theme}{How the table is painted, in the results panel and in
+every export.  \code{"light"} is the colour palette; \code{"print_ready"}
+says the same thing  typographically --- bold, italics, underlines and
+marks instead of blue and red ---  for a page that has no colour. See
+\code{\link{tab_css}}.}
 
 \item{totaltab}{The total table, if there are subtables/groups   (i.e. when
 \code{tab_vars} is provided). Vectorised over \code{row_vars}.  \itemize{
@@ -158,11 +225,17 @@ characters.}
 \item{wrap_cols}{By default, colnames are wrapped when larger than 12
 characters.}
 
-\item{display}{The information to display in the table.}
+\item{display}{What each cell shows. Every value here is a
+\code{tab(display =)} value: a bare field  name, a named layout such as
+\code{"base_ci"} (each value with its interval), or a  \code{\{\}} template
+combining fields. \code{"auto"} keeps whatever the table was  built with. A
+template naming a field the table does not carry renders empty and says
+which argument would fill it.}
 
-\item{add_n}{For \code{pct = "row"} or \code{pct = "col"}, set to
-\code{FALSE} not to add another column or row with unweighted counts
-(\code{n}).}
+\item{n}{How many people the table is about: \code{"range"} prints the
+unweighted base beside the Total cell (as \code{min-max} when the column
+variables rest on different people), \code{"min"} the smallest base only,
+\code{"no"} no count at all.}
 
 \item{add_pct}{Set to \code{TRUE} to add a column with the frequencies of
 the row variable (for \code{pct = "row"}) or a row with the frequencies of
@@ -170,20 +243,41 @@ the column variable (for  \code{pct = "col"})}
 
 \item{subtext}{A character vector to print rows of legend under the table.}
 
-\item{digits}{The number of digits to print, as a single integer, or an
-integer vector the same length as \code{col_vars}.}
+\item{digits}{The number of digits to print, as a single integer (0-6). In
+R, \code{tab()} also accepts an integer vector the same length as
+\code{col_vars}.}
 
-\item{exportExcel}{Press to export the table to Excel.}
+\item{n_min}{A pure display filter (0 = off). A row is dropped only when
+its largest base across the column variables is below \code{n_min};
+surviving cells whose own base is below \code{n_min} are blanked. Under
+\code{pct = "col"} weak columns are dropped instead. Totals, the added-n
+row/column and the p-value line are always kept. Recomputes nothing.}
 
-\item{xl_path}{"Folder in which to save exported Excel file"}
+\item{export_format}{The export file format: Excel (\code{.xlsx}), HTML
+(\code{.html}) or Markdown (\code{.md}).}
 
-\item{xl_filename}{"Name of exported Excel file"}
+\item{exportExcel}{Press to export the table to the chosen format (the
+button label follows the format).}
+
+\item{export_dir}{The folder to save the exported file in. Blank or
+\code{~/Documents} auto-detects your real Documents folder (a redirected
+\code{D:/Documents} or network Documents included). Type any other folder
+to override; a leading \code{~} there expands to your home folder.}
+
+\item{export_filename}{The bare file name, with NO extension (the chosen
+format adds it). Illegal characters are removed automatically. Blank saves
+as "Table".}
+
+\item{resetPath}{Reset the folder and file name to their defaults (your
+Documents folder and "Table").}
+
+\item{xl_replace}{"Set to \code{TRUE} to overwrite an existing file."}
 }
 \value{
 A results object containing:
 \tabular{llllll}{
 \code{results$html_table} \tab \tab \tab \tab \tab a html \cr
-\code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$cache_state} \tab \tab \tab \tab \tab an image \cr
 }
 }
 \description{

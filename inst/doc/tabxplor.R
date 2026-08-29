@@ -1,125 +1,267 @@
-## ----include = FALSE----------------------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
+# Messages and warnings are off for every chunk: the teaching notes tabxplor prints (an
+# auto-detected family, an over-dispersion caveat) are explained in the prose where they
+# matter, and repeated under every table they only clutter it. Re-enable one with
+# `message = TRUE` on the chunk that needs it.
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
 )
-
-## ----setup--------------------------------------------------------------------
 library(tabxplor)
 
-# # CRAN OMP THREAD LIMIT
-# threads_option <- Sys.getenv("OMP_THREAD_LIMIT")
-#Sys.setenv("OMP_THREAD_LIMIT" = 2)
+# Pin the legend language: it defaults to "auto" = the ambient locale, so building this English
+# vignette on a French machine silently renders French legends and captions (the -fr articles pin
+# "fr" for the same reason). Output must not depend on where it is built.
+options(tabxplor.lang = "en")
+Sys.setenv(LANGUAGE = "en")   # the test-summary / model-fit row labels go through gettext, not this option
 
+# The tables below are tabxplor's real html tables, rendered live: the setup sets
+# options(tabxplor.print = "html") --- the recommended everyday setting in RStudio/Positron ---
+# so every bare tab() chunk knits as a colored html table. The shared stylesheet is emitted ONCE
+# by the tab_css() chunk below (tab_kable_css = FALSE stops each table re-inlining it), and the
+# hover tooltips are off document-wide (see the dedicated tooltips section, which re-enables them).
+options(tabxplor.print = "html")
+options(tabxplor.tab_kable_css = FALSE)
+options(tabxplor.tab_kable_tooltips = FALSE)
 
+# The few console examples still show terminal colors: cli emits ANSI (options("cli.num_colors")),
+# and the fansi hook below turns that ANSI into colored HTML.
+options(cli.num_colors = 256)
+set_color_palette(theme = "light") # type = "text"
 
-set_color_style(type = "text", theme = "light")
+## ----echo = FALSE, results = "asis"-------------------------------------------
+# The website carries a light/dark switch and tab_css("auto") follows it; a shipped vignette
+# is always read on a light page, so there it stays light.
+cat(tab_css(theme = if (Sys.getenv("IN_PKGDOWN") == "true") "auto" else "light"))
+
+## ----eval = FALSE-------------------------------------------------------------
+# install.packages("tabxplor", dependencies = TRUE)
+
+## ----eval = FALSE-------------------------------------------------------------
+# library(tabxplor)
 
 ## ----echo = FALSE, include = FALSE--------------------------------------------
-options(crayon.enabled = TRUE)
-knitr::knit_hooks$set(output = function(x, options){
-  paste0(
-    '<pre class="r-output"><code>',
-    fansi::sgr_to_html(x = htmltools::htmlEscape(x), warn = FALSE),
-    '</code></pre>'
-  )
+# Colour the console outputs (ANSI -> html, via fansi), but hand as-is results (the html tables,
+# marked by knitr with an ASIS token) back to knitr's default hook untouched.
+# Escape the three HTML specials before fansi turns the ANSI codes into markup.
+esc_html <- function(x) gsub(">", "&gt;", gsub("<", "&lt;", gsub("&", "&amp;", x, fixed = TRUE),
+                                               fixed = TRUE), fixed = TRUE)
+# fansi is Suggests-only, so the ANSI -> html step degrades: without it the escape codes are
+# stripped and the output is handed on uncoloured, which is what a check run with no Suggests gets.
+ansi_html <- if (requireNamespace("fansi", quietly = TRUE)) {
+  function(x) fansi::sgr_to_html(x = esc_html(x), warn = FALSE)
+} else {
+  function(x) esc_html(gsub("\033\\[[0-9;]*m", "", x))
+}
+default_output_hook <- knitr::knit_hooks$get("output")
+knitr::knit_hooks$set(output = function(x, options) {
+  if (grepl("KNITR_ASIS_OUTPUT_TOKEN", x, fixed = TRUE)) return(default_output_hook(x, options))
+  paste0('<pre class="r-output"><code>',
+         ansi_html(x),
+         '</code></pre>')
 })
-
-num_colors <- function(forget = TRUE) 256
-library(crayon)
-assignInNamespace("num_colors", num_colors, pos = "package:crayon")
+# A cli message or warning is its own kind of condition, so knitr routes each through its own hook,
+# not `output`: without these two it would land in the collapsed source block, ANSI codes and all.
+for (hook in c("message", "warning")) {
+  knitr::knit_hooks$set(stats::setNames(list(function(x, options) {
+    paste0('<pre class="r-output"><code>',
+           ansi_html(x),
+           '</code></pre>')
+  }), hook))
+}
 
 ## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, marital, race)
+gss_simple <- gss_cat_data_formatting()
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, marital, race)
+
+## ----eval = FALSE-------------------------------------------------------------
+# options(tabxplor.print = "html")
 
 ## ----include = FALSE----------------------------------------------------------
-options(tabxplor.output_kable = TRUE)
+options(tabxplor.print = "console")
 
 ## ----echo = TRUE--------------------------------------------------------------
-data <- forcats::gss_cat %>% 
-  dplyr::filter(year %in% c(2000, 2006, 2012), !marital %in% c("No answer", "Widowed"))
-gss  <- "Source: General social survey 2000-2014"
-gss2 <- "Source: General social survey 2000, 2006 and 2012"
-tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(dplyr::storms, category, status, sup_cols = c("pressure", "wind"))
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(data, race, marital, year, subtext = gss2, pct = "row", color = "diff", comp = "all")
-
-## ----echo = TRUE--------------------------------------------------------------
-data <- data %>% dplyr::mutate(year = as.factor(year))
-tab(data, year, marital, race, pct = "row", color = "diff", ref = "first", tot = "col",
-    totaltab = "table")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(data, year, marital, race, pct = "row", color = "diff", ref = 3)
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(data, year, marital, race, pct = "col", tot = "row", color = "diff", ref = "Married")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, race, marital, pct = "row", ci = "cell")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, race, marital, pct = "row", color = "diff_ci")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, race, marital, subtext = gss, pct = "row", color = "after_ci")
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, race, marital, chi2 = TRUE)
-
-## ----echo = TRUE--------------------------------------------------------------
-tab(forcats::gss_cat, race, marital, color = "contrib")
+tab(gss_simple, marital, race)
 
 ## ----include = FALSE----------------------------------------------------------
-options(tabxplor.output_kable = FALSE)
+options(tabxplor.print = "html")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, marital, race, pct = "row")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, marital, age)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, c(race, relig), c(party3, tvhours), na = "drop_all", pct = "row")
+
+## ----echo = TRUE--------------------------------------------------------------
+counts <- dplyr::count(gss_simple, marital, race) # or a published table
+tab_counts(counts, marital, race, counts = n, pct = "row", color = "difference")
+
+## ----echo = FALSE-------------------------------------------------------------
+options(tabxplor.cleannames = TRUE)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "difference")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, rincome, c(party3, marital), pct = "row", color = "auto")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, rincome, tvhours, color = "difference")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, relig, year, pct = "col", color = "ratio", ref = 1)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, rincome, party3, race, na = "drop", pct = "row", 
+    color = "auto", comp="all")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, c(race, relig), party3, pct = "row", color = "difference",
+    ref = c(race = 1, relig = "tot"), na = "drop")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, c(party3, marital), pct = "col", color = "difference",
+    ref = c("first", "tot"), na = "drop")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "difference", 
+    color_signif = "grey_non_signif")
+
+## ----echo = TRUE--------------------------------------------------------------
+gss_simple |>
+  dplyr::filter(year == "2012") |> # n=1 974
+  tab(race, party3, pct = "row", color = "difference", color_signif = "guaranteed_effect")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, relig, race, pct = "row", n_min = 400)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, relig, race, pct = "row",  other_if_less_than = 400)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", ci = "cell") # by default, conf_level = 0.95
+
+## ----echo = TRUE--------------------------------------------------------------
+gss_simple |>
+  dplyr::filter(year == "2012") |> # n=1 974
+  tab(race, party3, pct = "row", 
+      color = "difference", ref = 1, color_signif = "guaranteed_effect",
+      display = "base_ci" # "{base} {ci}"
+  )
+
+## ----echo = TRUE--------------------------------------------------------------
+gss_simple |>
+  dplyr::filter(year == "2012") |> # n=1 974
+  tab(rincome, party3, pct = "row", ref = 1, display = "ci", stars = TRUE)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, c(party3, tvhours), pct = "row", test = TRUE)
+
+## ----echo = TRUE--------------------------------------------------------------
+tea_when_vars <- c("breakfast", "lunch", "tea.time", "evening", "dinner", "always")
+# levels(facto_tea$breakfast)   # always check: the "yes" answer must come first
+
+## ----echo = TRUE--------------------------------------------------------------
+tea <- facto_tea |> score_from_lv1("tea_when", vars_list = tea_when_vars) # score variable
+tab(tea, SPC, all_of(c(tea_when_vars, "tea_when")), pct = "row", 
+    levels = "first", na = "drop", color = "difference")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(tea, sex, c(breakfast, evening, SPC), pct = "row", 
+    levels = "auto", na = "drop", tot = "row")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, rincome, na = "drop", pct = "row")
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# tab(gss_simple, c(married, income25k), race, pct = "row", output_list = TRUE)
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, rincome, c(married, tvhours), tab_vars = race, spread_vars = race,
+    pct = "row", na = "drop", levels = "first", comp = "all",
+    color = "auto", color_signif = "grey_non_signif")
+
+## ----echo = TRUE--------------------------------------------------------------
+gss_w <- dplyr::mutate(gss_simple, w = ifelse(marital %in% "Never married", 2.5, 0.8))
+tab(gss_w, race, party3, wt = w, pct = "row", na = "drop")
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# tabs <- tab(gss_simple, race, party3, pct = "row", color = "difference")
+# tab_export(tabs) # default : html table (RStudio Viewer, .Rmd/.qmd, etc.)
+# tab_export(tabs, format = "xl", path = "table") # Excel export
+# tab_export(tabs, format = "md", path = "table") # flat markdown file
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# tab_export(tabs, theme = "auto") # HTML that follows the reader's light/dark modes
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, party3, c(race, tvhours), pct = "row",
+    color = "ratio", display = "base", n = "min") |>
+  tab_html(transpose = TRUE)
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# options(tabxplor.tab_kable_css = FALSE)
+# tab_css(theme = "auto")   # emit once, near the top of the document
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "difference") |>
+  tab_html(theme = "print_ready")
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# options(tabxplor.theme = "print_ready")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, c(party3, tvhours), pct = "row", display = "base_moe")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "difference", display = "{pct} ({diff})")
+
+## ----echo = TRUE--------------------------------------------------------------
+tabs <- tab(gss_simple, race, party3, pct = "row")
+set_display(tabs, "{pct} (n={n})")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, color = "contrib")
+# tab(gss_simple, race, party3, pct = "all", color = "contrib")  # works with pct too
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, color = "contrib") |> set_display("ctr")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, color = "contrib", color_signif = "guaranteed_effect") |>
+  set_display("resid")
+
+## ----echo = TRUE--------------------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "contrib",
+    display = "{pct} ({resid})")
+
+## ----echo = TRUE, eval = FALSE------------------------------------------------
+# tab(gss_simple, race, party3, pct = "row", color = "difference")
+
+## ----echo = FALSE, eval = TRUE------------------------------------------------
+tab(gss_simple, race, party3, pct = "row", color = "difference") |>
+  tab_html(tooltips = TRUE)
+
+## ----echo = TRUE, fig.width = 8, fig.height = 4, eval = requireNamespace("ggplot2", quietly = TRUE)----
+tab(tea, SPC, c(breakfast, lunch, evening, dinner), pct = "row",
+    levels = "first", na = "drop",
+    color = "ratio", color_signif = "guaranteed_effect", ref = 1) |>
+  forest_plot()
 
 ## ----echo = TRUE, message = FALSE---------------------------------------------
 library(dplyr)
-first_lvs <- c("Married", "$25000 or more", "Strong republican", "Protestant")
-data <- forcats::gss_cat %>% mutate(across(
-  where(is.factor),
-  ~ forcats::fct_relevel(., first_lvs[first_lvs %in% levels(.)])
-))
-tabs <- tab_many(data, race, c(marital, rincome, partyid, relig, age, tvhours),
-         levels = "first", pct = "row", chi2 = TRUE, color = "auto")
-tabs
+tab(gss_simple, race, marital, pct = "row") |>
+  arrange(desc(Married))
 
 ## ----echo = TRUE--------------------------------------------------------------
-tabs %>% tab_kable()
-
-## -----------------------------------------------------------------------------
-tabs <- tab(data, race, marital, year, pct = "row")
-tabs %>% mutate(across(where(is_fmt), get_num))
-
-## -----------------------------------------------------------------------------
-vctrs::vec_data(tabs$Married)
-
-## ----echo = TRUE, message = FALSE---------------------------------------------
-tab_num(data, race, c(age, tvhours), marital, digits = 1L, comp = "all") |>
-  dplyr::mutate(dplyr::across( #Mutate over the whole table.
-    c(age, tvhours),
-    ~ dplyr::mutate(., #Mutate over each fmt vector's underlying data.frame.
-                    var     = sqrt(var), 
-                    display = "var", 
-                    digits  = 2L) |> 
-      set_color("no"),
-    .names = "{.col}_sd"
-  ))
-
-## ----echo = TRUE, message = FALSE---------------------------------------------
-tab(data, race, marital, year, pct = "row") %>%
-  dplyr::mutate(across( 
-    where(is_fmt),
-    ~ dplyr::if_else(is_totrow(.), 
-                true  = mutate(., digits = 1L), 
-                false = mutate(., digits = 2L))
-  ))
-
-## ----echo = TRUE, message = FALSE---------------------------------------------
-tab(data, race, marital, year, pct = "row") %>%
-  mutate(across(where(is_totcol), ~ mutate(., display = "n") ))
+tab(gss_simple, race, marital, pct = "row",
+    subtext = c("Population: ", "Source: GSS, 2000-2014")) |>
+  set_caption("Custom title")
 

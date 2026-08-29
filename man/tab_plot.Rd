@@ -2,54 +2,27 @@
 % Please edit documentation in R/tab_classes.R
 \name{tab_plot}
 \alias{tab_plot}
-\title{Print a tabxplor table as plot}
+\title{Print a tabxplor table as plot (defunct)}
 \usage{
-tab_plot(
-  tabs,
-  theme = c("light", "dark"),
-  color_type = NULL,
-  html_24_bit = NULL,
-  color_legend = TRUE,
-  caption = NULL,
-  wrap_rows = 35,
-  wrap_cols = 14,
-  whitespace_only = TRUE
-)
+tab_plot(tabs, ...)
 }
 \arguments{
-\item{tabs}{A table made with \code{\link{tab}} or \code{\link{tab_many}}.}
+\item{tabs}{A data.frame.}
 
-\item{theme}{By default, a white table with black text, Set to \code{"dark"} for a
-black table with white text.}
-
-\item{color_type}{Set to \code{"text"} to color the text, \code{"bg"} to color the
-background. By default it takes \code{getOption("tabxplor.color_style_type")}.}
-
-\item{html_24_bit}{Use 24bits colors palettes for html tables : set to \code{"green_red"}
-or \code{"blue_red"}. Only with \code{mode = "color_code"} (not \code{mode = "crayon"}) and
-\verb{theme = "light}. Default to \code{getOption("tabxplor.color_html_24_bit")}.}
-
-\item{color_legend}{Print colors legend below the table ?}
-
-\item{caption}{The table caption.}
-
-\item{wrap_rows}{By default, rownames are wrapped when larger than 30 characters.}
-
-\item{wrap_cols}{By default, colnames are wrapped when larger than 12 characters.}
-
-\item{whitespace_only}{Set to \code{FALSE} to wrap also on non whitespace characters.}
+\item{...}{Ignored.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object to be printed in the
-\code{RStudio} Plots pane or exported as image, using \code{\link[ggpubr]{ggtexttable}}.
+Never returns: it errors.
 }
 \description{
-Print a tabxplor table as plot
-}
-\examples{
-\donttest{
-tab(forcats::gss_cat, race, marital, pct = "row", color = "diff") |>
-  tab_plot()
-}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 
+Removed in 2.0.0. \code{tab_plot()} drew a \emph{picture of the table} as a \pkg{ggpubr} image. Use
+\code{\link[=tab_html]{tab_html()}}, \code{\link[=tab_md]{tab_md()}} or \code{\link[=tab_xl]{tab_xl()}} to export the table itself, and \code{\link[=forest_plot]{forest_plot()}} for a
+chart of the numbers -- every estimate with its confidence interval, its significance and its
+colour.
+
+It was the only part of the package needing \pkg{ggpubr}, \pkg{cowplot} and \pkg{gtable}, whose
+dependency trees every user paid for; its display never matched the other backends'.
 }
+\keyword{internal}
