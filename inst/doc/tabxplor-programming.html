@@ -109,8 +109,16 @@ pre:not([class]) { background-color: white }</style>
       }
       if (bs.Popover) {
         for (i = 0; i < pops.length; i++) {
+          /* `content` and `title` are passed EXPLICITLY, and that is the whole point of this
+             branch. Bootstrap 5 reads options from `data-bs-*` only, so the `data-content=` and
+             `title=` that tab_tooltip_attrs() writes -- the Bootstrap 3/4 spelling -- are invisible
+             to it. Left to itself BS5 builds a popover whose content is the empty default, and
+             `_isWithContent()` then refuses to show it: the markup was there, the binding was
+             there, and no bubble ever appeared. */
           new bs.Popover(pops[i], {placement: 'right', container: 'body',
-                                   trigger: 'hover focus', delay: 0});
+                                   trigger: 'hover focus', delay: 0,
+                                   title: pops[i].getAttribute('title') || '',
+                                   content: pops[i].getAttribute('data-content') || ''});
         }
       }
       return;
@@ -468,7 +476,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 .p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4{font-weight:bold;}
 .tabxplor-tab,.tabxplor-tab table{border-collapse:collapse;border-top-width:0;border-bottom-width:0;margin:0;font-family:"DejaVu Sans Condensed","DejaVu Sans",Arial,helvetica,sans-serif;}
 .tabxplor-tab{margin-bottom:1.2em;}
-.tabxplor-caption{display:block;text-align:left;font-weight:bold;font-size:110%;white-space:normal;width:0;min-width:100%;}
+.tx-scrollbox{display:block;width:max-content;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;margin-bottom:1.2em;}
+.tx-scrollbox>.tabxplor-tab{display:table;overflow:visible;margin-bottom:0;}
+.tabxplor-caption{display:block;text-align:left;font-weight:bold;font-style:italic;font-size:110%;white-space:normal;width:0;min-width:100%;margin-top:1.2em;margin-bottom:0;}
 .tabxplor-tab>caption{caption-side:top;padding:0;margin:0;}
 .tabxplor-tab tfoot{font-size:80%;text-align:left;}
 .tabxplor-tab th,.tabxplor-tab td{padding:3px 4px;vertical-align:top;line-height:1.1;}
@@ -512,6 +522,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 .popover-body,.popover-content{padding:6px;white-space:pre;}
 .tabxplor-tab{color:#000000;background:transparent;}
 .tabxplor-tab th,.tabxplor-tab td{background-color:transparent;border-color:#000000;}
+.tabxplor-tab td.tx-bar{position:relative;isolation:isolate;--tx-bar-ink:currentColor;}
+.tabxplor-tab td.tx-bar:not(.p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4){--tx-bar-ink:#0267c7;}
+.tabxplor-tab td.tx-bar::before,.tabxplor-tab td.tx-bar-on::after{content:"";position:absolute;z-index:-1;box-sizing:border-box;top:2px;bottom:2px;left:0;}
+.tabxplor-tab td.tx-bar::before{right:0;background:rgba(0,0,0,.07);}
+.tabxplor-tab td.tx-bar-on::after{width:var(--tx-bar,0%);border-radius:3px;border:2px solid var(--tx-bar-ink);background:color-mix(in oklch,var(--tx-bar-ink) 14%,transparent);}
 .tabxplor-tab tbody tr:hover{background:#FFFCE5;}
 .g1,.tabxplor-tab .g1{color:#949494;}
 .g2,.tabxplor-tab .g2{color:#444444;}
@@ -538,10 +553,119 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 .u2,.tabxplor-tab .u2{background-color:#F6CFB0;}
 .u3,.tabxplor-tab .u3{background-color:#FCBDA5;}
 .u4,.tabxplor-tab .u4{background-color:#FEAC9F;}
+:root .tabxplor-tab.tx-print_minimalistic{color:#000000;background:#ffffff;}
+:root .tabxplor-tab.tx-print_minimalistic th,:root .tabxplor-tab.tx-print_minimalistic td{color:#000000;background-color:#ffffff;border-color:#000000;}
+:root .tabxplor-tab.tx-print_minimalistic td.tx-bar{position:relative;isolation:isolate;--tx-bar-ink:currentColor;}
+:root .tabxplor-tab.tx-print_minimalistic td.tx-bar:not(.p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4){--tx-bar-ink:#000000;}
+:root .tabxplor-tab.tx-print_minimalistic td.tx-bar::before,:root .tabxplor-tab.tx-print_minimalistic td.tx-bar-on::after{content:"";position:absolute;z-index:-1;box-sizing:border-box;top:2px;bottom:2px;left:0;}
+:root .tabxplor-tab.tx-print_minimalistic td.tx-bar::before{right:0;background:rgba(0,0,0,.05);}
+:root .tabxplor-tab.tx-print_minimalistic td.tx-bar-on::after{width:var(--tx-bar,0%);border-radius:3px;border:2px solid var(--tx-bar-ink);background:color-mix(in oklch,var(--tx-bar-ink) 10%,transparent);}
+:root .tabxplor-tab.tx-print_minimalistic tbody tr:hover{background:transparent;}
+:root .tabxplor-tab.tx-print_minimalistic .g1{color:#949494;}
+:root .tabxplor-tab.tx-print_minimalistic .g2{color:#444444;}
+:root .tabxplor-tab.tx-print_minimalistic .tx-unit{color:#949494;}
+:root .tabxplor-tab.tx-print_minimalistic .tabxplor-caption{color:#000000;}
+:root .tabxplor-tab.tx-print_minimalistic .tx-foot{color:#444444;}
+:root .tabxplor-tab.tx-print_minimalistic.tx-shape{color:#444444;}
+:root .tabxplor-tab.tx-print_minimalistic.tx-shape thead th{color:#444444;}
+:root .tabxplor-tab.tx-print_minimalistic.tx-shape .tx-sec{color:#949494;}
+:root .tabxplor-tab.tx-print_minimalistic .tx-sec{color:#444444;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_minimalistic .tx-mark{color:#000000;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_minimalistic .p1{color:#555555;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_minimalistic .p2{color:#000000;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_minimalistic .p3{color:#000000;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_minimalistic .p4{color:#000000;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_minimalistic .m1{color:#555555;font-weight:normal;font-style:italic;}
+:root .tabxplor-tab.tx-print_minimalistic .m2{color:#000000;font-weight:normal;font-style:italic;}
+:root .tabxplor-tab.tx-print_minimalistic .m3{color:#000000;font-style:italic;}
+:root .tabxplor-tab.tx-print_minimalistic .m4{color:#000000;font-style:italic;}
+:root .tabxplor-tab.tx-print_minimalistic .o1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_minimalistic .o2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_minimalistic .o3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_minimalistic .o4{background-color:#B8B8B8;}
+:root .tabxplor-tab.tx-print_minimalistic .u1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_minimalistic .u2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_minimalistic .u3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_minimalistic .u4{background-color:#B8B8B8;}
+:root .tabxplor-tab.tx-print_emphasis{color:#000000;background:#ffffff;}
+:root .tabxplor-tab.tx-print_emphasis th,:root .tabxplor-tab.tx-print_emphasis td{color:#000000;background-color:#ffffff;border-color:#000000;}
+:root .tabxplor-tab.tx-print_emphasis td.tx-bar{position:relative;isolation:isolate;--tx-bar-ink:currentColor;}
+:root .tabxplor-tab.tx-print_emphasis td.tx-bar:not(.p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4){--tx-bar-ink:#000000;}
+:root .tabxplor-tab.tx-print_emphasis td.tx-bar::before,:root .tabxplor-tab.tx-print_emphasis td.tx-bar-on::after{content:"";position:absolute;z-index:-1;box-sizing:border-box;top:2px;bottom:2px;left:0;}
+:root .tabxplor-tab.tx-print_emphasis td.tx-bar::before{right:0;background:rgba(0,0,0,.05);}
+:root .tabxplor-tab.tx-print_emphasis td.tx-bar-on::after{width:var(--tx-bar,0%);border-radius:3px;border:2px solid var(--tx-bar-ink);background:color-mix(in oklch,var(--tx-bar-ink) 10%,transparent);}
+:root .tabxplor-tab.tx-print_emphasis tbody tr:hover{background:transparent;}
+:root .tabxplor-tab.tx-print_emphasis .g1{color:#888888;}
+:root .tabxplor-tab.tx-print_emphasis .g2{color:#444444;}
+:root .tabxplor-tab.tx-print_emphasis .tx-unit{color:#888888;}
+:root .tabxplor-tab.tx-print_emphasis .tabxplor-caption{color:#000000;}
+:root .tabxplor-tab.tx-print_emphasis .tx-foot{color:#444444;}
+:root .tabxplor-tab.tx-print_emphasis.tx-shape{color:#444444;}
+:root .tabxplor-tab.tx-print_emphasis.tx-shape thead th{color:#444444;}
+:root .tabxplor-tab.tx-print_emphasis.tx-shape .tx-sec{color:#888888;}
+:root .tabxplor-tab.tx-print_emphasis .tx-sec{color:#444444;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_emphasis .tx-mark{color:#000000;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_emphasis .p1{color:#000000;font-weight:normal;}
+:root .tabxplor-tab.tx-print_emphasis .p2{color:#000000;}
+:root .tabxplor-tab.tx-print_emphasis .p3{color:#000000;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_emphasis .p4{color:#000000;text-decoration:underline double;}
+:root .tabxplor-tab.tx-print_emphasis .m1{color:#000000;font-weight:normal;font-style:italic;}
+:root .tabxplor-tab.tx-print_emphasis .m2{color:#000000;font-style:italic;}
+:root .tabxplor-tab.tx-print_emphasis .m3{color:#000000;font-style:italic;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_emphasis .m4{color:#000000;font-style:italic;text-decoration:underline double;}
+:root .tabxplor-tab.tx-print_emphasis .o1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_emphasis .o2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_emphasis .o3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_emphasis .o4{background-color:#B8B8B8;}
+:root .tabxplor-tab.tx-print_emphasis .u1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_emphasis .u2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_emphasis .u3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_emphasis .u4{background-color:#B8B8B8;}
+:root .tabxplor-tab.tx-print_marks{color:#000000;background:#ffffff;}
+:root .tabxplor-tab.tx-print_marks th,:root .tabxplor-tab.tx-print_marks td{color:#000000;background-color:#ffffff;border-color:#000000;}
+:root .tabxplor-tab.tx-print_marks td.tx-bar{position:relative;isolation:isolate;--tx-bar-ink:currentColor;}
+:root .tabxplor-tab.tx-print_marks td.tx-bar:not(.p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4){--tx-bar-ink:#000000;}
+:root .tabxplor-tab.tx-print_marks td.tx-bar::before,:root .tabxplor-tab.tx-print_marks td.tx-bar-on::after{content:"";position:absolute;z-index:-1;box-sizing:border-box;top:2px;bottom:2px;left:0;}
+:root .tabxplor-tab.tx-print_marks td.tx-bar::before{right:0;background:rgba(0,0,0,.05);}
+:root .tabxplor-tab.tx-print_marks td.tx-bar-on::after{width:var(--tx-bar,0%);border-radius:3px;border:2px solid var(--tx-bar-ink);background:color-mix(in oklch,var(--tx-bar-ink) 10%,transparent);}
+:root .tabxplor-tab.tx-print_marks tbody tr:hover{background:transparent;}
+:root .tabxplor-tab.tx-print_marks .g1{color:#888888;}
+:root .tabxplor-tab.tx-print_marks .g2{color:#444444;}
+:root .tabxplor-tab.tx-print_marks .tx-unit{color:#888888;}
+:root .tabxplor-tab.tx-print_marks .tabxplor-caption{color:#000000;}
+:root .tabxplor-tab.tx-print_marks .tx-foot{color:#444444;}
+:root .tabxplor-tab.tx-print_marks.tx-shape{color:#444444;}
+:root .tabxplor-tab.tx-print_marks.tx-shape thead th{color:#444444;}
+:root .tabxplor-tab.tx-print_marks.tx-shape .tx-sec{color:#888888;}
+:root .tabxplor-tab.tx-print_marks .tx-sec{color:#444444;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_marks .tx-mark{color:#000000;font-style:normal;text-decoration:none;display:inline-block;}
+:root .tabxplor-tab.tx-print_marks .p1{color:#000000;font-weight:normal;}
+:root .tabxplor-tab.tx-print_marks .p2{color:#000000;font-weight:normal;}
+:root .tabxplor-tab.tx-print_marks .p3{color:#000000;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_marks .p4{color:#000000;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_marks .m1{color:#000000;font-weight:normal;}
+:root .tabxplor-tab.tx-print_marks .m2{color:#000000;font-weight:normal;}
+:root .tabxplor-tab.tx-print_marks .m3{color:#000000;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_marks .m4{color:#000000;font-weight:normal;text-decoration:underline;}
+:root .tabxplor-tab.tx-print_marks .o1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_marks .o2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_marks .o3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_marks .o4{background-color:#B8B8B8;}
+:root .tabxplor-tab.tx-print_marks .u1{background-color:#F5F5F5;}
+:root .tabxplor-tab.tx-print_marks .u2{background-color:#E4E4E4;}
+:root .tabxplor-tab.tx-print_marks .u3{background-color:#D0D0D0;}
+:root .tabxplor-tab.tx-print_marks .u4{background-color:#B8B8B8;}
 @media print {
 .tabxplor-tab .tx-pill{print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+.tabxplor-tab td.tx-bar{print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+.tx-scrollbox{max-width:none;overflow:visible;}
 .tabxplor-tab{color:#000000;background:#ffffff;}
 .tabxplor-tab th,.tabxplor-tab td{color:#000000;background-color:#ffffff;border-color:#000000;}
+.tabxplor-tab td.tx-bar{position:relative;isolation:isolate;--tx-bar-ink:currentColor;}
+.tabxplor-tab td.tx-bar:not(.p1,.p2,.p3,.p4,.m1,.m2,.m3,.m4){--tx-bar-ink:#000000;}
+.tabxplor-tab td.tx-bar::before,.tabxplor-tab td.tx-bar-on::after{content:"";position:absolute;z-index:-1;box-sizing:border-box;top:2px;bottom:2px;left:0;}
+.tabxplor-tab td.tx-bar::before{right:0;background:rgba(0,0,0,.05);}
+.tabxplor-tab td.tx-bar-on::after{width:var(--tx-bar,0%);border-radius:3px;border:2px solid var(--tx-bar-ink);background:color-mix(in oklch,var(--tx-bar-ink) 10%,transparent);}
 .tabxplor-tab tbody tr:hover{background:transparent;}
 .g1,.tabxplor-tab .g1{color:#949494;}
 .g2,.tabxplor-tab .g2{color:#444444;}
@@ -595,6 +719,7 @@ read or rewrite any of its fields.</p>
 numeric vectors is <code>get_num()</code>, which extracts whatever field
 is currently displayed:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>tabs <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), get_num))</span></code></pre></div>
+<div class="tx-scrollbox">
 <table class="tabxplor-tab" data-quarto-disable-processing="true">
 <thead>
 <tr>
@@ -731,6 +856,7 @@ Total
 </tr>
 </tbody>
 </table>
+</div>
 <p>To get the character strings instead (formatted, but without
 colours), use <code>format()</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>tabs <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), format))</span></code></pre></div>
@@ -805,7 +931,7 @@ means)</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>or</code></td>
-<td align="left">odds ratio / relative-risk ratio</td>
+<td align="left">odds ratio</td>
 </tr>
 <tr class="even">
 <td align="left"><code>ctr</code></td>
@@ -921,6 +1047,7 @@ the same template you can pass to <code>tab(display =)</code> when you
 build the table. The template is plain text with <code>{field}</code>
 tokens; each token is replaced by that field, formatted as usual:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>tabs <span class="sc">|&gt;</span> <span class="fu">set_display</span>(<span class="st">&quot;{pct} ({diff})&quot;</span>)</span></code></pre></div>
+<div class="tx-scrollbox">
 <table class="tabxplor-tab" data-quarto-disable-processing="true">
 <thead>
 <tr>
@@ -1093,6 +1220,7 @@ Percentage points (risk) difference: cell ≥ the Total row <span class="p1" sty
 </tr>
 </tfoot>
 </table>
+</div>
 <p>The rules:</p>
 <ul>
 <li><strong>Valid tokens</strong> are <code>pct</code>, <code>n</code>,
@@ -1148,6 +1276,7 @@ filled; a difference twin of every percentage column is then one
 <code>mutate()</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">tab</span>(gss_simple, race, marital, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_fmt), <span class="sc">~</span> <span class="fu">set_display</span>(., <span class="st">&quot;diff&quot;</span>), <span class="at">.names =</span> <span class="st">&quot;{.col}_diff&quot;</span>))</span></code></pre></div>
+<div class="tx-scrollbox">
 <table class="tabxplor-tab" data-quarto-disable-processing="true">
 <thead>
 <tr>
@@ -1432,6 +1561,7 @@ ref:0%
 </tr>
 </tbody>
 </table>
+</div>
 <p><code>.names = &quot;{.col}_diff&quot;</code> keeps the original percentage
 columns and adds a <code>&lt;name&gt;_diff</code> twin next to each. (If
 a <code>diff</code> column comes out empty, the source table had no
@@ -1610,6 +1740,7 @@ individual records.</p>
 row per combination, the count in a column):</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">count</span>(gss_simple, marital, race)</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">tab_counts</span>(counts, marital, race, <span class="at">counts =</span> n, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">color =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="tx-scrollbox">
 <table class="tabxplor-tab" data-quarto-disable-processing="true">
 <thead>
 <tr>
@@ -1786,6 +1917,7 @@ cell ≤ the Total row <span class="u1" style="border-radius:4px;padding-right:4
 </tr>
 </tfoot>
 </table>
+</div>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># identical to tab(gss_simple, marital, race, pct = &quot;row&quot;, color = &quot;difference&quot;)</span></span></code></pre></div>
 <p>It also melts a <code>table()</code> / <code>xtabs()</code> / matrix
 automatically, and reads a <strong>wide</strong> frame (one column per
@@ -1817,6 +1949,7 @@ you want first, then spread:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">tab</span>(gss_simple, relig, marital, year, <span class="at">pct =</span> <span class="st">&quot;row&quot;</span>, <span class="at">totaltab =</span> <span class="st">&quot;no&quot;</span>, <span class="at">tot =</span> <span class="st">&quot;row&quot;</span>) <span class="sc">|&gt;</span></span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(year, relig, Married) <span class="sc">|&gt;</span></span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">tab_spread</span>(year)</span></code></pre></div>
+<div class="tx-scrollbox">
 <table class="tabxplor-tab" data-quarto-disable-processing="true">
 <thead>
 <tr>
@@ -2465,6 +2598,7 @@ Total
 </tr>
 </tbody>
 </table>
+</div>
 <p><code>tab(..., spread_vars = year)</code> does the same in one call.
 <code>tab_reg(..., tab_vars =)</code> produces a grouped table you can
 spread the same way — see <code>vignette(&quot;tabxplor-reg&quot;)</code>.</p>
@@ -2492,9 +2626,10 @@ column per argument:</p>
 exporters and the build. HTML / <code>tab_html()</code>:</p>
 <ul>
 <li><code>tabxplor.tab_kable_css</code> — inline the stylesheet with
-each table (<code>TRUE</code>); set <code>FALSE</code> in a many-table
-document and call <code>tab_css()</code> once instead (this vignette
-does).</li>
+each <code>tab_html()</code> <em>and</em> <code>tab_md()</code> table
+(<code>TRUE</code>); set <code>FALSE</code> in a many-table document and
+call <code>tab_css()</code> once instead (this vignette does), or in a
+plain-Markdown notebook that wants no stylesheet at all.</li>
 <li><code>tabxplor.tab_kable_tooltips</code> — the per-cell hover
 tooltips (<code>TRUE</code>); set <code>FALSE</code> once per document
 to switch them off everywhere.</li>

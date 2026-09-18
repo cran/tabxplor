@@ -162,7 +162,7 @@ tab_reg(gss_simple, "tvhours", c("race", "marital", "relig", "rincome"), family 
 tab(gss_simple, "race", "tvhours", pct = "row", digits = 2, na = "drop",
     color = "ratio", ref = 1,  ci_method = c(mean_ratio = "quasipoisson")
 ) |> 
-  mutate(IRR = set_display(tvhours, "ratio"))
+  mutate(RoM = set_display(tvhours, "ratio"))
 # the default method is a robust ratio of means (each group's own variance) ;
 #  we use "quasipoisson" to match those computed by quasi-poisson regression -- one dispersion
 #  estimated over every level (assumption : variance is proportional to mean). 
